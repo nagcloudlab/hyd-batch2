@@ -2,6 +2,7 @@ com/example/proxy/ProxyExample.class
 com/example/config/BFPP.class
 com/example/repository/JpaAccountRepository.class
 com/example/repository/AccountRepository.class
+com/example/annotation/NpciAnnotation.class
 com/example/repository/JdbcAccountRepository.class
 com/example/proxy/Trainer.class
 com/example/aspect/TransactionAspect.class

@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.example.annotation.NpciAnnotation;
 import com.example.repository.AccountRepository;
 
 // @Component("transferService")
@@ -43,6 +44,7 @@ public class TransferServiceImpl implements TransferService {
                 logger.info("TransferServiceImpl bean is being destroyed.");
         }
 
+        @NpciAnnotation
         public void transfer(double amount, String fromAccountNumber, String toAccountNumber) {
 
                 logger.info("Initiating transfer of ${} from account {} to account {}.", amount, fromAccountNumber,

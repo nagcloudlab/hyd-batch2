@@ -1,4 +1,5 @@
 /Users/nag/hyd-batch2/transfer-service-v2/src/main/java/com/example/TransferServiceApplication.java
+/Users/nag/hyd-batch2/transfer-service-v2/src/main/java/com/example/annotation/NpciAnnotation.java
 /Users/nag/hyd-batch2/transfer-service-v2/src/main/java/com/example/aspect/AuthAspect.java
 /Users/nag/hyd-batch2/transfer-service-v2/src/main/java/com/example/aspect/TransactionAspect.java
 /Users/nag/hyd-batch2/transfer-service-v2/src/main/java/com/example/config/BFPP.java
