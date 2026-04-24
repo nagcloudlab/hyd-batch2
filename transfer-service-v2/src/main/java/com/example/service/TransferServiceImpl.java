@@ -1,24 +1,34 @@
 package com.example.service;
 
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 import com.example.repository.AccountRepository;
 
-@Component("transferService")
+// @Component("transferService")
+@Service("transferService")
 public class TransferServiceImpl implements TransferService {
 
         private AccountRepository accountRepository;
 
         private static final Logger logger = org.slf4j.LoggerFactory.getLogger("txr-service");
 
-        @Autowired
-        public TransferServiceImpl(AccountRepository accountRepository) {
+        // constructor DI
+        // @Autowired
+        public TransferServiceImpl(@Qualifier("jdbc") AccountRepository accountRepository) {
                 this.accountRepository = accountRepository;
                 logger.info("TransferServiceImpl initialized with {} repository.",
                                 accountRepository.getClass().getSimpleName());
         }
+
+        // // setter DI
+        // @Autowired(required = true)
+        // public void setAccountRepository(AccountRepository accountRepository) {
+        // this.accountRepository = accountRepository;
+        // logger.info("AccountRepository set to {}.",
+        // accountRepository.getClass().getSimpleName());
+        // }
 
         public void transfer(double amount, String fromAccountNumber, String toAccountNumber) {
                 logger.info("Initiating transfer of ${} from account {} to account {}.", amount, fromAccountNumber,

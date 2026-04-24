@@ -3,7 +3,6 @@ package com.example;
 import org.slf4j.Logger;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.example.config.TransferServiceConfiguration;
 import com.example.service.TransferService;
@@ -31,7 +30,7 @@ public class TransferServiceApplication {
         TransferService transferService = context.getBean("transferService", TransferService.class);
         transferService.transfer(300.00, "123", "456");
         logger.info("-".repeat(30));
-        transferService.transfer(150.00, "789", "012");
+        // transferService.transfer(150.00, "789", "012");
 
         logger.info("-".repeat(70));
         // -----------------------

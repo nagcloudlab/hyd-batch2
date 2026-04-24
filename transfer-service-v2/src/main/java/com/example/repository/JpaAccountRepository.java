@@ -1,9 +1,15 @@
 package com.example.repository;
 
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Repository;
 
 import com.example.model.Account;
 
+@Primary
+@Qualifier("jpa")
+@Repository("jpaAccountRepository")
 public class JpaAccountRepository implements AccountRepository {
 
     private static final Logger logger = org.slf4j.LoggerFactory.getLogger("txr-service");

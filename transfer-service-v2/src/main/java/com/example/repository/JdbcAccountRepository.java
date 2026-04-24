@@ -7,7 +7,10 @@ import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import com.example.model.Account;
 
@@ -15,7 +18,9 @@ import com.example.model.Account;
  * author: team-1
  */
 
-@Component("jdbcAccountRepository")
+@Qualifier("jdbc")
+// @Component("jdbcAccountRepository")
+@Repository("jdbcAccountRepository")
 public class JdbcAccountRepository implements AccountRepository {
 
     private static final Logger logger = org.slf4j.LoggerFactory.getLogger("txr-service");
