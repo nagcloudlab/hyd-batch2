@@ -2,6 +2,9 @@ package com.example;
 
 import org.slf4j.Logger;
 
+import com.example.repository.AccountRepository;
+import com.example.repository.AccountRepositoryFactory;
+import com.example.service.TransferService;
 import com.example.service.TransferServiceImpl;
 
 public class TransferServiceApplication {
@@ -16,7 +19,9 @@ public class TransferServiceApplication {
         logger.info("-".repeat(70));
         // create & wire up the components based on the configuration
         // (e.g. using Spring Boot, or manually)
-        TransferServiceImpl transferService = new TransferServiceImpl();
+        AccountRepository jdbcAccountRepository = AccountRepositoryFactory.createAccountRepository("jdbc");
+        AccountRepository jpaAccountRepository = AccountRepositoryFactory.createAccountRepository("jpa");
+        TransferService transferService = new TransferServiceImpl(jdbcAccountRepository); // DI
         logger.info("Transfer Service Application started successfully.");
         logger.info("-".repeat(70));
         // -----------------------

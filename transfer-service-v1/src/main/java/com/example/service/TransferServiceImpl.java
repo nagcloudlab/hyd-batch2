@@ -2,44 +2,54 @@ package com.example.service;
 
 import org.slf4j.Logger;
 
-import com.example.repository.JdbcAccountRepository;
+import com.example.repository.AccountRepository;
 
-public class TransferServiceImpl {
+public class TransferServiceImpl implements TransferService {
 
-    private static final Logger logger = org.slf4j.LoggerFactory.getLogger("txr-service");
+        private AccountRepository accountRepository;
 
-    public TransferServiceImpl() {
-        logger.info("TransferServiceImpl instance created.");
-    }
+        private static final Logger logger = org.slf4j.LoggerFactory.getLogger("txr-service");
 
-    public void transfer(double amount, String fromAccountNumber, String toAccountNumber) {
-        logger.info("Initiating transfer of ${} from account {} to account {}.", amount, fromAccountNumber,
-                toAccountNumber);
-        JdbcAccountRepository accountRepository = new JdbcAccountRepository();
-        // step-1: Load 'from' account
-        var fromAccount = accountRepository.findByAccountNumber(fromAccountNumber);
-
-        if (fromAccount.getBalance() < amount) {
-            logger.error("Insufficient funds in account {}. Available balance: ${}. Transfer aborted.",
-                    fromAccountNumber, fromAccount.getBalance());
-            return;
+        public TransferServiceImpl(AccountRepository accountRepository) {
+                this.accountRepository = accountRepository;
+                logger.info("TransferServiceImpl initialized with {} repository.",
+                                accountRepository.getClass().getSimpleName());
         }
 
-        // step-2: Load 'to' account
-        var toAccount = accountRepository.findByAccountNumber(toAccountNumber);
-        // step-3: Debit 'from' account
-        fromAccount.setBalance(fromAccount.getBalance() - amount);
-        logger.info("Debited ${} from account {}. New balance: ${}.", amount, fromAccountNumber,
-                fromAccount.getBalance());
-        // step-4: Credit 'to' account
-        toAccount.setBalance(toAccount.getBalance() + amount);
-        logger.info("Credited ${} to account {}. New balance: ${}.", amount, toAccountNumber,
-                toAccount.getBalance());
-        // step-5: Save updated accounts
-        accountRepository.saveAccount(fromAccount);
-        accountRepository.saveAccount(toAccount);
-        logger.info("Transfer of ${} from account {} to account {} completed successfully.", amount, fromAccountNumber,
-                toAccountNumber);
-    }
+        public void transfer(double amount, String fromAccountNumber, String toAccountNumber) {
+                logger.info("Initiating transfer of ${} from account {} to account {}.", amount, fromAccountNumber,
+                                toAccountNumber);
+
+                // Dont'create
+                // JdbcAccountRepository accountRepository = new JdbcAccountRepository();
+                // Don't create by factory, inject it from outside
+                // AccountRepository accountRepository =
+                // AccountRepositoryFactory.createAccountRepository("jpa");
+                // step-1: Load 'from' account
+                var fromAccount = accountRepository.findByNumber(fromAccountNumber);
+
+                if (fromAccount.getBalance() < amount) {
+                        logger.error("Insufficient funds in account {}. Available balance: ${}. Transfer aborted.",
+                                        fromAccountNumber, fromAccount.getBalance());
+                        return;
+                }
+
+                // step-2: Load 'to' account
+                var toAccount = accountRepository.findByNumber(toAccountNumber);
+                // step-3: Debit 'from' account
+                fromAccount.setBalance(fromAccount.getBalance() - amount);
+                logger.info("Debited ${} from account {}. New balance: ${}.", amount, fromAccountNumber,
+                                fromAccount.getBalance());
+                // step-4: Credit 'to' account
+                toAccount.setBalance(toAccount.getBalance() + amount);
+                logger.info("Credited ${} to account {}. New balance: ${}.", amount, toAccountNumber,
+                                toAccount.getBalance());
+                // step-5: Save updated accounts
+                accountRepository.save(fromAccount);
+                accountRepository.save(toAccount);
+                logger.info("Transfer of ${} from account {} to account {} completed successfully.", amount,
+                                fromAccountNumber,
+                                toAccountNumber);
+        }
 
 }

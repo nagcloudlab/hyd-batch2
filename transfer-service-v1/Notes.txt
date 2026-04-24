@@ -20,3 +20,74 @@ project : transfer-service-v1
 How to run the application using Maven:
 
 mvn clean compile exec:java -Dexec.mainClass="com.example.TransferServiceApplication"
+
+
+
+----
+
+
+project : transfer-service-v1
+------------------------------
+
+
+
+design issues
+---------------
+
+-> tight-coupling b/w dependent & dependency.
+-> hard to test dependent in isolation.
+
+   => can't extend component with new-features without modifying existing code.
+   => dev & bugging becomes difficult as changes in one component can affect others.
+   => code becomes less maintainable and scalable over time.
+
+performance issues
+-----------------
+
+-> on each transfer request, a new instance of AccountRepository is created, leading to increased memory usage and slower performance due to repeated instantiation.
+
+   => inefficient resource utilization, especially under high load.
+   => potential for memory leaks if instances are not properly managed.
+   => overall degradation of application responsiveness and user experience.
+
+why these issues occur?
+-----------------
+
+-> dependent managing lifecycle of it's own dependencies(s)
+
+
+Naive Solution:
+---------------
+
+-> dont'create dependency in dependen't home -> factory patern
+
+Problem with factpry-pattern alone
+-----------------------------------
+
+-> still perfornace issues exist.
+
+
+Best Solution:
+------------------------------
+
+-> don't create & lookup dependency on factory directly. isntead inject the dependecy 
+  by third-person ( Dependency Inversion Principle aka Inversion Of Control )
+
+
+how to implement IOC ?
+
+-> dependency Injection
+
+        -> constructor through 
+
+------------------------------------
+SOLID Principles
+--------------------------------------
+
+S - Single Responsibility Principle
+O - Open for extension/Closed for modification Principle 
+L - Liskov Substitution Principle ( polymorphism )
+I - Interface Segregation Principle
+D - Dependency Inversion Principle ( Inversion of Control )
+
+-----
