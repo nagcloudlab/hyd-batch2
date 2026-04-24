@@ -28,6 +28,7 @@ public class TransferServiceApplication {
         // -----------------------
         logger.info("-".repeat(70));
         TransferService transferService = context.getBean("transferService", TransferService.class);
+        System.out.println(transferService.getClass());
         transferService.transfer(300.00, "123", "456");
         logger.info("-".repeat(30));
         // transferService.transfer(150.00, "789", "012");
