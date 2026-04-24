@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.example.model.Account;
 
@@ -13,11 +15,13 @@ import com.example.model.Account;
  * author: team-1
  */
 
+@Component("jdbcAccountRepository")
 public class JdbcAccountRepository implements AccountRepository {
 
     private static final Logger logger = org.slf4j.LoggerFactory.getLogger("txr-service");
     private final DataSource dataSource;
 
+    @Autowired
     public JdbcAccountRepository(DataSource dataSource) {
         this.dataSource = dataSource;
         logger.info("JdbcAccountRepository initialized with DataSource: {}", dataSource);

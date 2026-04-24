@@ -2,8 +2,10 @@ package com.example;
 
 import org.slf4j.Logger;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.example.config.TransferServiceConfiguration;
 import com.example.service.TransferService;
 
 public class TransferServiceApplication {
@@ -19,7 +21,8 @@ public class TransferServiceApplication {
         // create & wire up the components based on the configuration
         // (e.g. using Spring Framework, manual wiring, etc.)
         ConfigurableApplicationContext context = null;
-        context = new ClassPathXmlApplicationContext("transfer-service.xml");
+        // context = new ClassPathXmlApplicationContext("transfer-service.xml");
+        context = new AnnotationConfigApplicationContext(TransferServiceConfiguration.class);
         logger.info("-".repeat(70));
         // -----------------------
         // Run phase

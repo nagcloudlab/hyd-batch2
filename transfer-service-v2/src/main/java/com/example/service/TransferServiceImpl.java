@@ -1,15 +1,19 @@
 package com.example.service;
 
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.example.repository.AccountRepository;
 
+@Component("transferService")
 public class TransferServiceImpl implements TransferService {
 
         private AccountRepository accountRepository;
 
         private static final Logger logger = org.slf4j.LoggerFactory.getLogger("txr-service");
 
+        @Autowired
         public TransferServiceImpl(AccountRepository accountRepository) {
                 this.accountRepository = accountRepository;
                 logger.info("TransferServiceImpl initialized with {} repository.",

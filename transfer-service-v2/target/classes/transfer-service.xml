@@ -10,22 +10,26 @@
            http://www.springframework.org/schema/context/spring-context.xsd">
 
 
-    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+    <!-- <context:annotation-config/>
+    <context:component-scan base-package="com.example"/> -->
+
+    <!-- <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
         <property name="jdbcUrl" value="jdbc:postgresql://localhost:5432/mydatabase"/>
         <property name="username" value="postgres"/>
         <property name="password" value="mysecretpassword"/>
         <property name="driverClassName" value="org.postgresql.Driver"/>
         <property name="maximumPoolSize" value="5"/>
-    </bean>
+    </bean> -->
 
-    <bean id="jdbcAccountRepository" class="com.example.repository.JdbcAccountRepository">
+    <!-- <bean id="jdbcAccountRepository" class="com.example.repository.JdbcAccountRepository">
         <constructor-arg ref="dataSource"/>
-    </bean>
+    </bean> -->
     
-    <bean id="jpaAccountRepository" class="com.example.repository.JpaAccountRepository">
-    </bean> 
+    <!-- <bean id="jpaAccountRepository" class="com.example.repository.JpaAccountRepository">
+    </bean>  -->
+    <!-- 
     <bean id="transferService" class="com.example.service.TransferServiceImpl">
         <constructor-arg ref="jdbcAccountRepository"/>
-    </bean>
+    </bean> -->
 
 </beans>
