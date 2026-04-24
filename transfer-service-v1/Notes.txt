@@ -1,0 +1,22 @@
+
+
+
+project : transfer-service-v1
+-------------------------------
+
+👉 define the data model
+
+        - Account
+
+👉 define layer(s)
+
+        1. data/repository layer => persistence logic
+                - AccountRepository => CRUD operations for Account
+        2. service/business layer => processing logic
+                - TransferService => transfer funds between accounts
+
+
+-------
+How to run the application using Maven:
+
+mvn clean compile exec:java -Dexec.mainClass="com.example.TransferServiceApplication"

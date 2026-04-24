@@ -1,0 +1,45 @@
+package com.example.service;
+
+import org.slf4j.Logger;
+
+import com.example.repository.JdbcAccountRepository;
+
+public class TransferServiceImpl {
+
+    private static final Logger logger = org.slf4j.LoggerFactory.getLogger("txr-service");
+
+    public TransferServiceImpl() {
+        logger.info("TransferServiceImpl instance created.");
+    }
+
+    public void transfer(double amount, String fromAccountNumber, String toAccountNumber) {
+        logger.info("Initiating transfer of ${} from account {} to account {}.", amount, fromAccountNumber,
+                toAccountNumber);
+        JdbcAccountRepository accountRepository = new JdbcAccountRepository();
+        // step-1: Load 'from' account
+        var fromAccount = accountRepository.findByAccountNumber(fromAccountNumber);
+
+        if (fromAccount.getBalance() < amount) {
+            logger.error("Insufficient funds in account {}. Available balance: ${}. Transfer aborted.",
+                    fromAccountNumber, fromAccount.getBalance());
+            return;
+        }
+
+        // step-2: Load 'to' account
+        var toAccount = accountRepository.findByAccountNumber(toAccountNumber);
+        // step-3: Debit 'from' account
+        fromAccount.setBalance(fromAccount.getBalance() - amount);
+        logger.info("Debited ${} from account {}. New balance: ${}.", amount, fromAccountNumber,
+                fromAccount.getBalance());
+        // step-4: Credit 'to' account
+        toAccount.setBalance(toAccount.getBalance() + amount);
+        logger.info("Credited ${} to account {}. New balance: ${}.", amount, toAccountNumber,
+                toAccount.getBalance());
+        // step-5: Save updated accounts
+        accountRepository.saveAccount(fromAccount);
+        accountRepository.saveAccount(toAccount);
+        logger.info("Transfer of ${} from account {} to account {} completed successfully.", amount, fromAccountNumber,
+                toAccountNumber);
+    }
+
+}
