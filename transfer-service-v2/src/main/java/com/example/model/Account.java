@@ -1,11 +1,22 @@
 package com.example.model;
 
+import java.math.BigDecimal;
+
+// Domain model representing a bank account
+// Uses BigDecimal for balance — never use double/float for money (floating point precision issues)
 public class Account {
 
-    private String number;
-    private double balance;
+    // 'final' — account number should never change after creation (immutability)
+    private final String number;
+    private BigDecimal balance;
 
-    public Account(String number, double balance) {
+    public Account(String number, BigDecimal balance) {
+        if (number == null || number.isBlank()) {
+            throw new IllegalArgumentException("Account number cannot be null or blank");
+        }
+        if (balance == null) {
+            throw new IllegalArgumentException("Balance cannot be null");
+        }
         this.number = number;
         this.balance = balance;
     }
@@ -14,11 +25,11 @@ public class Account {
         return number;
     }
 
-    public double getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(double balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 

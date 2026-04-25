@@ -1,18 +1,24 @@
 package com.example.repository;
 
+import java.math.BigDecimal;
+
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
 import com.example.model.Account;
 
+// LSP — Can substitute JpaAccountRepository wherever AccountRepository is expected
+// SRP — Only handles persistence logic using JPA
+// @Primary — when multiple beans qualify, Spring picks this one by default
 @Primary
 @Qualifier("jpa")
 @Repository("jpaAccountRepository")
 public class JpaAccountRepository implements AccountRepository {
 
-    private static final Logger logger = org.slf4j.LoggerFactory.getLogger("txr-service");
+    private static final Logger logger = LoggerFactory.getLogger(JpaAccountRepository.class);
 
     public JpaAccountRepository() {
         logger.info("JpaAccountRepository instance created.");
@@ -20,15 +26,13 @@ public class JpaAccountRepository implements AccountRepository {
 
     @Override
     public Account findByNumber(String accountNumber) {
-        // Implementation to load account from the database using JPA
-        return new Account(accountNumber, 1000.00);
+        logger.info("Loading account {} from database using JPA.", accountNumber);
+        return new Account(accountNumber, new BigDecimal("1000.00"));
     }
 
     @Override
     public Account save(Account account) {
-        // Implementation to update account balance in the database using JPA
-        // For demonstration, we simply return the updated account
-        logger.info("Saving account with account number {} to the database. New balance: ${}.",
+        logger.info("Saving account {} to database. Balance: ${}.",
                 account.getNumber(),
                 account.getBalance());
         return account;

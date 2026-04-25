@@ -10,6 +10,8 @@ com/example/config/BPP.class
 com/example/service/TransferServiceImpl.class
 com/example/proxy/Logger.class
 com/example/service/TransferService.class
+com/example/exception/AccountNotFoundException.class
+com/example/exception/InsufficientFundsException.class
 com/example/aspect/AuthAspect.class
 com/example/proxy/TrainerProxy.class
 com/example/proxy/Authentication.class

@@ -1,29 +1,29 @@
 package com.example.repository;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import com.example.model.Account;
 
-/**
- * author: team-1
- */
-
+// LSP — Can replace AccountRepository with JdbcAccountRepository anywhere without breaking behavior
+// SRP — Only handles persistence logic using JDBC
+// @Repository — specialization of @Component, indicates a data access component
 @Qualifier("jdbc")
-// @Component("jdbcAccountRepository")
 @Repository("jdbcAccountRepository")
 public class JdbcAccountRepository implements AccountRepository {
 
-    private static final Logger logger = org.slf4j.LoggerFactory.getLogger("txr-service");
+    private static final Logger logger = LoggerFactory.getLogger(JdbcAccountRepository.class);
+
+    // DataSource is injected by Spring container — no manual creation
     private final DataSource dataSource;
 
     @Autowired
@@ -32,9 +32,9 @@ public class JdbcAccountRepository implements AccountRepository {
         logger.info("JdbcAccountRepository initialized with DataSource: {}", dataSource);
     }
 
+    @Override
     public Account findByNumber(String accountNumber) {
-        logger.info("Loading account with account number {} from the database.", accountNumber);
-        // Implementation to load account from the database using JDBC
+        logger.info("Loading account {} from database using JDBC.", accountNumber);
         Connection connection = null;
         try {
             connection = dataSource.getConnection();
@@ -50,13 +50,12 @@ public class JdbcAccountRepository implements AccountRepository {
                 }
             }
         }
-        return new Account(accountNumber, 1000.00);
+        return new Account(accountNumber, new BigDecimal("1000.00"));
     }
 
+    @Override
     public Account save(Account account) {
-        // Implementation to update account balance in the database using JDBC
-        // For demonstration, we simply return the updated account
-        logger.info("Saving account with account number {} to the database. New balance: ${}.",
+        logger.info("Saving account {} to database. Balance: ${}.",
                 account.getNumber(),
                 account.getBalance());
         return account;

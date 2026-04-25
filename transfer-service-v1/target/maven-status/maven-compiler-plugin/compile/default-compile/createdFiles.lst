@@ -1,5 +1,7 @@
 com/example/service/TransferService.class
 com/example/repository/AccountRepositoryFactory.class
+com/example/exception/AccountNotFoundException.class
+com/example/exception/InsufficientFundsException.class
 com/example/repository/JpaAccountRepository.class
 com/example/repository/AccountRepository.class
 com/example/repository/JdbcAccountRepository.class

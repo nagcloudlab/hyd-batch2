@@ -1,19 +1,20 @@
 
-
-
 project : transfer-service-v1
 -------------------------------
 
-👉 define the data model
+project structure
+-----------------
+
+1. data-model(s)
 
         - Account
 
-👉 define layer(s)
+2. layer(s)
 
-        1. data/repository layer => persistence logic
+        1. data/repository layer    => persistence logic
                 - AccountRepository => CRUD operations for Account
-        2. service/business layer => processing logic
-                - TransferService => transfer funds between accounts
+        2. service/business layer   => processing logic
+                - TransferService   => transfer funds between accounts
 
 
 -------
@@ -22,72 +23,77 @@ How to run the application using Maven:
 mvn clean compile exec:java -Dexec.mainClass="com.example.TransferServiceApplication"
 
 
+--------------------------------------------------------------
 
-----
-
-
-project : transfer-service-v1
-------------------------------
-
-
-
-design issues
+Design Issues
 ---------------
 
 -> tight-coupling b/w dependent & dependency.
--> hard to test dependent in isolation.
 
+   => hard to test dependent in isolation.
    => can't extend component with new-features without modifying existing code.
-   => dev & bugging becomes difficult as changes in one component can affect others.
+   => dev & debugging becomes difficult as changes in one component can affect others.
    => code becomes less maintainable and scalable over time.
 
-performance issues
------------------
+Performance Issues
+-------------------
 
--> on each transfer request, a new instance of AccountRepository is created, leading to increased memory usage and slower performance due to repeated instantiation.
+-> on each transfer,
+   a new instance of AccountRepository is created,
+   leading to increased memory usage and slower performance due to repeated instantiation.
 
    => inefficient resource utilization, especially under high load.
    => potential for memory leaks if instances are not properly managed.
    => overall degradation of application responsiveness and user experience.
 
-why these issues occur?
------------------
 
--> dependent managing lifecycle of it's own dependencies(s)
+Why these issues occur?
+------------------------
 
-
-Naive Solution:
----------------
-
--> dont'create dependency in dependen't home -> factory patern
-
-Problem with factpry-pattern alone
------------------------------------
-
--> still perfornace issues exist.
+-> dependent managing lifecycle of its own dependency(s)
 
 
-Best Solution:
-------------------------------
+Naive Solution : Factory Pattern
+----------------------------------
 
--> don't create & lookup dependency on factory directly. isntead inject the dependecy 
-  by third-person ( Dependency Inversion Principle aka Inversion Of Control )
+-> don't create dependency in dependent's home -> use factory pattern
 
-
-how to implement IOC ?
-
--> dependency Injection
-
-        -> constructor through 
-
+Problem with factory-pattern alone
 ------------------------------------
-SOLID Principles
+
+-> tight-coupling still exists b/w dependent & factory.
+   -> dependent still responsible for looking up factory to get dependency instance.
+   -> dev & debugging becomes difficult as changes in factory can affect dependent.
+   -> code becomes less maintainable and scalable over time.
+
+
+Best Solution : Dependency Injection
 --------------------------------------
 
+-> don't create & lookup dependency on factory directly.
+   instead, inject the dependency by framework 
+   
+   -> Dependency Inversion Principle aka Inversion Of Control 
+
+
+How to implement IoC?
+-----------------------
+
+-> Dependency Injection
+
+        -> constructor injection
+        -> setter injection
+        -> field injection
+
+
+--------------------------------------------------------------
+SOLID Principles
+--------------------------------------------------------------
+
 S - Single Responsibility Principle
-O - Open for extension/Closed for modification Principle 
+O - Open for extension / Closed for modification Principle
 L - Liskov Substitution Principle ( polymorphism )
 I - Interface Segregation Principle
 D - Dependency Inversion Principle ( Inversion of Control )
 
------
+--------------------------------------------------------------

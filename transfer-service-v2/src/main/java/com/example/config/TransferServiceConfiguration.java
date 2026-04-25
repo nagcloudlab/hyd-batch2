@@ -10,11 +10,15 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 import com.zaxxer.hikari.HikariDataSource;
 
+// @Configuration — marks this class as a source of bean definitions (replaces XML config)
+// @ComponentScan — tells Spring to scan 'com.example' package for @Component, @Service, @Repository beans
+// @EnableAspectJAutoProxy — enables AOP proxy creation for @Aspect beans
 @Configuration
 @ComponentScan(basePackages = "com.example")
 @EnableAspectJAutoProxy
 public class TransferServiceConfiguration {
 
+    // @Value — injects externalized properties with default values after ':'
     @Value("${spring.datasource.url:jdbc:postgresql://localhost:5432/mydatabase}")
     private String jdbcUrl;
     @Value("${spring.datasource.username:postgres}")
@@ -26,16 +30,17 @@ public class TransferServiceConfiguration {
     @Value("${spring.datasource.maximum-pool-size:5}")
     private int maximumPoolSize;
 
+    // @Bean — method-level annotation, Spring calls this method and manages the
+    // returned object as a bean
+    // Bean name defaults to method name: "dataSource"
     @Bean
     public DataSource dataSource() {
-        // Configure and return the DataSource bean
-        // For example, using HikariCP:
         HikariDataSource dataSource = new HikariDataSource();
         dataSource.setJdbcUrl(jdbcUrl);
         dataSource.setUsername(username);
         dataSource.setPassword(password);
         dataSource.setDriverClassName(driverClassName);
-        dataSource.setMaximumPoolSize(5);
+        dataSource.setMaximumPoolSize(maximumPoolSize);
         return dataSource;
     }
 
