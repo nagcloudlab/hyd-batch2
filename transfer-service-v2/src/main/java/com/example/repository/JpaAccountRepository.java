@@ -13,6 +13,7 @@ import com.example.model.Account;
 // LSP — Can substitute JpaAccountRepository wherever AccountRepository is expected
 // SRP — Only handles persistence logic using JPA
 // @Primary — when multiple beans qualify, Spring picks this one by default
+// Note: stub implementation — no real JPA/EntityManager wiring; focus is on @Primary/@Qualifier
 @Primary
 @Qualifier("jpa")
 @Repository("jpaAccountRepository")
@@ -27,6 +28,7 @@ public class JpaAccountRepository implements AccountRepository {
     @Override
     public Account findByNumber(String accountNumber) {
         logger.info("Loading account {} from database using JPA.", accountNumber);
+        // Stub — returns hardcoded balance
         return new Account(accountNumber, new BigDecimal("1000.00"));
     }
 
@@ -35,6 +37,7 @@ public class JpaAccountRepository implements AccountRepository {
         logger.info("Saving account {} to database. Balance: ${}.",
                 account.getNumber(),
                 account.getBalance());
+        // Stub — no-op
         return account;
     }
 

@@ -8,10 +8,12 @@ import javax.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.exception.AccountNotFoundException;
 import com.example.exception.InsufficientFundsException;
+import com.example.model.Account;
 import com.example.repository.AccountRepository;
 
 // SRP — only handles transfer business logic, delegates persistence to repository
@@ -28,19 +30,11 @@ public class TransferServiceImpl implements TransferService {
 
     // Constructor Injection — Spring auto-detects single constructor, @Autowired
     // optional
-    // @Qualifier("jdbc") — picks JdbcAccountRepository when multiple beans
-    // implement AccountRepository
-    public TransferServiceImpl(/* @Qualifier("jdbc") */ AccountRepository accountRepository) {
+    public TransferServiceImpl(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
         logger.info("TransferServiceImpl initialized with {} repository.",
                 accountRepository.getClass().getSimpleName());
     }
-
-    // Setter DI — alternative to constructor injection (uncomment to demo)
-    // @Autowired(required = true)
-    // public void setAccountRepository(AccountRepository accountRepository) {
-    // this.accountRepository = accountRepository;
-    // }
 
     // @PostConstruct — called after DI is complete, use for initialization logic
     @PostConstruct
@@ -54,13 +48,26 @@ public class TransferServiceImpl implements TransferService {
         logger.info("TransferServiceImpl bean is being destroyed.");
     }
 
-    // ACID
+    // ACID Properties:
     // Atomicity — all steps succeed or all fail (rollback on exception)
     // Consistency — ensures data integrity (e.g., no negative balances)
-    // Isolation — concurrent transactions do not interfere (handled by DB)
-
-    // -> TransactionalAspect -> TransactionInterceptor ->TransactionManager
-    @Transactional(rollbackFor = RuntimeException.class, noRollbackFor = InsufficientFundsException.class, isolation = org.springframework.transaction.annotation.Isolation.READ_COMMITTED)
+    // Isolation — concurrent transactions do not interfere (READ_COMMITTED)
+    // Durability — committed data survives DB restart
+    //
+    // How it works: @Transactional -> TransactionInterceptor (AOP) ->
+    // PlatformTransactionManager
+    @Transactional(
+            // rollbackFor — which exceptions trigger rollback (RuntimeException by default
+            // anyway)
+            rollbackFor = RuntimeException.class,
+            // noRollbackFor — InsufficientFundsException is a business rule violation, not
+            // a data error;
+            // no DB changes were made yet, so no rollback needed
+            noRollbackFor = InsufficientFundsException.class,
+            // READ_COMMITTED — prevents dirty reads; each transaction sees only committed
+            // data
+            // Other options: READ_UNCOMMITTED, REPEATABLE_READ, SERIALIZABLE
+            isolation = Isolation.READ_COMMITTED)
     @Override
     public void transfer(BigDecimal amount, String fromAccountNumber, String toAccountNumber) {
 
@@ -82,19 +89,20 @@ public class TransferServiceImpl implements TransferService {
                 amount, fromAccountNumber, toAccountNumber);
 
         // step-1: Load 'from' account
-        var fromAccount = accountRepository.findByNumber(fromAccountNumber);
+        Account fromAccount = accountRepository.findByNumber(fromAccountNumber);
         if (fromAccount == null) {
             throw new AccountNotFoundException(fromAccountNumber);
         }
 
-        // Fail fast with custom exception. Use compareTo() for BigDecimal, never == or
-        // equals
+        // Fail fast — use compareTo() for BigDecimal, never == or equals
+        // (BigDecimal("1.0").equals(BigDecimal("1.00")) returns false due to scale
+        // difference)
         if (fromAccount.getBalance().compareTo(amount) < 0) {
             throw new InsufficientFundsException(fromAccountNumber, fromAccount.getBalance(), amount);
         }
 
         // step-2: Load 'to' account
-        var toAccount = accountRepository.findByNumber(toAccountNumber);
+        Account toAccount = accountRepository.findByNumber(toAccountNumber);
         if (toAccount == null) {
             throw new AccountNotFoundException(toAccountNumber);
         }
@@ -112,9 +120,12 @@ public class TransferServiceImpl implements TransferService {
         // step-5: Save updated accounts
         accountRepository.save(fromAccount);
 
-        boolean simulateError = false; // Set to true to test rollback behavior
+        // Atomicity demo — set to true to simulate failure between debit and credit
+        // Transaction rolls back: fromAccount debit is undone, toAccount credit never
+        // happens
+        boolean simulateError = false;
         if (simulateError) {
-            logger.warn("Simulating error after debiting 'from' account but before saving 'to' account.");
+            logger.warn("Simulating error after debit but before credit save.");
             throw new RuntimeException("Simulated error to test transaction rollback");
         }
 
@@ -122,7 +133,6 @@ public class TransferServiceImpl implements TransferService {
 
         logger.info("Transfer of ${} from account {} to account {} completed successfully.",
                 amount, fromAccountNumber, toAccountNumber);
-
     }
 
 }

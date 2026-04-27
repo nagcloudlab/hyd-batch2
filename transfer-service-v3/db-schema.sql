@@ -1,6 +1,4 @@
 
-
-
 CREATE TABLE accounts (
     number VARCHAR(255) PRIMARY KEY,
     balance DECIMAL(19, 4) NOT NULL

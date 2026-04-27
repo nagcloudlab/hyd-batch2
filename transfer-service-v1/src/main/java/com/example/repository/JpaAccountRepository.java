@@ -11,6 +11,7 @@ import com.example.model.Account;
 // Can substitute JpaAccountRepository wherever AccountRepository is expected
 // SRP — Single Responsibility Principle
 // Only handles persistence logic using JPA
+// Note: stub implementation — returns hardcoded data. Real JPA operations in v5.
 public class JpaAccountRepository implements AccountRepository {
 
     private static final Logger logger = LoggerFactory.getLogger(JpaAccountRepository.class);
@@ -22,6 +23,7 @@ public class JpaAccountRepository implements AccountRepository {
     @Override
     public Account findByNumber(String accountNumber) {
         logger.info("Loading account {} from database using JPA.", accountNumber);
+        // Stub — returns hardcoded balance. In v5, this queries via EntityManager.
         return new Account(accountNumber, new BigDecimal("1000.00"));
     }
 
@@ -30,6 +32,7 @@ public class JpaAccountRepository implements AccountRepository {
         logger.info("Saving account {} to database. Balance: ${}.",
                 account.getNumber(),
                 account.getBalance());
+        // Stub — no-op. In v5, this persists via EntityManager.
         return account;
     }
 

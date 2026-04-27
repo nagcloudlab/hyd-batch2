@@ -9,8 +9,8 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import com.example.config.TransferServiceConfiguration;
 import com.example.service.TransferService;
 
-// In v1, we manually created and wired dependencies (acted as the assembler)
-// In v2, Spring container does it for us — we just provide configuration
+// v3 — Spring JDBC with manual configuration
+// Demonstrates: JdbcTemplate, @Transactional, ACID properties, concurrent transfers
 public class TransferServiceApplication {
 
     private static final Logger logger = LoggerFactory.getLogger(TransferServiceApplication.class);
@@ -24,46 +24,49 @@ public class TransferServiceApplication {
         logger.info("INIT/BOOT PHASE");
         logger.info("=".repeat(70));
 
-        // Java config: AnnotationConfigApplicationContext with @Configuration class
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
         context.register(TransferServiceConfiguration.class);
         context.refresh();
         logger.info("Transfer Service Application started successfully.");
 
         // =====================================================================
-        // RUN PHASE — use beans from the container
+        // RUN PHASE — concurrent transfers to demo ACID Isolation
         // =====================================================================
         logger.info("=".repeat(70));
         logger.info("RUN PHASE");
         logger.info("=".repeat(70));
 
-        //
-        // Lookup bean by name and type
-        TransferService transferService = context.getBean("transferService",
-                TransferService.class);
+        TransferService transferService = context.getBean("transferService", TransferService.class);
 
-        // At runtime, this is a Spring AOP proxy, not the actual TransferServiceImpl
-        // logger.info("Bean class: {}", transferService.getClass().getName());
-
-        new Thread(() -> {
+        // Two concurrent transfers — demos Isolation property of ACID
+        // Both threads access the same accounts; @Transactional ensures they don't
+        // interfere
+        Thread t1 = new Thread(() -> {
             try {
-                Thread.sleep(2000); // Simulate some delay before running the transfer
-                logger.info("Initiating transfer operation...");
+                Thread.sleep(2000);
+                logger.info("Thread-1: Initiating transfer...");
                 transferService.transfer(new BigDecimal("100.00"), "123", "456");
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
-        }).start();
+        });
 
-        new Thread(() -> {
+        Thread t2 = new Thread(() -> {
             try {
-                Thread.sleep(3000); // Simulate some delay before running the transfer
-                logger.info("Initiating another transfer operation...");
-                transferService.transfer(new BigDecimal("200.00"), "789", "012");
+                Thread.sleep(3000);
+                logger.info("Thread-2: Initiating transfer...");
+                transferService.transfer(new BigDecimal("200.00"), "123", "456");
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
-        }).start();
+        });
+
+        t1.start();
+        t2.start();
+
+        // Wait for both threads to complete before shutting down
+        t1.join();
+        t2.join();
 
         // =====================================================================
         // SHUTDOWN PHASE — @PreDestroy callbacks and resource cleanup

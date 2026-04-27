@@ -8,21 +8,22 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.zaxxer.hikari.HikariDataSource;
 
 // @Configuration — marks this class as a source of bean definitions (replaces XML config)
-// @ComponentScan — tells Spring to scan 'com.example' package for @Component, @Service, @Repository beans
-// @EnableAspectJAutoProxy — enables AOP proxy creation for @Aspect beans
-// @PropertySource — loads profile-specific properties into Spring Environment
+// @ComponentScan — scans 'com.example' for @Component, @Service, @Repository beans
+// @EnableTransactionManagement — enables @Transactional annotation processing (creates AOP proxies)
+// @PropertySource — loads properties into Spring Environment
+//
+// Pain point: ALL of this manual config is eliminated by Spring Boot auto-configuration (v4)
 @Configuration
 @ComponentScan(basePackages = "com.example")
-@EnableAspectJAutoProxy
 @EnableTransactionManagement
 @PropertySource("classpath:application.properties")
 public class TransferServiceConfiguration {
@@ -45,10 +46,9 @@ public class TransferServiceConfiguration {
     @Value("${spring.datasource.maximum-pool-size}")
     private int maximumPoolSize;
 
-    // @Bean — method-level annotation, Spring calls this and manages the returned
-    // object
-    // @Conditional — bean created only if PostgresDriverCondition.matches() returns
-    // true
+    // Manual bean: DataSource (HikariCP connection pool)
+    // HikariCP is the fastest Java connection pool — also used by Spring Boot by default
+    // In Spring Boot, this is auto-configured from application.properties
     @Bean
     public DataSource dataSource() {
         logger.info("Creating DataSource bean with URL: {}", jdbcUrl);
@@ -61,14 +61,18 @@ public class TransferServiceConfiguration {
         return dataSource;
     }
 
+    // Manual bean: JdbcTemplate (Spring's JDBC helper)
+    // In Spring Boot, this is auto-configured when spring-jdbc is on classpath
     @Bean
     public JdbcTemplate jdbcTemplate(DataSource dataSource) {
         return new JdbcTemplate(dataSource);
     }
 
+    // Manual bean: TransactionManager (needed for @Transactional)
+    // In Spring Boot, this is auto-configured when spring-jdbc is on classpath
     @Bean
     public PlatformTransactionManager transactionManager(DataSource dataSource) {
-        return new org.springframework.jdbc.datasource.DataSourceTransactionManager(dataSource);
+        return new DataSourceTransactionManager(dataSource);
     }
 
 }

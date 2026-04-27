@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 // @Lazy — delays bean creation until first access (default is eager — created at startup)
 // Useful for heavy beans (external service clients, large caches)
+// Verify: this constructor log will NOT appear at startup, only when getBean() is called
 @Component
 @Lazy
 public class ApplicationCache {

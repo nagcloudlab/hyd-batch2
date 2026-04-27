@@ -1,6 +1,7 @@
 package com.example.proxy;
 
-// This example demonstrates the Proxy Pattern — the concept behind Spring AOP
+// Standalone Java demo — no Spring, no SLF4J (intentionally self-contained)
+// Demonstrates the Proxy Pattern — the concept behind Spring AOP
 // Problem: cross-cutting concerns (auth, logging) get mixed into business logic
 // Solution: wrap the target object with a proxy that adds behavior before/after
 
@@ -12,6 +13,7 @@ class Authentication {
 }
 
 // Cross-cutting concern: Logging
+// Note: this 'Logger' class is for demo only — not SLF4J
 class Logger {
     public void doLog() {
         System.out.println("Log...");
@@ -52,8 +54,7 @@ class TrainerProxy {
 }
 
 // Run this to see the proxy pattern in action
-// Then compare with AuthAspect + TransactionAspect — Spring does this
-// automatically
+// Compare with AuthAspect + TransactionAspect — Spring does this automatically
 public class ProxyExample {
 
     public static void main(String[] args) {

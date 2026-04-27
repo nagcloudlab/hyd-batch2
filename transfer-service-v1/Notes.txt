@@ -1,89 +1,23 @@
+project : transfer-service-v1 (Plain Java + SOLID Principles)
+--------------------------------------------------------------
 
-project : transfer-service-v1
--------------------------------
-
-project structure
+Project Structure
 -----------------
 
-1. data-model(s)
-
+1. Data Model
         - Account
 
-2. layer(s)
-
-        1. data/repository layer    => persistence logic
+2. Layers
+        1. Repository Layer  => persistence logic
                 - AccountRepository => CRUD operations for Account
-        2. service/business layer   => processing logic
+        2. Service Layer      => processing logic
                 - TransferService   => transfer funds between accounts
 
 
--------
-How to run the application using Maven:
+How to Run
+----------
 
 mvn clean compile exec:java -Dexec.mainClass="com.example.TransferServiceApplication"
-
-
---------------------------------------------------------------
-
-Design Issues
----------------
-
--> tight-coupling b/w dependent & dependency.
-
-   => hard to test dependent in isolation.
-   => can't extend component with new-features without modifying existing code.
-   => dev & debugging becomes difficult as changes in one component can affect others.
-   => code becomes less maintainable and scalable over time.
-
-Performance Issues
--------------------
-
--> on each transfer,
-   a new instance of AccountRepository is created,
-   leading to increased memory usage and slower performance due to repeated instantiation.
-
-   => inefficient resource utilization, especially under high load.
-   => potential for memory leaks if instances are not properly managed.
-   => overall degradation of application responsiveness and user experience.
-
-
-Why these issues occur?
-------------------------
-
--> dependent managing lifecycle of its own dependency(s)
-
-
-Naive Solution : Factory Pattern
-----------------------------------
-
--> don't create dependency in dependent's home -> use factory pattern
-
-Problem with factory-pattern alone
-------------------------------------
-
--> tight-coupling still exists b/w dependent & factory.
-   -> dependent still responsible for looking up factory to get dependency instance.
-   -> dev & debugging becomes difficult as changes in factory can affect dependent.
-   -> code becomes less maintainable and scalable over time.
-
-
-Best Solution : Dependency Injection
---------------------------------------
-
--> don't create & lookup dependency on factory directly.
-   instead, inject the dependency by framework 
-   
-   -> Dependency Inversion Principle aka Inversion Of Control 
-
-
-How to implement IoC?
------------------------
-
--> Dependency Injection
-
-        -> constructor injection
-        -> setter injection
-        -> field injection
 
 
 --------------------------------------------------------------
@@ -91,9 +25,54 @@ SOLID Principles
 --------------------------------------------------------------
 
 S - Single Responsibility Principle
-O - Open for extension / Closed for modification Principle
-L - Liskov Substitution Principle ( polymorphism )
+O - Open for Extension / Closed for Modification Principle
+L - Liskov Substitution Principle (polymorphism)
 I - Interface Segregation Principle
-D - Dependency Inversion Principle ( Inversion of Control )
+D - Dependency Inversion Principle (Inversion of Control)
+
 
 --------------------------------------------------------------
+Design Issues (without SOLID)
+--------------------------------------------------------------
+
+-> Tight-coupling between dependent & dependency
+   => hard to test dependent in isolation
+   => can't extend component with new features without modifying existing code
+   => dev & debugging becomes difficult as changes in one component affect others
+   => code becomes less maintainable and scalable over time
+
+-> Performance: on each transfer, a new instance of AccountRepository is created
+   => inefficient resource utilization, especially under high load
+   => potential for memory leaks if instances are not properly managed
+
+-> Root cause: dependent managing lifecycle of its own dependency(s)
+
+
+--------------------------------------------------------------
+Solutions (Progressive)
+--------------------------------------------------------------
+
+1. Naive: Factory Pattern
+   -> don't create dependency in dependent's class -> use factory
+   -> Problem: tight-coupling still exists between dependent & factory
+     -> dependent still responsible for looking up factory to get dependency
+     -> changes in factory can affect dependent
+
+2. Best: Dependency Injection (IoC)
+   -> don't create & don't lookup dependency from factory
+   -> instead, inject the dependency by a third-party (framework)
+   -> Dependency Inversion Principle aka Inversion of Control
+
+3. How to implement IoC?
+   -> Dependency Injection
+        -> constructor injection (recommended)
+        -> setter injection
+        -> field injection
+
+
+--------------------------------------------------------------
+What's Next: transfer-service-v2 (Spring Core)
+--------------------------------------------------------------
+
+-> Replace manual assembler (main class) with Spring container
+-> Spring automates: bean creation, dependency injection, lifecycle management

@@ -8,8 +8,10 @@ public class Account {
 
     // 'final' — account number should never change after creation (immutability)
     private final String number;
+    // Mutable — balance changes during transfers (debit/credit operations)
     private BigDecimal balance;
 
+    // Guard clauses — validate inputs at construction time, fail fast
     public Account(String number, BigDecimal balance) {
         if (number == null || number.isBlank()) {
             throw new IllegalArgumentException("Account number cannot be null or blank");

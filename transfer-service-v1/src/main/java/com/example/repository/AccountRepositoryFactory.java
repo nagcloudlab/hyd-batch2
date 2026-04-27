@@ -9,9 +9,10 @@ import java.util.function.Supplier;
 // New repository types can be added via register() without modifying this class
 public class AccountRepositoryFactory {
 
+    // Supplier<T> — functional interface that creates a new instance on each .get() call
     private static final Map<String, Supplier<AccountRepository>> registry = new HashMap<>();
 
-    // Pre-register known implementations
+    // Static initializer — runs once when the class is loaded; pre-populates the registry
     static {
         registry.put("jdbc", JdbcAccountRepository::new);
         registry.put("jpa", JpaAccountRepository::new);

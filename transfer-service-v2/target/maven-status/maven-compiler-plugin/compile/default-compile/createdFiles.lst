@@ -1,4 +1,3 @@
-com/example/config/FoodFactoryBean.class
 com/example/event/TransferCompletedEvent.class
 com/example/config/BFPP.class
 com/example/repository/JpaAccountRepository.class
@@ -13,9 +12,7 @@ com/example/aspect/AuthAspect.class
 com/example/proxy/TrainerProxy.class
 com/example/config/DataSourceFactoryBean.class
 com/example/proxy/Authentication.class
-com/example/menu/VegComponent.class
 com/example/proxy/ProxyExample.class
-com/example/config/FoodConfiguration.class
 com/example/repository/JdbcAccountRepository.class
 com/example/config/BPP.class
 com/example/service/TransferServiceImpl.class

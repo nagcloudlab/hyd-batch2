@@ -17,6 +17,7 @@ public class BPP implements BeanPostProcessor {
 
     private static final Logger logger = LoggerFactory.getLogger(BPP.class);
 
+    // Must return the bean (or a proxy wrapping it) — returning null breaks the container
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) {
         logger.info("BPP — Before Initialization: {}", beanName);
@@ -29,6 +30,7 @@ public class BPP implements BeanPostProcessor {
         return bean;
     }
 
+    // Must return the bean (or a proxy wrapping it) — returning null breaks the container
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) {
         logger.info("BPP — After Initialization: {}", beanName);

@@ -55,15 +55,14 @@ public class TransferServiceApplication {
         // ApplicationCache cache = context.getBean(ApplicationCache.class);
 
         // Lookup bean by name and type
-        // TransferService transferService = context.getBean("transferService",
-        // TransferService.class);
+        TransferService transferService = context.getBean("transferService", TransferService.class);
 
         // At runtime, this is a Spring AOP proxy, not the actual TransferServiceImpl
         // logger.info("Bean class: {}", transferService.getClass().getName());
 
-        // transferService.transfer(new BigDecimal("300.00"), "123", "456");
+        transferService.transfer(new BigDecimal("300.00"), "123", "456");
         logger.info("-".repeat(70));
-        // transferService.transfer(new BigDecimal("150.00"), "789", "012");
+        transferService.transfer(new BigDecimal("150.00"), "789", "012");
 
         // =====================================================================
         // SHUTDOWN PHASE — @PreDestroy callbacks and resource cleanup

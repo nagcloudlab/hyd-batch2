@@ -26,6 +26,7 @@ public class DataSourceFactoryBean implements FactoryBean<DataSource> {
         this.password = password;
     }
 
+    // Spring calls this method to get the actual bean (the product)
     @Override
     public DataSource getObject() throws Exception {
         logger.info("FactoryBean — creating DataSource");
@@ -33,16 +34,20 @@ public class DataSourceFactoryBean implements FactoryBean<DataSource> {
         ds.setJdbcUrl(url);
         ds.setUsername(username);
         ds.setPassword(password);
+        // Hardcoded for demo — in production, pass these as constructor params too
         ds.setDriverClassName("org.postgresql.Driver");
         ds.setMaximumPoolSize(5);
         return ds;
     }
 
+    // Tells Spring the type of object this factory produces
     @Override
     public Class<?> getObjectType() {
         return DataSource.class;
     }
 
+    // true = Spring caches the product (one DataSource shared everywhere)
+    // false = new DataSource created on every getBean() call
     @Override
     public boolean isSingleton() {
         return true;

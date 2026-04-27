@@ -18,17 +18,19 @@ public class TransactionAspect {
 
     private static final Logger logger = LoggerFactory.getLogger(TransactionAspect.class);
 
-    // Individual advice types for reference:
+    // Advice types cheat sheet:
     // @Before — runs before method
     // @AfterReturning — runs after successful return
     // @AfterThrowing — runs after exception
     // @After — runs always (like finally)
     // @Around — wraps the method, controls execution (combines all of the above)
 
+    // Pointcut: (..) means any parameters
     @Around("execution(void com.example.service.TransferServiceImpl.transfer(..))")
     public void manageTransaction(ProceedingJoinPoint pjp) throws Throwable {
         logger.info(">>> begin transaction.");
         try {
+            // proceed() calls the actual target method — omit it to block execution entirely
             pjp.proceed();
             logger.info(">>> Transaction committed.");
         } catch (Throwable ex) {

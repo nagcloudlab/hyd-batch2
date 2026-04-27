@@ -1,112 +1,92 @@
+project : transfer-service-v3 (Spring JDBC — Manual Config, ACID)
+------------------------------------------------------------------
+
+Reference: https://nagcloudlab.notion.site/hyd-batch-2-34c5bab9bf87804bae9ac63ad12f2a7d
 
 
-https://nagcloudlab.notion.site/hyd-batch-2-34c5bab9bf87804bae9ac63ad12f2a7d?source=copy_link
+Project Structure
+-----------------
 
-
-project : transfer-service-v1
--------------------------------
-
-👉 define the data model
-
+1. Data Model
         - Account
 
-👉 define layer(s)
+2. Layers
+        1. Repository Layer  => real database persistence using JdbcTemplate
+                - AccountRepository (interface)
+                - JdbcAccountRepository (JdbcTemplate, queryForObject, update)
+        2. Service Layer      => processing logic with @Transactional
+                - TransferService (interface)
+                - TransferServiceImpl (@Service, @Transactional, ACID demo)
+        3. Config Layer       => manual Spring configuration (the "pain")
+                - TransferServiceConfiguration
+                  - DataSource bean (HikariCP)
+                  - JdbcTemplate bean
+                  - PlatformTransactionManager bean
+                  - @EnableTransactionManagement
 
-        1. data/repository layer => persistence logic
-                - AccountRepository => CRUD operations for Account
-        2. service/business layer => processing logic
-                - TransferService => transfer funds between accounts
 
+How to Run
+----------
 
--------
-How to run the application using Maven:
+1. Start Postgres:
+
+docker run \
+  --name postgres-container \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_PASSWORD=mysecretpassword \
+  -e POSTGRES_DB=mydatabase \
+  -p 5432:5432 \
+  -d postgres:latest
+
+2. Create table and seed data:
+
+docker exec -it postgres-container psql -U postgres -d mydatabase
+
+CREATE TABLE accounts (
+    number VARCHAR(255) PRIMARY KEY,
+    balance DECIMAL(10, 2) NOT NULL
+);
+
+INSERT INTO accounts (number, balance) VALUES ('123', 1000.00);
+INSERT INTO accounts (number, balance) VALUES ('456', 500.00);
+INSERT INTO accounts (number, balance) VALUES ('789', 2000.00);
+INSERT INTO accounts (number, balance) VALUES ('012', 750.00);
+
+3. Run application:
 
 mvn clean compile exec:java -Dexec.mainClass="com.example.TransferServiceApplication"
 
 
-----
+--------------------------------------------------------------
+Key Concepts
+--------------------------------------------------------------
+
+1. JdbcTemplate     — Spring's JDBC helper (connection mgmt, statement creation, exception translation)
+2. @Transactional   — Declarative transaction management via AOP proxy
+3. ACID Demo:
+   - Atomicity     — simulateError flag to test rollback
+   - Consistency   — balance validation before transfer
+   - Isolation     — concurrent threads with READ_COMMITTED
+   - Durability    — committed data survives Postgres restart
 
 
-project : transfer-service-v1
-------------------------------
+--------------------------------------------------------------
+Pain Points (Manual Config)
+--------------------------------------------------------------
+
+-> Must manually create 3 beans: DataSource, JdbcTemplate, TransactionManager
+-> Must add @EnableTransactionManagement
+-> Must add @PropertySource to load properties
+-> Must configure connection pool settings in @Bean method
+
+All of this disappears in v4 (Spring Boot auto-configuration)
 
 
+--------------------------------------------------------------
+What's Next: transfer-service-v4 (Spring Boot)
+--------------------------------------------------------------
 
-design issues
----------------
-
--> tight-coupling b/w dependent & dependency.
--> hard to test dependent in isolation.
-
-   => can't extend component with new-features without modifying existing code.
-   => dev & bugging becomes difficult as changes in one component can affect others.
-   => code becomes less maintainable and scalable over time.
-
-performance issues
------------------
-
--> on each transfer request, a new instance of AccountRepository is created, leading to increased memory usage and slower performance due to repeated instantiation.
-
-   => inefficient resource utilization, especially under high load.
-   => potential for memory leaks if instances are not properly managed.
-   => overall degradation of application responsiveness and user experience.
-
-why these issues occur?
------------------
-
--> dependent managing lifecycle of it's own dependencies(s)
-
-
-Naive Solution:
----------------
-
--> dont'create dependency in dependen't home -> factory patern
-
-Problem with factpry-pattern alone
------------------------------------
-
--> still perfornace issues exist.
-
-
-Best Solution:
-------------------------------
-
--> don't create & lookup dependency on factory directly. isntead inject the dependecy 
-  by third-person ( Dependency Inversion Principle aka Inversion Of Control )
-
-
-how to implement IOC ?
-
--> dependency Injection
-
-        -> constructor through 
-
-------------------------------------
-SOLID Principles
---------------------------------------
-
-S - Single Responsibility Principle
-O - Open for extension/Closed for modification Principle 
-L - Liskov Substitution Principle ( polymorphism )
-I - Interface Segregation Principle
-D - Dependency Inversion Principle ( Inversion of Control )
-
------
-
-
-
-
-create Postgres database container using docker
-
-docker run \
---name postgres-container \
--e POSTGRES_USER=postgres \
--e POSTGRES_PASSWORD=mysecretpassword \
--e POSTGRES_DB=mydatabase \
--p 5432:5432 \
--d postgres:latest
-
-docker container ls
-docker logs postgres-container
-docker exec -it postgres-container psql -U postgres -d mydatabase
-\dt
+-> Spring Boot auto-configures: DataSource, JdbcTemplate, TransactionManager
+-> Just add spring-boot-starter-jdbc + application.properties
+-> No @Configuration class needed for infrastructure beans
+-> Focus on business logic, not plumbing

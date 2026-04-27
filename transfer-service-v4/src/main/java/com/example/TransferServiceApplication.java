@@ -5,22 +5,12 @@ import java.math.BigDecimal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import com.example.service.TransferService;
 
-// In v1, we manually created and wired dependencies (acted as the assembler)
-// In v2, Spring container does it for us — we just provide configuration
-@Configuration
-@EnableAutoConfiguration
-@ComponentScan(basePackages = "com.example")
-@EnableAspectJAutoProxy
-@EnableTransactionManagement
+@SpringBootApplication
 public class TransferServiceApplication {
 
     private static final Logger logger = LoggerFactory.getLogger(TransferServiceApplication.class);
@@ -34,25 +24,47 @@ public class TransferServiceApplication {
         logger.info("INIT/BOOT PHASE");
         logger.info("=".repeat(70));
 
-        // Java config: AnnotationConfigApplicationContext with @Configuration class
         ConfigurableApplicationContext context = SpringApplication.run(TransferServiceApplication.class, args);
         logger.info("Transfer Service Application started successfully.");
 
         // =====================================================================
-        // RUN PHASE — use beans from the container
+        // RUN PHASE — concurrent transfers to demo ACID Isolation
         // =====================================================================
         logger.info("=".repeat(70));
         logger.info("RUN PHASE");
         logger.info("=".repeat(70));
-        // Lookup bean by name and type
-        TransferService transferService = context.getBean("transferService",
-                TransferService.class);
 
-        // At runtime, this is a Spring AOP proxy, not the actual TransferServiceImpl
-        // logger.info("Bean class: {}", transferService.getClass().getName());
+        TransferService transferService = context.getBean("transferService", TransferService.class);
 
-        logger.info("Initiating transfer operation...");
-        transferService.transfer(new BigDecimal("100.00"), "456", "123");
+        // Two concurrent transfers — demos Isolation property of ACID
+        // Both threads access the same accounts; @Transactional ensures they don't
+        // interfere
+        Thread t1 = new Thread(() -> {
+            try {
+                Thread.sleep(1000);
+                logger.info("Thread-1: Initiating transfer...");
+                transferService.transfer(new BigDecimal("100.00"), "123", "456");
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
+        Thread t2 = new Thread(() -> {
+            try {
+                Thread.sleep(2000);
+                logger.info("Thread-2: Initiating transfer...");
+                transferService.transfer(new BigDecimal("200.00"), "123", "456");
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
+        t1.start();
+        t2.start();
+
+        // Wait for both threads to complete before shutting down
+        t1.join();
+        t2.join();
 
         // =====================================================================
         // SHUTDOWN PHASE — @PreDestroy callbacks and resource cleanup

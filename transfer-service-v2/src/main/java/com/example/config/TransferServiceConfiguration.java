@@ -47,7 +47,8 @@ public class TransferServiceConfiguration {
     @Value("${spring.datasource.maximum-pool-size}")
     private int maximumPoolSize;
 
-    // SpEL — #{...} expressions compute values at runtime (different from ${...} property placeholders)
+    // SpEL — #{...} expressions compute values at runtime (different from ${...}
+    // property placeholders)
     @Value("#{T(java.lang.Runtime).getRuntime().availableProcessors()}")
     private int cpuCores;
 
@@ -62,7 +63,8 @@ public class TransferServiceConfiguration {
     @Autowired
     private Environment env;
 
-    // @PostConstruct — called after DI is complete; logs resolved config for verification
+    // @PostConstruct — called after DI is complete; logs resolved config for
+    // verification
     @PostConstruct
     public void init() {
         logger.info("-".repeat(30));
@@ -77,8 +79,10 @@ public class TransferServiceConfiguration {
         logger.info("-".repeat(30));
     }
 
-    // @Bean — method-level annotation, Spring calls this and manages the returned object
-    // @Conditional — bean created only if PostgresDriverCondition.matches() returns true
+    // @Bean — method-level annotation, Spring calls this and manages the returned
+    // object
+    // @Conditional — bean created only if PostgresDriverCondition.matches() returns
+    // true
     @Bean
     @Conditional(PostgresDriverCondition.class)
     public DataSource dataSource() {
@@ -91,10 +95,11 @@ public class TransferServiceConfiguration {
         return dataSource;
     }
 
-    // FactoryBean alternative — uncomment to demo FactoryBean producing the DataSource
+    // FactoryBean alternative — uncomment to demo FactoryBean producing the
+    // DataSource
     // @Bean
     // public DataSourceFactoryBean dataSource() {
-    //     return new DataSourceFactoryBean(jdbcUrl, username, password);
+    // return new DataSourceFactoryBean(jdbcUrl, username, password);
     // }
 
 }
