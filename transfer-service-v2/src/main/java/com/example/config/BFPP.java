@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 // BeanFactoryPostProcessor — runs BEFORE any bean is created
 // Use case: modify bean definitions (metadata) before instantiation
 // Example: PropertySourcesPlaceholderConfigurer (resolves @Value placeholders) is a BFPP
-@Component
+// @Component
 public class BFPP implements BeanFactoryPostProcessor {
 
     private static final Logger logger = LoggerFactory.getLogger(BFPP.class);

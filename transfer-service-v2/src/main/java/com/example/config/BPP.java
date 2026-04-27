@@ -12,7 +12,7 @@ import com.example.annotation.NpciAnnotation;
 // BeanPostProcessor — runs AFTER each bean is created but BEFORE/AFTER initialization (@PostConstruct)
 // Use case: inspect or wrap beans (e.g., AOP proxies are created by a BPP internally)
 // Lifecycle: Constructor -> BPP.before -> @PostConstruct -> BPP.after
-@Component
+// @Component
 public class BPP implements BeanPostProcessor {
 
     private static final Logger logger = LoggerFactory.getLogger(BPP.class);

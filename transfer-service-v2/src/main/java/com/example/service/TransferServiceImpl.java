@@ -8,9 +8,11 @@ import javax.annotation.PreDestroy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import com.example.annotation.NpciAnnotation;
+import com.example.event.TransferCompletedEvent;
 import com.example.exception.AccountNotFoundException;
 import com.example.exception.InsufficientFundsException;
 import com.example.repository.AccountRepository;
@@ -25,6 +27,7 @@ public class TransferServiceImpl implements TransferService {
         // 'final' — dependency cannot be reassigned after construction
         // (safe DI practice)
         private final AccountRepository accountRepository;
+        private final ApplicationEventPublisher eventPublisher;
 
         private static final Logger logger = LoggerFactory.getLogger(TransferServiceImpl.class);
 
@@ -32,8 +35,10 @@ public class TransferServiceImpl implements TransferService {
         // optional
         // @Qualifier("jdbc") — picks JdbcAccountRepository when multiple beans
         // implement AccountRepository
-        public TransferServiceImpl(@Qualifier("jdbc") AccountRepository accountRepository) {
+        public TransferServiceImpl(/* @Qualifier("jdbc") */ AccountRepository accountRepository,
+                        ApplicationEventPublisher eventPublisher) {
                 this.accountRepository = accountRepository;
+                this.eventPublisher = eventPublisher;
                 logger.info("TransferServiceImpl initialized with {} repository.",
                                 accountRepository.getClass().getSimpleName());
         }
@@ -111,6 +116,10 @@ public class TransferServiceImpl implements TransferService {
 
                 logger.info("Transfer of ${} from account {} to account {} completed successfully.",
                                 amount, fromAccountNumber, toAccountNumber);
+
+                // Publish transfer completed event
+                eventPublisher.publishEvent(
+                                new TransferCompletedEvent(this, amount, fromAccountNumber, toAccountNumber));
         }
 
 }

@@ -10,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 
 import com.example.model.Account;
@@ -19,6 +21,8 @@ import com.example.model.Account;
 // @Repository — specialization of @Component, indicates a data access component
 @Qualifier("jdbc")
 @Repository("jdbcAccountRepository")
+@Profile("dev")
+@Scope("singleton") // Default scope, can be omitted , prototype, request,session
 public class JdbcAccountRepository implements AccountRepository {
 
     private static final Logger logger = LoggerFactory.getLogger(JdbcAccountRepository.class);
