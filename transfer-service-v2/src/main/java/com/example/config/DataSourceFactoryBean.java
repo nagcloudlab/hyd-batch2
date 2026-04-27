@@ -2,18 +2,23 @@ package com.example.config;
 
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.FactoryBean;
 
 import com.zaxxer.hikari.HikariDataSource;
 
+// FactoryBean<T> — interface for creating complex beans
+// Spring calls getObject() to produce the actual bean
+// getBean("dataSource") returns the product (DataSource)
+// getBean("&dataSource") returns the factory itself (DataSourceFactoryBean)
 public class DataSourceFactoryBean implements FactoryBean<DataSource> {
 
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(DataSourceFactoryBean.class);
+    private static final Logger logger = LoggerFactory.getLogger(DataSourceFactoryBean.class);
 
-    private String url;
-    private String username;
-    private String password;
+    private final String url;
+    private final String username;
+    private final String password;
 
     public DataSourceFactoryBean(String url, String username, String password) {
         this.url = url;
@@ -40,9 +45,7 @@ public class DataSourceFactoryBean implements FactoryBean<DataSource> {
 
     @Override
     public boolean isSingleton() {
-        return false;
+        return true;
     }
-}
 
-// JPA
-// EntityManagerFactoryBean -> EntityManagerFactory -> EntityManager
+}

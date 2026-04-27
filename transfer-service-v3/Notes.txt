@@ -1,0 +1,112 @@
+
+
+https://nagcloudlab.notion.site/hyd-batch-2-34c5bab9bf87804bae9ac63ad12f2a7d?source=copy_link
+
+
+project : transfer-service-v1
+-------------------------------
+
+👉 define the data model
+
+        - Account
+
+👉 define layer(s)
+
+        1. data/repository layer => persistence logic
+                - AccountRepository => CRUD operations for Account
+        2. service/business layer => processing logic
+                - TransferService => transfer funds between accounts
+
+
+-------
+How to run the application using Maven:
+
+mvn clean compile exec:java -Dexec.mainClass="com.example.TransferServiceApplication"
+
+
+----
+
+
+project : transfer-service-v1
+------------------------------
+
+
+
+design issues
+---------------
+
+-> tight-coupling b/w dependent & dependency.
+-> hard to test dependent in isolation.
+
+   => can't extend component with new-features without modifying existing code.
+   => dev & bugging becomes difficult as changes in one component can affect others.
+   => code becomes less maintainable and scalable over time.
+
+performance issues
+-----------------
+
+-> on each transfer request, a new instance of AccountRepository is created, leading to increased memory usage and slower performance due to repeated instantiation.
+
+   => inefficient resource utilization, especially under high load.
+   => potential for memory leaks if instances are not properly managed.
+   => overall degradation of application responsiveness and user experience.
+
+why these issues occur?
+-----------------
+
+-> dependent managing lifecycle of it's own dependencies(s)
+
+
+Naive Solution:
+---------------
+
+-> dont'create dependency in dependen't home -> factory patern
+
+Problem with factpry-pattern alone
+-----------------------------------
+
+-> still perfornace issues exist.
+
+
+Best Solution:
+------------------------------
+
+-> don't create & lookup dependency on factory directly. isntead inject the dependecy 
+  by third-person ( Dependency Inversion Principle aka Inversion Of Control )
+
+
+how to implement IOC ?
+
+-> dependency Injection
+
+        -> constructor through 
+
+------------------------------------
+SOLID Principles
+--------------------------------------
+
+S - Single Responsibility Principle
+O - Open for extension/Closed for modification Principle 
+L - Liskov Substitution Principle ( polymorphism )
+I - Interface Segregation Principle
+D - Dependency Inversion Principle ( Inversion of Control )
+
+-----
+
+
+
+
+create Postgres database container using docker
+
+docker run \
+--name postgres-container \
+-e POSTGRES_USER=postgres \
+-e POSTGRES_PASSWORD=mysecretpassword \
+-e POSTGRES_DB=mydatabase \
+-p 5432:5432 \
+-d postgres:latest
+
+docker container ls
+docker logs postgres-container
+docker exec -it postgres-container psql -U postgres -d mydatabase
+\dt

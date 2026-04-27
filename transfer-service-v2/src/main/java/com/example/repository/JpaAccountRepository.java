@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
 import com.example.model.Account;
@@ -13,10 +13,9 @@ import com.example.model.Account;
 // LSP — Can substitute JpaAccountRepository wherever AccountRepository is expected
 // SRP — Only handles persistence logic using JPA
 // @Primary — when multiple beans qualify, Spring picks this one by default
-// @Primary
+@Primary
 @Qualifier("jpa")
 @Repository("jpaAccountRepository")
-@Profile("prod")
 public class JpaAccountRepository implements AccountRepository {
 
     private static final Logger logger = LoggerFactory.getLogger(JpaAccountRepository.class);

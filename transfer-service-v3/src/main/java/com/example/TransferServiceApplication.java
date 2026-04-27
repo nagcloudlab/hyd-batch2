@@ -6,9 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import com.example.cache.ApplicationCache;
 import com.example.config.TransferServiceConfiguration;
-import com.example.repository.AccountRepository;
 import com.example.service.TransferService;
 
 // In v1, we manually created and wired dependencies (acted as the assembler)
@@ -27,12 +25,8 @@ public class TransferServiceApplication {
         logger.info("=".repeat(70));
 
         // Java config: AnnotationConfigApplicationContext with @Configuration class
-        // XML config alternative: new ClassPathXmlApplicationContext("beans.xml")
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
         context.register(TransferServiceConfiguration.class);
-        // Activate profile programmatically (alternative to
-        // -Dspring.profiles.active=dev)
-        // context.getEnvironment().setActiveProfiles("dev");
         context.refresh();
         logger.info("Transfer Service Application started successfully.");
 
@@ -43,27 +37,33 @@ public class TransferServiceApplication {
         logger.info("RUN PHASE");
         logger.info("=".repeat(70));
 
-        // Bean Scopes demo — singleton returns same instance, prototype returns new
-        // each time
-        // AccountRepository repo1 = context.getBean(AccountRepository.class);
-        // AccountRepository repo2 = context.getBean(AccountRepository.class);
-        // logger.info("Singleton — same instance? {} (r1={}, r2={})",
-        // repo1 == repo2, repo1.hashCode(), repo2.hashCode());
-
-        // @Lazy demo — ApplicationCache is created only when first accessed, not at
-        // startup
-        // ApplicationCache cache = context.getBean(ApplicationCache.class);
-
+        //
         // Lookup bean by name and type
-        // TransferService transferService = context.getBean("transferService",
-        // TransferService.class);
+        TransferService transferService = context.getBean("transferService",
+                TransferService.class);
 
         // At runtime, this is a Spring AOP proxy, not the actual TransferServiceImpl
         // logger.info("Bean class: {}", transferService.getClass().getName());
 
-        // transferService.transfer(new BigDecimal("300.00"), "123", "456");
-        logger.info("-".repeat(70));
-        // transferService.transfer(new BigDecimal("150.00"), "789", "012");
+        new Thread(() -> {
+            try {
+                Thread.sleep(2000); // Simulate some delay before running the transfer
+                logger.info("Initiating transfer operation...");
+                transferService.transfer(new BigDecimal("100.00"), "123", "456");
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }).start();
+
+        new Thread(() -> {
+            try {
+                Thread.sleep(3000); // Simulate some delay before running the transfer
+                logger.info("Initiating another transfer operation...");
+                transferService.transfer(new BigDecimal("200.00"), "789", "012");
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }).start();
 
         // =====================================================================
         // SHUTDOWN PHASE — @PreDestroy callbacks and resource cleanup

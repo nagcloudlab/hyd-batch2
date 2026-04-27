@@ -1,20 +1,27 @@
 package com.example.config;
 
-public class PostgresDriverCondition implements org.springframework.context.annotation.Condition {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Condition;
+import org.springframework.context.annotation.ConditionContext;
+import org.springframework.core.type.AnnotatedTypeMetadata;
+
+// Custom Condition — checks if Postgres driver is on classpath before creating a bean
+// This is what Spring Boot does automatically with @ConditionalOnClass
+public class PostgresDriverCondition implements Condition {
+
+    private static final Logger logger = LoggerFactory.getLogger(PostgresDriverCondition.class);
 
     @Override
-    public boolean matches(org.springframework.context.annotation.ConditionContext context,
-            org.springframework.core.type.AnnotatedTypeMetadata metadata) {
+    public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
         try {
             Class.forName("org.postgresql.Driver");
-            return true; // Driver is present, condition matches
+            logger.info("Postgres driver found — condition TRUE");
+            return true;
         } catch (ClassNotFoundException e) {
-            return false; // Driver not found, condition does not match
+            logger.info("Postgres driver NOT found — condition FALSE");
+            return false;
         }
-
-        // return false; // For demonstration, we assume the driver is always present.
-        // In a real
-        // application, you would check for the actual driver class.
     }
 
 }

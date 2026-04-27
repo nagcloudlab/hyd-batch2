@@ -2,19 +2,17 @@ package com.example.service;
 
 import java.math.BigDecimal;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.example.annotation.NpciAnnotation;
-import com.example.event.TransferCompletedEvent;
 import com.example.exception.AccountNotFoundException;
 import com.example.exception.InsufficientFundsException;
 import com.example.repository.AccountRepository;
+
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 
 // SRP — only handles transfer business logic, delegates persistence to repository
 // DIP — depends on AccountRepository abstraction, not on concrete implementations
@@ -24,16 +22,16 @@ public class TransferServiceImpl implements TransferService {
 
     private static final Logger logger = LoggerFactory.getLogger(TransferServiceImpl.class);
 
-    // 'final' — dependency cannot be reassigned after construction (safe DI practice)
+    // 'final' — dependency cannot be reassigned after construction (safe DI
+    // practice)
     private final AccountRepository accountRepository;
-    private final ApplicationEventPublisher eventPublisher;
 
-    // Constructor Injection — Spring auto-detects single constructor, @Autowired optional
-    // @Qualifier("jdbc") — picks JdbcAccountRepository when multiple beans implement AccountRepository
-    public TransferServiceImpl(/* @Qualifier("jdbc") */ AccountRepository accountRepository,
-                               ApplicationEventPublisher eventPublisher) {
+    // Constructor Injection — Spring auto-detects single constructor, @Autowired
+    // optional
+    // @Qualifier("jdbc") — picks JdbcAccountRepository when multiple beans
+    // implement AccountRepository
+    public TransferServiceImpl(/* @Qualifier("jdbc") */ AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
-        this.eventPublisher = eventPublisher;
         logger.info("TransferServiceImpl initialized with {} repository.",
                 accountRepository.getClass().getSimpleName());
     }
@@ -41,7 +39,7 @@ public class TransferServiceImpl implements TransferService {
     // Setter DI — alternative to constructor injection (uncomment to demo)
     // @Autowired(required = true)
     // public void setAccountRepository(AccountRepository accountRepository) {
-    //     this.accountRepository = accountRepository;
+    // this.accountRepository = accountRepository;
     // }
 
     // @PostConstruct — called after DI is complete, use for initialization logic
@@ -56,7 +54,13 @@ public class TransferServiceImpl implements TransferService {
         logger.info("TransferServiceImpl bean is being destroyed.");
     }
 
-    @NpciAnnotation
+    // ACID
+    // Atomicity — all steps succeed or all fail (rollback on exception)
+    // Consistency — ensures data integrity (e.g., no negative balances)
+    // Isolation — concurrent transactions do not interfere (handled by DB)
+
+    // -> TransactionalAspect -> TransactionInterceptor ->TransactionManager
+    @Transactional(rollbackFor = RuntimeException.class, noRollbackFor = InsufficientFundsException.class, isolation = org.springframework.transaction.annotation.Isolation.READ_COMMITTED)
     @Override
     public void transfer(BigDecimal amount, String fromAccountNumber, String toAccountNumber) {
 
@@ -83,7 +87,8 @@ public class TransferServiceImpl implements TransferService {
             throw new AccountNotFoundException(fromAccountNumber);
         }
 
-        // Fail fast with custom exception. Use compareTo() for BigDecimal, never == or equals
+        // Fail fast with custom exception. Use compareTo() for BigDecimal, never == or
+        // equals
         if (fromAccount.getBalance().compareTo(amount) < 0) {
             throw new InsufficientFundsException(fromAccountNumber, fromAccount.getBalance(), amount);
         }
@@ -106,14 +111,18 @@ public class TransferServiceImpl implements TransferService {
 
         // step-5: Save updated accounts
         accountRepository.save(fromAccount);
+
+        boolean simulateError = false; // Set to true to test rollback behavior
+        if (simulateError) {
+            logger.warn("Simulating error after debiting 'from' account but before saving 'to' account.");
+            throw new RuntimeException("Simulated error to test transaction rollback");
+        }
+
         accountRepository.save(toAccount);
 
         logger.info("Transfer of ${} from account {} to account {} completed successfully.",
                 amount, fromAccountNumber, toAccountNumber);
 
-        // Publish event — listeners react independently (decoupled)
-        eventPublisher.publishEvent(
-                new TransferCompletedEvent(this, amount, fromAccountNumber, toAccountNumber));
     }
 
 }
