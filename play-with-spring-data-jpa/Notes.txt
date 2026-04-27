@@ -1,0 +1,12 @@
+
+
+
+How Select data using JPA?
+
+    - by primary key
+    - by JPQL ( Object Oriented Query Language )
+    - by Native SQL
+    - by Criteria API ( Dynamic Query )
+    - by Named Query
+    - by Query By Example ( QBE )
+    .....
