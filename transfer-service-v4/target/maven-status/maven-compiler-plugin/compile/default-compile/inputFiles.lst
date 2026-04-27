@@ -1,4 +1,6 @@
 /Users/nag/hyd-batch2/transfer-service-v4/src/main/java/com/example/TransferServiceApplication.java
+/Users/nag/hyd-batch2/transfer-service-v4/src/main/java/com/example/components/A.java
+/Users/nag/hyd-batch2/transfer-service-v4/src/main/java/com/example/components/B.java
 /Users/nag/hyd-batch2/transfer-service-v4/src/main/java/com/example/exception/AccountNotFoundException.java
 /Users/nag/hyd-batch2/transfer-service-v4/src/main/java/com/example/exception/InsufficientFundsException.java
 /Users/nag/hyd-batch2/transfer-service-v4/src/main/java/com/example/model/Account.java
@@ -6,3 +8,4 @@
 /Users/nag/hyd-batch2/transfer-service-v4/src/main/java/com/example/repository/JdbcAccountRepository.java
 /Users/nag/hyd-batch2/transfer-service-v4/src/main/java/com/example/service/TransferService.java
 /Users/nag/hyd-batch2/transfer-service-v4/src/main/java/com/example/service/TransferServiceImpl.java
+/Users/nag/hyd-batch2/transfer-service-v4/src/main/java/com/npci/config/NpciHydConfiguration.java

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,9 @@ public class TransferServiceImpl implements TransferService {
     // 'final' — dependency cannot be reassigned after construction (safe DI
     // practice)
     private final AccountRepository accountRepository;
+
+    @Value("${npci.transfer.limit:10000.00}") // Inject from properties, default to 10000.00 if not set
+    private double transferLimit; // Example of a configurable property with a default value
 
     // Constructor Injection — Spring auto-detects single constructor, @Autowired
     // optional
@@ -70,6 +74,10 @@ public class TransferServiceImpl implements TransferService {
             isolation = Isolation.READ_COMMITTED)
     @Override
     public void transfer(BigDecimal amount, String fromAccountNumber, String toAccountNumber) {
+
+        System.out.println("--------------------------------");
+        System.out.println("Transfer Limit: $" + transferLimit);
+        System.out.println("--------------------------------");
 
         // Validate inputs at boundary — fail fast before any business logic runs
         if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
