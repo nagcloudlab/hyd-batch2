@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--
+    Error template — rendered by @ControllerAdvice GlobalExceptionHandler
+    Model attributes: errorTitle, errorMessage, errorStatus (set by @ExceptionHandler methods)
+    @ResponseStatus on each handler sets the HTTP status code (404, 400, 500)
+    th:text safely renders dynamic content (prevents XSS)
+-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <title>Error - Transfer Service v6</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="/">Transfer Service</a>
+            <div class="navbar-nav">
+                <a class="nav-link" href="/transfer">New Transfer</a>
+                <a class="nav-link" href="/accounts">Accounts</a>
+                <a class="nav-link" href="/transfer-history">History</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow-sm border-danger">
+                    <div class="card-body text-center py-5">
+                        <div class="mb-3">
+                            <!-- th:text renders HTTP status code -->
+                            <span class="display-1 text-danger" th:text="${errorStatus}">500</span>
+                        </div>
+                        <h3 class="card-title text-danger" th:text="${errorTitle}">Error</h3>
+                        <p class="card-text text-muted mt-3" th:text="${errorMessage}">
+                            Error details will appear here
+                        </p>
+                        <div class="d-flex justify-content-center gap-3 mt-4">
+                            <a href="/transfer" class="btn btn-primary">Try Again</a>
+                            <a href="/" class="btn btn-outline-secondary">Home</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
