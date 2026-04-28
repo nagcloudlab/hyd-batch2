@@ -1,5 +1,5 @@
-project : transfer-service-v3 (Spring JDBC — Manual Config, ACID)
-------------------------------------------------------------------
+project : transfer-service-v6 (Spring Web — Thymeleaf MVC)
+-------------------------------------------------------------
 
 Reference: https://nagcloudlab.notion.site/hyd-batch-2-34c5bab9bf87804bae9ac63ad12f2a7d
 
@@ -7,86 +7,93 @@ Reference: https://nagcloudlab.notion.site/hyd-batch-2-34c5bab9bf87804bae9ac63ad
 Project Structure
 -----------------
 
-1. Data Model
-        - Account
+1. Data Model (JPA entities)
+        - Account (@Entity, @Id)
+        - TxnHistory (@Entity, @ManyToOne, @Enumerated)
+        - TransferType (enum: DEBIT, CREDIT)
 
 2. Layers
-        1. Repository Layer  => real database persistence using JdbcTemplate
-                - AccountRepository (interface)
-                - JdbcAccountRepository (JdbcTemplate, queryForObject, update)
-        2. Service Layer      => processing logic with @Transactional
+        1. Repository Layer   => Spring Data JPA
+                - AccountRepository (JpaRepository<Account, String>)
+                - TxnHistoryRepository (JpaRepository<TxnHistory, Long>)
+        2. Service Layer       => business logic with @Transactional
                 - TransferService (interface)
-                - TransferServiceImpl (@Service, @Transactional, ACID demo)
-        3. Config Layer       => manual Spring configuration (the "pain")
-                - TransferServiceConfiguration
-                  - DataSource bean (HikariCP)
-                  - JdbcTemplate bean
-                  - PlatformTransactionManager bean
-                  - @EnableTransactionManagement
+                - TransferServiceImpl (@Service)
+        3. Web Layer           => Spring MVC + Thymeleaf
+                - TransferController (@Controller)
+                - TransferRequest (DTO with Bean Validation)
+                - GlobalExceptionHandler (@ControllerAdvice)
+        4. View Layer          => Thymeleaf templates + static HTML
+                - templates/transfer-form.html (th:object, th:field, th:errors)
+                - templates/transfer-success.html (flash attributes)
+                - templates/account-list.html (th:each)
+                - templates/account-detail.html (@PathVariable)
+                - templates/transfer-history.html (th:each, th:classappend)
+                - templates/error.html (@ExceptionHandler target)
+                - static/index.html (plain HTML, no Thymeleaf)
 
 
 How to Run
 ----------
 
-1. Start Postgres:
-
-docker run \
-  --name postgres-container \
-  -e POSTGRES_USER=postgres \
-  -e POSTGRES_PASSWORD=mysecretpassword \
-  -e POSTGRES_DB=mydatabase \
-  -p 5432:5432 \
-  -d postgres:latest
-
-2. Create table and seed data:
-
-docker exec -it postgres-container psql -U postgres -d mydatabase
-
-CREATE TABLE accounts (
-    number VARCHAR(255) PRIMARY KEY,
-    balance DECIMAL(10, 2) NOT NULL
-);
-
-INSERT INTO accounts (number, balance) VALUES ('123', 1000.00);
-INSERT INTO accounts (number, balance) VALUES ('456', 500.00);
-INSERT INTO accounts (number, balance) VALUES ('789', 2000.00);
-INSERT INTO accounts (number, balance) VALUES ('012', 750.00);
-
-3. Run application:
-
-mvn clean compile exec:java -Dexec.mainClass="com.example.TransferServiceApplication"
+1. Start Postgres (see v3 Notes.txt for Docker setup)
+2. Run: mvn spring-boot:run
+3. Open: http://localhost:8080
 
 
 --------------------------------------------------------------
-Key Concepts
+Spring Web Concepts Covered
 --------------------------------------------------------------
 
-1. JdbcTemplate     — Spring's JDBC helper (connection mgmt, statement creation, exception translation)
-2. @Transactional   — Declarative transaction management via AOP proxy
-3. ACID Demo:
-   - Atomicity     — simulateError flag to test rollback
-   - Consistency   — balance validation before transfer
-   - Isolation     — concurrent threads with READ_COMMITTED
-   - Durability    — committed data survives Postgres restart
+1.  @Controller              — returns view names (vs @RestController for JSON)
+2.  @GetMapping              — shorthand for @RequestMapping(method=GET)
+3.  @PostMapping             — shorthand for @RequestMapping(method=POST)
+4.  Model                    — pass data from controller to Thymeleaf template
+5.  @ModelAttribute          — bind form fields to a Java object (TransferRequest)
+6.  @RequestParam            — bind individual query/form params (shown in original code)
+7.  @PathVariable            — extract values from URL path (/accounts/{id})
+8.  @Valid + BindingResult   — Bean Validation with error capture
+9.  PRG Pattern              — redirect: after POST to prevent duplicate submission
+10. RedirectAttributes       — flash attributes that survive a redirect
+11. @ControllerAdvice        — centralized exception handling across all controllers
+12. @ExceptionHandler        — handle specific exception types, return error views
+
+--------------------------------------------------------------
+Thymeleaf Concepts Covered
+--------------------------------------------------------------
+
+1.  th:text       — safely render text (auto-escapes HTML to prevent XSS)
+2.  th:if         — conditional rendering
+3.  th:each       — iterate over collections
+4.  th:object     — bind form to a model attribute
+5.  th:field      — bind input to a field (generates name/id/value)
+6.  th:errors     — show validation error messages
+7.  th:action     — generate form action URL
+8.  th:href       — generate dynamic links with @{...} URL syntax
+9.  th:classappend — conditionally add CSS classes
+10. |...|         — literal substitution (string interpolation)
+11. ${...}        — variable expression (access model attributes)
+12. *{...}        — selection expression (access fields on th:object)
+13. @{...}        — URL expression (context-path aware)
 
 
 --------------------------------------------------------------
-Pain Points (Manual Config)
+Request Flow
 --------------------------------------------------------------
 
--> Must manually create 3 beans: DataSource, JdbcTemplate, TransactionManager
--> Must add @EnableTransactionManagement
--> Must add @PropertySource to load properties
--> Must configure connection pool settings in @Bean method
-
-All of this disappears in v4 (Spring Boot auto-configuration)
+Browser -> Embedded Tomcat -> DispatcherServlet -> @Controller method
+   -> return "view-name"
+   -> ViewResolver (Thymeleaf)
+   -> templates/view-name.html (processed with Model data)
+   -> HTML response -> Browser
 
 
 --------------------------------------------------------------
-What's Next: transfer-service-v4 (Spring Boot)
+What's Next: transfer-service-v7 (Spring REST API)
 --------------------------------------------------------------
 
--> Spring Boot auto-configures: DataSource, JdbcTemplate, TransactionManager
--> Just add spring-boot-starter-jdbc + application.properties
--> No @Configuration class needed for infrastructure beans
--> Focus on business logic, not plumbing
+-> @RestController instead of @Controller
+-> @ResponseBody returns JSON directly (no Thymeleaf)
+-> @RequestBody receives JSON from client
+-> ResponseEntity for HTTP status codes
+-> Content negotiation, CORS, API versioning

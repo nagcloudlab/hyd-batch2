@@ -1,7 +1,7 @@
 package com.example.service;
 
 import java.math.BigDecimal;
-import java.sql.Date;
+import java.time.LocalDateTime;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +18,6 @@ import com.example.model.TxnHistory;
 import com.example.repository.AccountRepository;
 import com.example.repository.TxnHistoryRepository;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
-
 // SRP — only handles transfer business logic, delegates persistence to repository
 // DIP — depends on AccountRepository abstraction, not on concrete implementations
 // @Service — specialization of @Component, indicates a business logic component
@@ -29,66 +26,36 @@ public class TransferServiceImpl implements TransferService {
 
     private static final Logger logger = LoggerFactory.getLogger(TransferServiceImpl.class);
 
-    // 'final' — dependency cannot be reassigned after construction (safe DI
-    // practice)
     private final AccountRepository accountRepository;
     private final TxnHistoryRepository txnHistoryRepository;
 
-    @Value("${npci.transfer.limit:10000.00}") // Inject from properties, default to 10000.00 if not set
-    private double transferLimit; // Example of a configurable property with a default value
+    // @Value — injects from application.properties with default fallback
+    @Value("${npci.transfer.limit:10000.00}")
+    private BigDecimal transferLimit;
 
-    // Constructor Injection — Spring auto-detects single constructor, @Autowired
-    // optional
-    public TransferServiceImpl(AccountRepository accountRepository, TxnHistoryRepository txnHistoryRepository) {
+    // Constructor Injection — Spring auto-detects single constructor, @Autowired optional
+    public TransferServiceImpl(AccountRepository accountRepository,
+                               TxnHistoryRepository txnHistoryRepository) {
         this.accountRepository = accountRepository;
         this.txnHistoryRepository = txnHistoryRepository;
-        logger.info("TransferServiceImpl initialized with {} and {} repositories.",
-                accountRepository.getClass().getSimpleName(),
-                txnHistoryRepository.getClass().getSimpleName());
     }
 
-    // @PostConstruct — called after DI is complete, use for initialization logic
-    @PostConstruct
-    public void init() {
-        logger.info("TransferServiceImpl bean is initialized and ready to use.");
-    }
-
-    // @PreDestroy — called before bean is removed, use for cleanup/resource release
-    @PreDestroy
-    public void destroy() {
-        logger.info("TransferServiceImpl bean is being destroyed.");
-    }
-
-    // ACID Properties:
-    // Atomicity — all steps succeed or all fail (rollback on exception)
-    // Consistency — ensures data integrity (e.g., no negative balances)
-    // Isolation — concurrent transactions do not interfere (READ_COMMITTED)
-    // Durability — committed data survives DB restart
-    //
-    // How it works: @Transactional -> TransactionInterceptor (AOP) ->
-    // PlatformTransactionManager
     @Transactional(
-            // rollbackFor — which exceptions trigger rollback (RuntimeException by default
-            // anyway)
-            rollbackFor = RuntimeException.class,
-            // noRollbackFor — InsufficientFundsException is a business rule violation, not
-            // a data error;
-            // no DB changes were made yet, so no rollback needed
-            noRollbackFor = InsufficientFundsException.class,
-            // READ_COMMITTED — prevents dirty reads; each transaction sees only committed
-            // data
-            // Other options: READ_UNCOMMITTED, REPEATABLE_READ, SERIALIZABLE
-            isolation = Isolation.READ_COMMITTED)
+        rollbackFor = RuntimeException.class,
+        noRollbackFor = InsufficientFundsException.class,
+        isolation = Isolation.READ_COMMITTED
+    )
     @Override
     public void transfer(BigDecimal amount, String fromAccountNumber, String toAccountNumber) {
 
-        System.out.println("--------------------------------");
-        System.out.println("Transfer Limit: $" + transferLimit);
-        System.out.println("--------------------------------");
+        logger.info("Transfer limit: ${}", transferLimit);
 
         // Validate inputs at boundary — fail fast before any business logic runs
         if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Transfer amount must be positive");
+        }
+        if (amount.compareTo(transferLimit) > 0) {
+            throw new IllegalArgumentException("Transfer amount exceeds limit of $" + transferLimit);
         }
         if (fromAccountNumber == null || fromAccountNumber.isBlank()) {
             throw new IllegalArgumentException("From account number is required");
@@ -103,13 +70,11 @@ public class TransferServiceImpl implements TransferService {
         logger.info("Initiating transfer of ${} from account {} to account {}.",
                 amount, fromAccountNumber, toAccountNumber);
 
-        // step-1: Load 'from' account
+        // step-1: Load 'from' account (JPA findById returns Optional)
         Account fromAccount = accountRepository.findById(fromAccountNumber)
                 .orElseThrow(() -> new AccountNotFoundException(fromAccountNumber));
 
         // Fail fast — use compareTo() for BigDecimal, never == or equals
-        // (BigDecimal("1.0").equals(BigDecimal("1.00")) returns false due to scale
-        // difference)
         if (fromAccount.getBalance().compareTo(amount) < 0) {
             throw new InsufficientFundsException(fromAccountNumber, fromAccount.getBalance(), amount);
         }
@@ -128,34 +93,24 @@ public class TransferServiceImpl implements TransferService {
         logger.info("Credited ${} to account {}. New balance: ${}.",
                 amount, toAccountNumber, toAccount.getBalance());
 
-        // step-5: Save updated accounts
+        // step-5: Save updated accounts (JPA dirty checking would auto-save, but explicit is clearer)
         accountRepository.save(fromAccount);
+        accountRepository.save(toAccount);
 
-        // step-6: Save transaction history
+        // step-6: Record transaction history
         TxnHistory debitTxn = new TxnHistory();
-        debitTxn.setAmount(amount.doubleValue());
-        debitTxn.setTimestamp(new Date(System.currentTimeMillis()));
+        debitTxn.setAmount(amount);
+        debitTxn.setTimestamp(LocalDateTime.now());
         debitTxn.setTransferType(TransferType.DEBIT);
         debitTxn.setAccount(fromAccount);
         txnHistoryRepository.save(debitTxn);
 
         TxnHistory creditTxn = new TxnHistory();
-        creditTxn.setAmount(amount.doubleValue());
-        creditTxn.setTimestamp(new Date(System.currentTimeMillis()));
+        creditTxn.setAmount(amount);
+        creditTxn.setTimestamp(LocalDateTime.now());
         creditTxn.setTransferType(TransferType.CREDIT);
         creditTxn.setAccount(toAccount);
         txnHistoryRepository.save(creditTxn);
-
-        // Atomicity demo — set to true to simulate failure between debit and credit
-        // Transaction rolls back: fromAccount debit is undone, toAccount credit never
-        // happens
-        boolean simulateError = false;
-        if (simulateError) {
-            logger.warn("Simulating error after debit but before credit save.");
-            throw new RuntimeException("Simulated error to test transaction rollback");
-        }
-
-        accountRepository.save(toAccount);
 
         logger.info("Transfer of ${} from account {} to account {} completed successfully.",
                 amount, fromAccountNumber, toAccountNumber);
