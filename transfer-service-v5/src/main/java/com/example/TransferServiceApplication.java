@@ -40,9 +40,6 @@ public class TransferServiceApplication {
         logger.info("RUN PHASE");
         logger.info("=".repeat(70));
 
-        String npciBean1 = context.getBean("npciBean1", String.class);
-        logger.info("Retrieved bean from NPCI config: {}", npciBean1);
-
         TransferService transferService = context.getBean("transferService", TransferService.class);
 
         // Two concurrent transfers — demos Isolation property of ACID
