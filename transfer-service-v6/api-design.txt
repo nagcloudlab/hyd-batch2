@@ -1,0 +1,39 @@
+
+
+    FUND TRANSFER: Complete API Flow
+    ═════════════════════════════════
+
+
+    CLIENT                                              SERVER
+    ──────                                              ──────
+       │                                                   │
+       │   POST /api/v1/transfers                          │
+       │   Headers:                                        │
+       │     Content-Type: application/json                │
+       │     Authorization: Bearer eyJhbGc...              │
+       │   Body:                                           │
+       │     {                                             │
+       │       "fromAccount": "ACC001",                    │
+       │       "toAccount": "ACC002",                      │
+       │       "amount": 5000,                             │
+       │       "remarks": "Rent payment"                   │
+       │     }                                             │
+       │ ─────────────────────────────────────────────────►│
+       │                                                   │
+       │                                    ┌──────────────┤
+       │                                    │ Validate     │
+       │                                    │ Process      │
+       │                                    │ Save         │
+       │                                    └──────────────┤
+       │                                                   │
+       │   HTTP/1.1 201 Created                            │
+       │   Headers:                                        │
+       │     Content-Type: application/json                │
+       │     Location: /transfers/TXN789                   │
+       │   Body:                                           │
+       │     {                                             │
+       │       "transactionId": "TXN789",                  │
+       │       "status": "SUCCESS",                        │
+       │       "timestamp": "2024-01-15T10:30:00Z"         │
+       │     }                                             │
+       │◄───────────────────────────────────────────────── │
