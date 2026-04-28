@@ -61,7 +61,8 @@
                                               th:text="${txn.transferType}">DEBIT</span>
                                     </td>
                                     <td th:text="|$${txn.amount}|">$100.00</td>
-                                    <td th:text="${txn.timestamp}">2024-01-01 12:00</td>
+                                    <!-- #temporals.format() — Thymeleaf utility for formatting java.time objects -->
+                                    <td th:text="${#temporals.format(txn.timestamp, 'dd-MMM-yyyy HH:mm')}">01-Jan-2024 12:00</td>
                                 </tr>
                             </tbody>
                         </table>

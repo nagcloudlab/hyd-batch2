@@ -1,0 +1,36 @@
+
+
+e.g todos-service
+
+1. identify the resource(s)
+    - todo
+    - user
+    - project
+2. indentify relationship between resources
+    - user has many todos
+    - project has many todos
+    - todo belongs to user and project
+3. identify the actions that can be performed on the resources
+    - create a todo
+    - read a todo
+    - update a todo
+    - delete a todo
+    - list all todos for a user
+    - list all todos for a project
+4. design the API endpoints
+    - POST /todos
+    - GET /todos/{id}
+    - PUT /todos/{id}
+    - DELETE /todos/{id}
+    - GET /users/{user_id}/todos
+    - GET /projects/{project_id}/todos
+5. know resource representation
+    - JSON
+    - XML
+
+6. design the request and response payloads
+
+7. implement authentication and authorization
+
+    - JWT
+    - OAuth2

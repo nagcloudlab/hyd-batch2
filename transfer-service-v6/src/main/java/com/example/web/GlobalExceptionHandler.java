@@ -17,7 +17,7 @@ import com.example.exception.InsufficientFundsException;
 // @ResponseStatus — sets the HTTP status code on the response
 //
 // Without this, Spring Boot shows a generic Whitelabel Error Page
-@ControllerAdvice
+@ControllerAdvice(basePackages = "com.example.web")
 public class GlobalExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
