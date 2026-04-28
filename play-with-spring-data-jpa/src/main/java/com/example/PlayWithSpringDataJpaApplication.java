@@ -19,6 +19,7 @@ import com.example.repository.EmployeeRepository;
 import com.example.repository.GirlRepository;
 import com.example.repository.ProjectRepository;
 import com.example.service.CustomerService;
+import com.example.service.OrderService;
 
 @SpringBootApplication
 @EnableJpaRepositories(basePackages = "com.example.repository")
@@ -35,7 +36,8 @@ public class PlayWithSpringDataJpaApplication {
 			GirlRepository girlRepository,
 			EmployeeRepository employeeRepository,
 			ProjectRepository projectRepository,
-			CustomerService customerService) {
+			CustomerService customerService,
+			OrderService orderService) {
 		return args -> {
 
 			// Customer customer = new Customer();
@@ -121,7 +123,11 @@ public class PlayWithSpringDataJpaApplication {
 			// System.out.println("Employee Name: " + employee.getName());
 			// });
 
-			customerService.doSomething();
+			// customerService.doSomething();
+
+			orderService.placeOrder(java.util.Arrays.asList(
+					new com.example.dto.CartLine(1L, 2),
+					new com.example.dto.CartLine(2L, 1)));
 
 		};
 	}
