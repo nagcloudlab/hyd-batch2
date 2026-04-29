@@ -1,0 +1,7 @@
+services:
+
+  ftgo-monolith:
+    build: ./ftgo-monolith
+    container_name: ftgo-monolith
+    ports:
+      - "8080:8080"

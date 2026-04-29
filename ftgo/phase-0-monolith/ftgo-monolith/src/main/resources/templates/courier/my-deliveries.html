@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FTGO - My Deliveries</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f6fa; }
+        .header { background: linear-gradient(135deg, #8e44ad, #9b59b6); color: white; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 1.3em; }
+        .header a { color: white; text-decoration: none; opacity: 0.9; font-size: 0.9em; }
+        .topbar { background: white; border-bottom: 1px solid #eee; padding: 12px 24px; display: flex; gap: 20px; align-items: center; }
+        .topbar a { color: #8e44ad; text-decoration: none; font-weight: 600; font-size: 0.9em; padding: 6px 12px; border-radius: 6px; }
+        .topbar a:hover, .topbar a.active { background: #f3e5f5; }
+        .topbar .user-select { margin-left: auto; display: flex; align-items: center; gap: 8px; font-size: 0.85em; color: #666; }
+        .topbar select { padding: 6px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.85em; }
+        .container { max-width: 1100px; margin: 24px auto; padding: 0 20px; }
+        h2 { color: #2c3e50; margin-bottom: 20px; font-size: 1.4em; }
+        .delivery-card { background: white; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-bottom: 16px; overflow: hidden; border-left: 4px solid #ddd; }
+        .delivery-card.ASSIGNED { border-left-color: #3498db; }
+        .delivery-card.PICKED_UP { border-left-color: #9b59b6; }
+        .delivery-card.DELIVERED { border-left-color: #27ae60; }
+        .card-content { padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
+        .delivery-info { flex: 1; }
+        .delivery-info h3 { color: #2c3e50; font-size: 1em; margin-bottom: 6px; }
+        .delivery-meta { display: flex; gap: 16px; flex-wrap: wrap; font-size: 0.85em; color: #888; }
+        .delivery-meta b { color: #555; }
+        .route { margin-top: 8px; display: flex; align-items: center; gap: 8px; font-size: 0.85em; }
+        .route .from { color: #e67e22; font-weight: 600; }
+        .route .to { color: #27ae60; font-weight: 600; }
+        .route .arrow { color: #ccc; }
+        .status { padding: 5px 14px; border-radius: 20px; font-size: 0.8em; font-weight: 600; color: white; }
+        .status.ASSIGNED { background: #3498db; }
+        .status.PICKED_UP { background: #9b59b6; }
+        .status.DELIVERED { background: #27ae60; }
+        .card-actions { padding: 12px 24px; background: #fafafa; border-top: 1px solid #f0f0f0; display: flex; align-items: center; gap: 12px; }
+        .btn { padding: 8px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 0.85em; font-weight: 600; color: white; transition: all 0.2s; }
+        .btn-pickup { background: #f39c12; }
+        .btn-pickup:hover { background: #e67e22; }
+        .btn-deliver { background: #27ae60; }
+        .btn-deliver:hover { background: #219a52; }
+        .hint { font-size: 0.8em; color: #999; }
+        .empty { text-align: center; padding: 60px 20px; background: white; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+        .empty p { color: #999; margin-bottom: 8px; }
+        .empty a { color: #8e44ad; font-weight: 600; }
+        .time-info { font-size: 0.8em; color: #aaa; margin-top: 6px; }
+    </style>
+    <style th:replace="~{fragments/navbar :: navbar-styles}"></style>
+</head>
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar('courier-deliveries')}"></nav>
+    <div class="topbar">
+        <a th:href="@{'/courier/available?courierId=' + ${courierId}}">Available Deliveries</a>
+        <a href="#" class="active">My Deliveries</a>
+        <div class="user-select">
+            <span>Courier:</span>
+            <select onchange="window.location='/courier/my-deliveries?courierId='+this.value">
+                <option th:each="c : ${couriers}" th:value="${c.id}" th:text="${c.name}" th:selected="${c.id == courierId}">Courier</option>
+            </select>
+        </div>
+    </div>
+    <div class="container">
+        <h2>My Deliveries</h2>
+
+        <div th:if="${deliveries.isEmpty()}" class="empty">
+            <p>No active deliveries.</p>
+            <a th:href="@{'/courier/available?courierId=' + ${courierId}}">Check available deliveries &rarr;</a>
+        </div>
+
+        <div th:each="delivery : ${deliveries}" class="delivery-card" th:classappend="${delivery.status}">
+            <div class="card-content">
+                <div class="delivery-info">
+                    <h3>Order #<span th:text="${delivery.foodOrder.id}">1</span>
+                        &mdash; <span th:text="${delivery.foodOrder.restaurant.name}">Restaurant</span>
+                    </h3>
+                    <div class="delivery-meta">
+                        <span><b>Customer:</b> <span th:text="${delivery.foodOrder.consumer.name}">Name</span></span>
+                        <span><b>Amount:</b> Rs.<span th:text="${delivery.foodOrder.totalAmount}">0</span></span>
+                    </div>
+                    <div class="route">
+                        <span class="from" th:text="${delivery.foodOrder.restaurant.address}">From</span>
+                        <span class="arrow">&rarr;</span>
+                        <span class="to" th:text="${delivery.foodOrder.deliveryAddress}">To</span>
+                    </div>
+                    <div class="time-info">
+                        <span th:if="${delivery.assignedTime != null}" th:text="'Assigned: ' + ${#temporals.format(delivery.assignedTime, 'hh:mm a')}">Assigned</span>
+                        <span th:if="${delivery.pickedUpTime != null}" th:text="' | Picked up: ' + ${#temporals.format(delivery.pickedUpTime, 'hh:mm a')}">Picked</span>
+                        <span th:if="${delivery.deliveredTime != null}" th:text="' | Delivered: ' + ${#temporals.format(delivery.deliveredTime, 'hh:mm a')}">Delivered</span>
+                    </div>
+                </div>
+                <span class="status" th:classappend="${delivery.status}" th:text="${delivery.status}">Status</span>
+            </div>
+            <div class="card-actions">
+                <div th:switch="${delivery.status.name()}">
+                    <div th:case="'ASSIGNED'">
+                        <form th:action="@{'/courier/pickup/' + ${delivery.id}}" method="post" style="display:inline">
+                            <input type="hidden" name="courierId" th:value="${courierId}" />
+                            <button type="submit" class="btn btn-pickup">Picked Up from Restaurant</button>
+                        </form>
+                        <span class="hint">Go to <span th:text="${delivery.foodOrder.restaurant.name}">restaurant</span> and collect the order</span>
+                    </div>
+                    <div th:case="'PICKED_UP'">
+                        <form th:action="@{'/courier/deliver/' + ${delivery.id}}" method="post" style="display:inline">
+                            <input type="hidden" name="courierId" th:value="${courierId}" />
+                            <button type="submit" class="btn btn-deliver">Mark as Delivered</button>
+                        </form>
+                        <span class="hint">Deliver to <span th:text="${delivery.foodOrder.deliveryAddress}">address</span></span>
+                    </div>
+                    <div th:case="'DELIVERED'">
+                        <span class="hint">Delivery completed successfully</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
