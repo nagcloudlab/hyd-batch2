@@ -1,0 +1,819 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>A little bit of polish</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+/* Override strong tags inside headings to maintain consistent weight */
+h1 strong,
+h2 strong,
+h3 strong {
+	font-weight: 600;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 10px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+
+	table.collection-content {
+		width: 100%;
+		table-layout: fixed;
+	}
+
+	table.collection-content th,
+	table.collection-content td {
+		overflow-wrap: anywhere;
+	}
+
+	table.collection-content td > .user,
+	table.collection-content td > time {
+		white-space: pre-wrap;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content-wrapper {
+	overflow-x: auto;
+}
+
+@media only print {
+	.collection-content-wrapper {
+		overflow-x: visible;
+	}
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.collection-content td {
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+
+.column-list {
+	display: flex;
+	gap: 46px;
+}
+
+.column {
+	min-width: 0;
+	overflow: hidden;
+}
+
+.column > *:first-child {
+	margin-top: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+table {
+	border-collapse: collapse;
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol.numbered-list.numbered-list-digits-2 {
+	padding-inline-start: 2em;
+}
+
+ol.numbered-list.numbered-list-digits-3plus {
+	padding-inline-start: 2.4em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+	margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.callout img.notion-static-icon {
+	width: 1em;
+	height: 1em;
+}
+
+.callout p {
+	margin: 0;
+}
+
+.callout h1,
+.callout h2,
+.callout h3 {
+	margin: 0 0 0.6rem;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+blockquote.quote-large {
+	font-size: 1.25em;
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray {
+	color: rgba(125, 122, 117, 1);
+	fill: rgba(125, 122, 117, 1);
+}
+.highlight-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.highlight-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.highlight-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.highlight-blue {
+	color: rgba(56, 125, 201, 1);
+	fill: rgba(56, 125, 201, 1);
+}
+.highlight-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.highlight-default_background {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray_background {
+	background: rgba(42, 28, 0, 0.07);
+}
+.highlight-brown_background {
+	background: rgba(139, 46, 0, 0.086);
+}
+.highlight-orange_background {
+	background: rgba(224, 101, 1, 0.129);
+}
+.highlight-yellow_background {
+	background: rgba(211, 168, 0, 0.137);
+}
+.highlight-teal_background {
+	background: rgba(0, 100, 45, 0.09);
+}
+.highlight-blue_background {
+	background: rgba(0, 124, 215, 0.094);
+}
+.highlight-purple_background {
+	background: rgba(102, 0, 178, 0.078);
+}
+.highlight-pink_background {
+	background: rgba(197, 0, 93, 0.086);
+}
+.highlight-red_background {
+	background: rgba(223, 22, 0, 0.094);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(125, 122, 117, 1);
+	fill: rgba(125, 122, 117, 1);
+}
+.block-color-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.block-color-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.block-color-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.block-color-blue {
+	color: rgba(56, 125, 201, 1);
+	fill: rgba(56, 125, 201, 1);
+}
+.block-color-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(240, 239, 237, 1);
+}
+.block-color-brown_background {
+	background: rgba(245, 237, 233, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 235, 222, 1);
+}
+.block-color-yellow_background {
+	background: rgba(249, 243, 220, 1);
+}
+.block-color-teal_background {
+	background: rgba(232, 241, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(229, 242, 252, 1);
+}
+.block-color-purple_background {
+	background: rgba(243, 235, 249, 1);
+}
+.block-color-pink_background {
+	background: rgba(250, 233, 241, 1);
+}
+.block-color-red_background {
+	background: rgba(252, 233, 231, 1);
+}
+.select-value-color-default { background-color: rgba(42, 28, 0, 0.07); }
+.select-value-color-gray { background-color: rgba(28, 19, 1, 0.11); }
+.select-value-color-brown { background-color: rgba(127, 51, 0, 0.156); }
+.select-value-color-orange { background-color: rgba(196, 88, 0, 0.203); }
+.select-value-color-yellow { background-color: rgba(209, 156, 0, 0.282); }
+.select-value-color-green { background-color: rgba(0, 96, 38, 0.156); }
+.select-value-color-blue { background-color: rgba(0, 118, 217, 0.203); }
+.select-value-color-purple { background-color: rgba(92, 0, 163, 0.141); }
+.select-value-color-pink { background-color: rgba(183, 0, 78, 0.152); }
+.select-value-color-red { background-color: rgba(206, 24, 0, 0.164); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="1e95bab9-bf87-80bc-b5cc-d3dcfab1e252" class="page sans"><header><h1 class="page-title" dir="auto"><strong>A little bit of polish</strong></h1><p class="page-description" dir="auto"></p></header><div class="page-body"><div style="display:contents" dir="auto"><hr id="1e95bab9-bf87-804b-a39c-c78bfe890cd8"/></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80e5-8938-fe502de441e2" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="1e95bab9-bf87-808d-8197-d61a81bf95e2" class="">🔷 A Little Bit of Polish – Improving the App UX</h3></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80b5-8b80-dcf9c03caf65" class="">We made progress with a working login but a few UX issues remain:</p></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-805e-ab1d-dfe7158fb9c2" class="bulleted-list"><li style="list-style-type:disc">Login form is <strong>basic and unbranded</strong>.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-807e-a5d9-d07c2a1431b6" class="bulleted-list"><li style="list-style-type:disc">All users see links like <strong>“All Events”</strong>, even without permission.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-8038-b71c-fb73e843c373" class="bulleted-list"><li style="list-style-type:disc">The app does <strong>not show user identity</strong> (e.g., “Welcome user@example.com”).</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-8092-9398-fb5f28328a19" class="bulleted-list"><li style="list-style-type:disc">There’s <strong>no clear logout button</strong>.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-8098-bb39-fe86c0988468" class="bulleted-list"><li style="list-style-type:disc">Hardcoded users aren&#x27;t sustainable.</li></ul></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80a9-8998-e93d35b49ba8" class="">This section focuses on customizing these behaviors before moving to advanced security.</p></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80d8-88d0-f0fb1956e54c" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e95bab9-bf87-8076-b108-f3fc8c47660b"/></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-807f-bb05-edad6568b3fa" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="1e95bab9-bf87-8099-870e-c1fc943a3f75" class="">✅ Customizing Login Page</h3></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80fb-b5c0-eb6509d46041" class="">🔧 Replace default Spring login page with your own HTML login form.</p></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80ce-a189-d92e00ab8d0c" class=""><strong>SecurityConfig.java:</strong></p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js" integrity="sha512-xKcnbsdT0KMoA4yrozkqZM1XJVTrPsjdQwvigxlAlxEDu8YDvC/jl+LfVqn0fY3Vs6m2y4a89JCHEIA/Z9zpmQ==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><pre id="1e95bab9-bf87-8038-bb3b-c5874a4891eb" class="code code-wrap"><code class="language-java" style="white-space:pre-wrap;word-break:break-all">
+.formLogin(form -&gt; form
+    .loginPage(&quot;/login/form&quot;)
+    .loginProcessingUrl(&quot;/login&quot;)
+    .failureUrl(&quot;/login/form?error&quot;)
+    .usernameParameter(&quot;username&quot;)
+    .passwordParameter(&quot;password&quot;)
+)
+
+</code></pre></div><div style="display:contents" dir="auto"><h3 id="1e95bab9-bf87-8047-ad52-fdd4dbd4a662" class="">📌 What each method does:</h3></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-80cd-9330-cd8c9f9def1d" class="bulleted-list"><li style="list-style-type:disc"><code>loginPage()</code>: URL that displays the login form.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-8012-b679-e2371ccfc8f5" class="bulleted-list"><li style="list-style-type:disc"><code>loginProcessingUrl()</code>: URL that receives POSTed credentials.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-8033-bf87-ea6273538114" class="bulleted-list"><li style="list-style-type:disc"><code>failureUrl()</code>: Redirect after login failure.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-8006-86bf-e1feb270d3fc" class="bulleted-list"><li style="list-style-type:disc"><code>usernameParameter()</code>, <code>passwordParameter()</code>: Form field names (default: <code>j_username</code>, <code>j_password</code>).</li></ul></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-8027-9459-c10aa63c4a52" class="">👉 <strong>Why customize?</strong></p></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-808a-a2ab-c86e26d0410d" class="bulleted-list"><li style="list-style-type:disc">Avoid exposing <code>/spring_security_login</code> (the default).</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-8064-972d-dd6bb45a7e0e" class="bulleted-list"><li style="list-style-type:disc">Prevent attackers from fingerprinting Spring apps.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-8085-8f42-ce5b495e4739" class="bulleted-list"><li style="list-style-type:disc">Improve branding and user experience.</li></ul></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-8094-be5f-d436c4fe8748" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e95bab9-bf87-801c-a670-e6b5f22601a8"/></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-809c-b584-e17abf62374a" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="1e95bab9-bf87-80ba-8f13-cde042ca1d0a" class="">✅ Designing a Custom Login Page (<code>login.html</code>)</h3></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-806b-b94b-c2974aecec00" class="">Your form must:</p></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-8009-8194-c3e899d756b1" class="bulleted-list"><li style="list-style-type:disc">Submit to <code>/login</code> via POST</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-8079-97c2-fc5777ada197" class="bulleted-list"><li style="list-style-type:disc">Use field names <code>username</code> and <code>password</code></li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-8024-855f-ecfc0fbc9a7b" class="bulleted-list"><li style="list-style-type:disc">Display error/success using:</li></ul></div><div style="display:contents" dir="auto"><pre id="1e95bab9-bf87-8061-aa43-d8368d854f88" class="code code-wrap"><code class="language-html" style="white-space:pre-wrap;word-break:break-all">
+&lt;div class=&quot;alert&quot; th:if=&quot;${param.error != null}&quot;&gt;
+  Failed to login
+&lt;/div&gt;
+&lt;div class=&quot;alert&quot; th:if=&quot;${param.logout != null}&quot;&gt;
+  You have been logged out
+&lt;/div&gt;
+
+</code></pre></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-8036-9aef-ec3a6835351c" class="">📌 Use <code>SPRING_SECURITY_LAST_EXCEPTION</code> to show specific error messages.</p></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80fe-a9ee-ed7ccf4f5171" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e95bab9-bf87-80d7-991d-d256be6b44f5"/></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80a3-8034-d26a25b4a391" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="1e95bab9-bf87-806d-bb7a-c837d361b7df" class="">✅ Preventing the Infinite Redirect Loop</h3></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-800b-9bc3-e3a0a2f71aaf" class="">🚨 Issue:</p></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-8085-97f2-c3d3cf8336a7" class="bulleted-list"><li style="list-style-type:disc">If <code>/login</code> page itself requires authentication, you’ll get stuck in a redirect loop.</li></ul></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80df-9580-ebaae130a59a" class="">🔧 Fix:</p></div><div style="display:contents" dir="auto"><pre id="1e95bab9-bf87-80a4-88c4-fc714c91b2cb" class="code code-wrap"><code class="language-java" style="white-space:pre-wrap;word-break:break-all">
+.requestMatchers(&quot;/login/**&quot;).permitAll()</code></pre></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-8097-91a0-f1d9546be1cb" class="">📌 Ensure this is set before applying <code>.authenticated()</code> or <code>.hasRole()</code> globally.</p></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-8094-8dc4-ebf0694ba6d0" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e95bab9-bf87-8027-a856-ff6419f61eb1"/></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-8047-9000-c99cb203728c" class="">
+</p></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-80bb-bf9c-d23bd56ed898" class="toggle"><li><details open=""><summary></summary><div style="display:contents" dir="ltr"><figure id="1e95bab9-bf87-808e-8998-f885a77fbff2" class="image"><a href="A%20little%20bit%20of%20polish/image.png"><img style="width:681.9906616210938px" src="A%20little%20bit%20of%20polish/image.png"/></a></figure></div></details></li></ul></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-800a-be8e-cabb1c8ccca0" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e95bab9-bf87-80f2-8884-ce1cadd37b30"/></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80a3-8ae0-f521322999ea" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="1e95bab9-bf87-80a3-8339-e7b7e87d5ee1" class="">✅ Configuring Logout</h3></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80ab-9fca-d31dd25b94dc" class="">Spring Security supports logout with minimal config:</p></div><div style="display:contents" dir="auto"><pre id="1e95bab9-bf87-802e-b197-fe79f44b9cc3" class="code code-wrap"><code class="language-java" style="white-space:pre-wrap;word-break:break-all">
+.logout(form -&gt; form
+  .logoutUrl(&quot;/logout&quot;)
+  .logoutSuccessUrl(&quot;/login?logout&quot;)
+)
+
+</code></pre></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-809e-a5a3-fbb41d20a356" class="">🧠 <strong>Default method</strong> is POST to <code>/logout</code>.</p></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-8078-8da2-f4a0668c9f58" class="">✅ Show logout success message on login page using:</p></div><div style="display:contents" dir="auto"><pre id="1e95bab9-bf87-8003-baba-ff9567da1042" class="code code-wrap"><code class="language-html" style="white-space:pre-wrap;word-break:break-all">
+&lt;div th:if=&quot;${param.logout != null}&quot;&gt;
+  You have been logged out.
+&lt;/div&gt;
+</code></pre></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80d5-9cbe-e8ae514cf13a" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e95bab9-bf87-8030-9e63-fe6c5c0b8a98"/></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-8048-b55a-e84edd7378fb" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="1e95bab9-bf87-80ba-a29f-e2cd868c1bdb" class="">✅ Adding Logout Link to Template</h3></div><div style="display:contents" dir="auto"><pre id="1e95bab9-bf87-80cd-b5b5-f239b5b91350" class="code code-wrap"><code class="language-html" style="white-space:pre-wrap;word-break:break-all">
+&lt;a th:href=&quot;@{/logout}&quot;&gt;Logout&lt;/a&gt;</code></pre></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-802a-9142-f492301c6047" class="">🧠 It’s just a link, but Spring handles it securely under the hood.</p></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-8003-8afe-e5285f71b1e7" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e95bab9-bf87-80ed-bbea-f0238f468fe0"/></div><div style="display:contents" dir="auto"><h3 id="1e95bab9-bf87-80c2-a855-c9ffb46ae2a1" class="">✅ Role-Based Access Control</h3></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-804f-a645-deebec314141" class="">Customize who sees what:</p></div><div style="display:contents" dir="auto"><pre id="1e95bab9-bf87-80d9-aaf5-e56a7ce0e505" class="code code-wrap"><code class="language-java" style="white-space:pre-wrap;word-break:break-all">
+.authorizeHttpRequests(authz -&gt; authz
+  .requestMatchers(&quot;/admin/**&quot;).hasRole(&quot;ADMIN&quot;)
+  .requestMatchers(&quot;/events/&quot;).hasRole(&quot;ADMIN&quot;)
+  .requestMatchers(&quot;/**&quot;).hasRole(&quot;USER&quot;)
+)
+
+</code></pre></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-802a-b768-ef2745d52bcf" class="">You can also allow static resources to be served without authentication:</p></div><div style="display:contents" dir="auto"><pre id="1e95bab9-bf87-8018-b311-fda08ea003ff" class="code code-wrap"><code class="language-java" style="white-space:pre-wrap;word-break:break-all">
+.requestMatchers(&quot;/resources/**&quot;).permitAll()
+.requestMatchers(&quot;/webjars/**&quot;).permitAll()
+
+</code></pre></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-8026-9509-fe5633d16bee" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e95bab9-bf87-803c-add5-ff896989df5f"/></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80ae-b71d-f2990bcccd5d" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="1e95bab9-bf87-8055-bc45-c240cf6cc62c" class="">✅ Post-Login Behavior</h3></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80ac-b4e1-ced71f21e31d" class="">Spring Security supports two flows:</p></div><div style="display:contents" dir="auto"><ol type="1" id="1e95bab9-bf87-80a4-a759-c4e0647c7805" class="numbered-list" start="1"><li>If user accessed a protected resource → Redirects them back.</li></ol></div><div style="display:contents" dir="auto"><ol type="1" id="1e95bab9-bf87-800e-b774-f46fe99e2a0c" class="numbered-list" start="2"><li>If not, sends to <code>defaultSuccessUrl()</code>.</li></ol></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-8041-a23d-d09b60955f15" class="">🛠 To control this:</p></div><div style="display:contents" dir="auto"><pre id="1e95bab9-bf87-801d-80b3-e2ac0c077c97" class="code code-wrap"><code class="language-java" style="white-space:pre-wrap;word-break:break-all">
+.defaultSuccessUrl(&quot;/default&quot;)
+
+</code></pre></div><div style="display:contents" dir="auto"><hr id="1e95bab9-bf87-8060-9e7e-d13c5d23e8e9"/></div><div style="display:contents" dir="auto"><h3 id="1e95bab9-bf87-80dd-9624-df99572cf36c" class="">✅ Redirect After Login Based on Role</h3></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-802c-8739-e58ae8be16b6" class="">Create <code>DefaultController.java</code>:</p></div><div style="display:contents" dir="auto"><pre id="1e95bab9-bf87-80ab-8171-c94514a6dfed" class="code code-wrap"><code class="language-java" style="white-space:pre-wrap;word-break:break-all">
+@RequestMapping(&quot;/default&quot;)
+public String defaultAfterLogin(HttpServletRequest request) {
+  if (request.isUserInRole(&quot;ADMIN&quot;)) {
+    return &quot;redirect:/events/&quot;;
+  }
+  return &quot;redirect:/&quot;;
+}
+
+</code></pre></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-806d-b5cb-c6bbc8c07d52" class="">🧠 This checks the user’s role using <code>HttpServletRequest.isUserInRole(...)</code>.</p></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-806e-bd41-e19c46efb536" class="">✅ Benefit: Decouples logic from Spring-specific APIs.</p></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-808c-9f20-fce75ae6406f" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e95bab9-bf87-8039-b447-f5a47b99243e"/></div><div style="display:contents" dir="auto"><h3 id="1e95bab9-bf87-8018-8f90-cfc35fb14df9" class="">✅ Optional: Always Redirect to Default Page</h3></div><div style="display:contents" dir="auto"><pre id="1e95bab9-bf87-8008-a1a7-d3b09577851c" class="code code-wrap"><code class="language-java" style="white-space:pre-wrap;word-break:break-all">
+.defaultSuccessUrl(&quot;/default&quot;, true)
+
+</code></pre></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-8035-8296-dfaa78bcce41" class="">📌 Bypasses Spring’s saved request cache.</p></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80f7-bba9-f2ea643924e9" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e95bab9-bf87-801a-8e61-cf4395ab3cdf"/></div><div style="display:contents" dir="auto"><h3 id="1e95bab9-bf87-80e3-b6ee-f11924fc258f" class="">✅ Final Testing</h3></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80e7-8ed3-d91552955aa6" class="">Try these flows:</p></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-8032-9a58-f30958ca3209" class="bulleted-list"><li style="list-style-type:disc">Login with valid/invalid credentials.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-8094-9f7f-c0cf2fed77fd" class="bulleted-list"><li style="list-style-type:disc">Observe role-based redirection.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-80e6-859d-e324425b914e" class="bulleted-list"><li style="list-style-type:disc">Ensure logout works.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-807b-b674-d84c05eead35" class="bulleted-list"><li style="list-style-type:disc">See login failure messages.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-80c2-953d-c5ca527c6a04" class="bulleted-list"><li style="list-style-type:disc">Test loop avoidance by verifying login page loads anonymously.</li></ul></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-8053-819c-fed2b5f196ad" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e95bab9-bf87-8001-a61f-eb5486871e7c"/></div><div style="display:contents" dir="auto"><h3 id="1e95bab9-bf87-80f7-a780-ec605c16a7b9" class="">📦 Code Snapshot</h3></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80db-b4ab-c84d3a416b40" class="">Your code should now resemble:</p></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80b8-beab-dbbebb548029" class=""><code><strong>chapter02.06-calendar</strong></code> in the provided repository.</p></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-8055-9356-dee673e0cce3" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e95bab9-bf87-800b-adb4-daf9e611a565"/></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80cc-a65c-c0494696e064" class="">
+</p></div></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

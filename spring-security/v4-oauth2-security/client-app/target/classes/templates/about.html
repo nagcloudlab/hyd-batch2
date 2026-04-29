@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>About - V4 OAuth2</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .nav { background: #333; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; flex-wrap: wrap; gap: 5px; }
+        .nav a { color: white; text-decoration: none; padding: 8px 16px; border-radius: 4px; }
+        .nav a:hover { background: #555; }
+        .nav .spacer { flex-grow: 1; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <span class="spacer"></span>
+        <span sec:authorize="isAnonymous()">
+            <a href="/oauth2/authorization/my-auth-server" style="background:#28a745;">Login with OAuth2</a>
+        </span>
+        <span sec:authorize="isAuthenticated()">
+            <form th:action="@{/logout}" method="post" style="display:inline;">
+                <button type="submit" style="background:#dc3545;color:white;border:none;padding:8px 16px;border-radius:4px;cursor:pointer;">Logout</button>
+            </form>
+        </span>
+    </div>
+    <h1>About - Public Page</h1>
+    <p>This page is public. No OAuth2 login needed.</p>
+    <p><a href="/">Back to Home</a></p>
+</div>
+</body>
+</html>

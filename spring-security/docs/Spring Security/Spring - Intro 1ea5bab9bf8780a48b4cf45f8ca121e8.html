@@ -1,0 +1,807 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Spring - Intro </title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+/* Override strong tags inside headings to maintain consistent weight */
+h1 strong,
+h2 strong,
+h3 strong {
+	font-weight: 600;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 10px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+
+	table.collection-content {
+		width: 100%;
+		table-layout: fixed;
+	}
+
+	table.collection-content th,
+	table.collection-content td {
+		overflow-wrap: anywhere;
+	}
+
+	table.collection-content td > .user,
+	table.collection-content td > time {
+		white-space: pre-wrap;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content-wrapper {
+	overflow-x: auto;
+}
+
+@media only print {
+	.collection-content-wrapper {
+		overflow-x: visible;
+	}
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.collection-content td {
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+
+.column-list {
+	display: flex;
+	gap: 46px;
+}
+
+.column {
+	min-width: 0;
+	overflow: hidden;
+}
+
+.column > *:first-child {
+	margin-top: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+table {
+	border-collapse: collapse;
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol.numbered-list.numbered-list-digits-2 {
+	padding-inline-start: 2em;
+}
+
+ol.numbered-list.numbered-list-digits-3plus {
+	padding-inline-start: 2.4em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+	margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.callout img.notion-static-icon {
+	width: 1em;
+	height: 1em;
+}
+
+.callout p {
+	margin: 0;
+}
+
+.callout h1,
+.callout h2,
+.callout h3 {
+	margin: 0 0 0.6rem;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+blockquote.quote-large {
+	font-size: 1.25em;
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray {
+	color: rgba(125, 122, 117, 1);
+	fill: rgba(125, 122, 117, 1);
+}
+.highlight-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.highlight-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.highlight-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.highlight-blue {
+	color: rgba(56, 125, 201, 1);
+	fill: rgba(56, 125, 201, 1);
+}
+.highlight-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.highlight-default_background {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray_background {
+	background: rgba(42, 28, 0, 0.07);
+}
+.highlight-brown_background {
+	background: rgba(139, 46, 0, 0.086);
+}
+.highlight-orange_background {
+	background: rgba(224, 101, 1, 0.129);
+}
+.highlight-yellow_background {
+	background: rgba(211, 168, 0, 0.137);
+}
+.highlight-teal_background {
+	background: rgba(0, 100, 45, 0.09);
+}
+.highlight-blue_background {
+	background: rgba(0, 124, 215, 0.094);
+}
+.highlight-purple_background {
+	background: rgba(102, 0, 178, 0.078);
+}
+.highlight-pink_background {
+	background: rgba(197, 0, 93, 0.086);
+}
+.highlight-red_background {
+	background: rgba(223, 22, 0, 0.094);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(125, 122, 117, 1);
+	fill: rgba(125, 122, 117, 1);
+}
+.block-color-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.block-color-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.block-color-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.block-color-blue {
+	color: rgba(56, 125, 201, 1);
+	fill: rgba(56, 125, 201, 1);
+}
+.block-color-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(240, 239, 237, 1);
+}
+.block-color-brown_background {
+	background: rgba(245, 237, 233, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 235, 222, 1);
+}
+.block-color-yellow_background {
+	background: rgba(249, 243, 220, 1);
+}
+.block-color-teal_background {
+	background: rgba(232, 241, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(229, 242, 252, 1);
+}
+.block-color-purple_background {
+	background: rgba(243, 235, 249, 1);
+}
+.block-color-pink_background {
+	background: rgba(250, 233, 241, 1);
+}
+.block-color-red_background {
+	background: rgba(252, 233, 231, 1);
+}
+.select-value-color-default { background-color: rgba(42, 28, 0, 0.07); }
+.select-value-color-gray { background-color: rgba(28, 19, 1, 0.11); }
+.select-value-color-brown { background-color: rgba(127, 51, 0, 0.156); }
+.select-value-color-orange { background-color: rgba(196, 88, 0, 0.203); }
+.select-value-color-yellow { background-color: rgba(209, 156, 0, 0.282); }
+.select-value-color-green { background-color: rgba(0, 96, 38, 0.156); }
+.select-value-color-blue { background-color: rgba(0, 118, 217, 0.203); }
+.select-value-color-purple { background-color: rgba(92, 0, 163, 0.141); }
+.select-value-color-pink { background-color: rgba(183, 0, 78, 0.152); }
+.select-value-color-red { background-color: rgba(206, 24, 0, 0.164); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="1ea5bab9-bf87-80a4-8b4c-f45f8ca121e8" class="page sans"><header><h1 class="page-title" dir="auto">Spring - Intro </h1><p class="page-description" dir="auto"></p></header><div class="page-body"><div style="display:contents" dir="auto"><hr id="1ea5bab9-bf87-8132-a604-c82031b5d6f7"/></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-815a-8152-fc43b7074b1a" class="">Money Transfer System</p></div><div style="display:contents" dir="auto"><hr id="1ea5bab9-bf87-81c4-8872-c5db892521b6"/></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8145-998f-c8abcb80724e" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-81ef-8902-d05561bc24a4" class="">MoneyTransferSystem</p></div><div style="display:contents" dir="auto"><hr id="1ea5bab9-bf87-814c-bc01-ddca8dc80e9b"/></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-81b2-a384-f19ea1051614" class="">—-</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-81f0-a6cb-fb158285298d" class="">
+</p></div><div style="display:contents" dir="ltr"><figure id="1ea5bab9-bf87-81c4-9fdf-e90759331dca" class="image"><a href="Spring%20-%20Intro/Untitled.png"><img style="width:707.9948120117188px" src="Spring%20-%20Intro/Untitled.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8173-8f5c-f383dde527fb" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-810a-9e40-fb73375a78a4" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-81b0-87f8-d8d43addb5f8" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1ea5bab9-bf87-81d5-8dad-ea8f4aa0e5a2"/></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8193-897c-d10104f5e11a" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8176-ad18-c4abc21c1447" class="">know data model</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8138-a340-c6e314f133d2" class="">
+</p></div><div style="display:contents" dir="auto"><ul id="1ea5bab9-bf87-8174-8e20-da6a48745e06" class="bulleted-list"><li style="list-style-type:disc"><code>Account</code></li></ul></div><div style="display:contents" dir="auto"><ul id="1ea5bab9-bf87-812b-b548-f37779be9ff3" class="bulleted-list"><li style="list-style-type:disc">Transaction</li></ul></div><div style="display:contents" dir="auto"><ul id="1ea5bab9-bf87-8158-8080-d66b20a81e2a" class="bulleted-list"><li style="list-style-type:disc">Customer</li></ul></div><div style="display:contents" dir="auto"><ul id="1ea5bab9-bf87-817f-9901-c33ca868342b" class="bulleted-list"><li style="list-style-type:disc">…</li></ul></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8174-a5f0-fa68049a171d" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1ea5bab9-bf87-81da-bdb5-da20ec28ea17"/></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8119-87e9-d602a88367e5" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-818c-8dcb-cc5c5180d876" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8120-be58-e6eb0691cb6a" class="">Application</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-81f5-a06d-cb1e1685090f" class="">Layer(s)</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8169-b325-dc862fa2f915" class="">
+</p></div><div style="display:contents" dir="auto"><ol type="1" id="1ea5bab9-bf87-81c9-8593-dd8eb530664f" class="numbered-list" start="1"><li>Data/Repository Layer<div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-81f1-8d1e-cc44da9175f8" class="">→ persisting logic code</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-81d7-bfe2-ca259418a88d" class="">component(s)</p></div><div style="display:contents" dir="auto"><ol type="1" id="1ea5bab9-bf87-8133-90df-cf14441824ed" class="numbered-list" start="1"><li><code>AccountRepository</code></li></ol></div><div style="display:contents" dir="auto"><ol type="1" id="1ea5bab9-bf87-8182-9661-e982d020f17b" class="numbered-list" start="2"><li>…</li></ol></div></li></ol></div><div style="display:contents" dir="auto"><ol type="1" id="1ea5bab9-bf87-819f-bdf7-fc77649eff5f" class="numbered-list" start="2"><li>Service/Business Layer<div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-81a2-8c4e-ed9b4da6ddad" class="">→ processing logic  code</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-810c-8fa4-f5b095c48344" class="">component(s)</p></div><div style="display:contents" dir="auto"><ol type="1" id="1ea5bab9-bf87-8183-ab54-ec34969d3d38" class="numbered-list" start="1"><li><code>TransferService</code></li></ol></div><div style="display:contents" dir="auto"><ol type="1" id="1ea5bab9-bf87-8138-b3ec-e75559294798" class="numbered-list" start="2"><li>..</li></ol></div></li></ol></div><div style="display:contents" dir="auto"><ol type="1" id="1ea5bab9-bf87-8187-9f56-e1e0e118cffa" class="numbered-list" start="3"><li>web/api layer<div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-817f-b020-e47ccf1f69e4" class="">→ request / response logic</p></div></li></ol></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-819b-9e74-c167d286142b" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1ea5bab9-bf87-8132-b693-ee95f4bfb5b5"/></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8194-be83-cc418d602cf4" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-81eb-8148-d51005a1cb27" class="">design issues</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8135-9ac0-e456fd11b611" class="">
+</p></div><div style="display:contents" dir="auto"><ul id="1ea5bab9-bf87-816f-91b9-dcc7dc105514" class="bulleted-list"><li style="list-style-type:disc"><strong>tight-coupling between dependent &amp; dependency object&#x27;s implementation</strong><div style="display:contents" dir="auto"><blockquote id="1ea5bab9-bf87-811b-a3aa-d7aefec252fc" class="">can&#x27;t extend with new features easily</blockquote></div></li></ul></div><div style="display:contents" dir="auto"><ul id="1ea5bab9-bf87-81d8-aecf-f197b9476e2d" class="bulleted-list"><li style="list-style-type:disc"><strong>unit-testing not possible</strong><div style="display:contents" dir="auto"><blockquote id="1ea5bab9-bf87-810b-9b36-fb5782cc59cb" class="">dev / bug-fix slow</blockquote></div></li></ul></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-815b-9cae-edbae3714a9d" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8107-bd1c-f1d5e21bcc28" class="">performance issues</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-81b8-8ec1-dadc3f1d1a22" class="">
+</p></div><div style="display:contents" dir="auto"><ul id="1ea5bab9-bf87-8168-8b0e-f4f02180380b" class="bulleted-list"><li style="list-style-type:disc"><strong>too many duplicate dependency instances</strong><div style="display:contents" dir="auto"><blockquote id="1ea5bab9-bf87-817e-8004-f9d6b581fed3" class="">too much resource ( cpu / memory ) consumption &amp; bad responsive to end-user</blockquote></div></li></ul></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8160-992a-ecad6dac0178" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8123-bcf3-e9b6a2e0aecd" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1ea5bab9-bf87-8127-a29e-e6d285863eaf"/></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-81ba-a1d8-f476a47ccb3c" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8113-87a4-e9b58abad46f" class="">why these issues ?</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-816b-ac8c-c1d3c0542b9f" class=""><div class="indented"><div style="display:contents" dir="auto"><blockquote id="1ea5bab9-bf87-813d-9d7a-de569faecab5" class="">dependent component managing/creating it&#x27;s own dependency component</blockquote></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-81a1-a49e-e3efe376caaa" class="">
+</p></div></div></p></div><div style="display:contents" dir="auto"><hr id="1ea5bab9-bf87-81ff-95b8-f0376115e1e0"/></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-811e-b4b4-ec409d49a9e6" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8100-9553-c419d3e7626c" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-81da-b647-c1f97b64c352" class="">solution:</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8160-9d1e-e6c252f1c902" class=""><div class="indented"><div style="display:contents" dir="auto"><blockquote id="1ea5bab9-bf87-81ec-9eba-f07419fd93cc" class="">don&#x27;t create , do lookup on factory.     <strong>Factory Design Pattern</strong></blockquote></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8182-9545-ee4716048616" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-81d5-8cab-f2349dcd6e11" class="">
+</p></div></div></p></div><div style="display:contents" dir="auto"><hr id="1ea5bab9-bf87-81f9-8e4a-e81ae18d5466"/></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-812f-a7b0-deb7c8b5741f" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-810a-b7d4-da48a30845cc" class="">limitation with factory only</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8116-ae0e-f44f208aa5d2" class=""><div class="indented"><div style="display:contents" dir="auto"><blockquote id="1ea5bab9-bf87-81b3-9e74-d484fd088e12" class="">factory location tight-coupling</blockquote></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8130-9ea7-fd1803453d03" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-811c-b7bd-e684cfe2ebed" class="">
+</p></div></div></p></div><div style="display:contents" dir="auto"><hr id="1ea5bab9-bf87-8116-b2e4-cbd3f01a8739"/></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8199-8389-d2ab9c76b0f1" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-81e7-b718-c244fbecc1cc" class="">best solution:</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8197-a4fd-ef89e0a41732" class=""><div class="indented"><div style="display:contents" dir="auto"><blockquote id="1ea5bab9-bf87-8173-9508-eb7e9074538d" class="">don&#x27;t create &amp; lookup , inject by third-party/container ( dependency inversion principle )</blockquote></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8112-8cf8-f3a570a1f2b5" class="">
+</p></div></div></p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8153-8770-e4dc7aaacd18" class="">how to implement IOC ( Inversion of Control )</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-811a-bc66-fcbb21b61ab7" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-814a-ba11-e48ac2963027" class="">by</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-81e1-9ad2-cf8c58fb1b75" class="">
+</p></div><div style="display:contents" dir="auto"><ul id="1ea5bab9-bf87-81b3-9532-f8b0092c6684" class="bulleted-list"><li style="list-style-type:disc">dependency injection ( DI ) </li></ul></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-818d-bd69-ca33b91ec063" class=""><div class="indented"><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8189-a030-cc05ee916519" class="">how to implement DI ?</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-81ef-9a34-e43f0ec03090" class="">
+</p></div><div style="display:contents" dir="auto"><ul id="1ea5bab9-bf87-812c-b0cb-feddebd58c38" class="bulleted-list"><li style="list-style-type:disc">via constructor  : for required dependency</li></ul></div><div style="display:contents" dir="auto"><ul id="1ea5bab9-bf87-8110-925a-ec4d879ce704" class="bulleted-list"><li style="list-style-type:disc">via set method  : for optional dependency</li></ul></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8185-86e9-c785c112e0e1" class="">
+</p></div></div></p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-81a4-b034-d0d00695249e" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-816f-8fd8-dd3e87dffbc2" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1ea5bab9-bf87-8124-894d-ecd1f8fe3109"/></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8142-b692-c4a35bef9dfa" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8154-8a13-c49323fd86de" class="">OO concepts</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8150-bcec-de8892f6affc" class="">
+</p></div><div style="display:contents" dir="auto"><ol type="1" id="1ea5bab9-bf87-81bc-b615-f78cab69a504" class="numbered-list" start="1"><li>Abstraction</li></ol></div><div style="display:contents" dir="auto"><ol type="1" id="1ea5bab9-bf87-8179-b397-d84f92a0cf6f" class="numbered-list" start="2"><li>Encapsulation</li></ol></div><div style="display:contents" dir="auto"><ol type="1" id="1ea5bab9-bf87-81fb-8ce2-ffe60586f8b2" class="numbered-list" start="3"><li>Polymorphic</li></ol></div><div style="display:contents" dir="auto"><ol type="1" id="1ea5bab9-bf87-81e0-9f5a-f456dfd43932" class="numbered-list" start="4"><li>Inheritance</li></ol></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-81fb-9511-ff5213abeaca" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1ea5bab9-bf87-81ae-b323-fc8ef3aad94d"/></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-81a0-9bbd-e0e49b6c65d9" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-81c7-8006-d11eccda764e" class="">OO  principles a.k.a S.O.L.I.D principles</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8112-9349-c5a701867089" class="">
+</p></div><div style="display:contents" dir="auto"><ol type="1" id="1ea5bab9-bf87-8194-b0aa-c7aa0fc3238a" class="numbered-list" start="1"><li><strong>Single Responsibility Principle</strong><div style="display:contents" dir="auto"><blockquote id="1ea5bab9-bf87-814d-855e-c1631374e255" class="">“One class should have one and only one responsibility”</blockquote></div></li></ol></div><div style="display:contents" dir="auto"><ol type="1" id="1ea5bab9-bf87-81d0-9dd4-e23c578b3051" class="numbered-list" start="2"><li><strong>Open Closed Principle</strong><div style="display:contents" dir="auto"><blockquote id="1ea5bab9-bf87-8133-b9af-fb8534703be0" class="">“Software components should be open for extension, but closed for modification”</blockquote></div></li></ol></div><div style="display:contents" dir="auto"><ol type="1" id="1ea5bab9-bf87-8192-b6e6-e45ea9902c92" class="numbered-list" start="3"><li><strong>Liskov’s Substitution Principle</strong><div style="display:contents" dir="auto"><blockquote id="1ea5bab9-bf87-812d-94b6-d45718a7ad37" class="">“Derived types must be completely substitutable for their base types”</blockquote></div></li></ol></div><div style="display:contents" dir="auto"><ol type="1" id="1ea5bab9-bf87-811d-8854-d89eb35d958e" class="numbered-list" start="4"><li><strong>Interface Segregation Principle</strong><div style="display:contents" dir="auto"><blockquote id="1ea5bab9-bf87-8191-96e6-fe7c1d20629d" class="">“Clients should not be forced to implement unnecessary methods which they will not use”</blockquote></div></li></ol></div><div style="display:contents" dir="auto"><ol type="1" id="1ea5bab9-bf87-8102-8acc-c68a6c344a21" class="numbered-list" start="5"><li><code><strong><a href="https://www.notion.so/Java-REST-APIs-and-API-Testing-with-REST-Assured-1c95bab9bf8780669f94f8260c00ede6?pvs=21">Dependency Inversion Principle</a></strong></code><code><strong> / Inversion of Control ( IOC )</strong></code><div style="display:contents" dir="auto"><blockquote id="1ea5bab9-bf87-8185-a1a3-c0119f352dd6" class="">“Depend on abstractions, not on concretions”</blockquote></div></li></ol></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8191-9557-c12fd131ae2c" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1ea5bab9-bf87-81a6-8eb2-cd94dba1e2a5"/></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-81de-be7f-c5eb743e2099" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-81c5-a251-e6e56a693088" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-81eb-8dd1-dc74b54cc036" class="">How to implement IOC ?</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8155-96e5-fb32fe40e66f" class="">
+</p></div><div style="display:contents" dir="auto"><ul id="1ea5bab9-bf87-81b2-b6dd-c6daf779bbfc" class="bulleted-list"><li style="list-style-type:disc">dependency injection ( DI )</li></ul></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-81e4-a7a4-e8aafefd34da" class=""><div class="indented"><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8188-8d50-f85cca612a60" class=""> how to inject dependency ?</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8186-bd94-fcf9763b606b" class=""><div class="indented"><div style="display:contents" dir="auto"><ol type="1" id="1ea5bab9-bf87-8185-a63c-cc80cebe4d03" class="numbered-list" start="1"><li>constructor-level<div style="display:contents" dir="auto"><ul id="1ea5bab9-bf87-81ed-af96-eea1db97e68c" class="bulleted-list"><li style="list-style-type:disc">required dependency</li></ul></div></li></ol></div><div style="display:contents" dir="auto"><ol type="1" id="1ea5bab9-bf87-8199-926b-cd32b4d51a10" class="numbered-list" start="2"><li>setter-level<div style="display:contents" dir="auto"><ul id="1ea5bab9-bf87-81c9-aee4-c9a2055fe405" class="bulleted-list"><li style="list-style-type:disc">optional dependency</li></ul></div></li></ol></div></div></p></div></div></p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8114-90ed-d935a94d2c56" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-81da-8050-e93a1beb7394" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1ea5bab9-bf87-814c-b277-d0157ea95500"/></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8174-adef-dcb774a06608" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-81f4-9e29-d09b3e9f23c2" class="">
+</p></div><div style="display:contents" dir="ltr"><figure id="1ea5bab9-bf87-81f0-8d8d-dbf867f0d0d5" class="image"><a href="Spring%20-%20Intro/Untitled%201.png"><img style="width:707.9896240234375px" src="Spring%20-%20Intro/Untitled%201.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8120-b88f-f19523eb2704" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1ea5bab9-bf87-8117-b185-e9ede5ab2457"/></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-81ac-92e6-cb458ff91e88" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-81b8-8adc-e7554e781a50" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-815b-8450-fefbc27e1088" class="">Spring configuration</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8155-bc68-cf53bebb79d2" class=""><div class="indented"><div style="display:contents" dir="auto"><ol type="1" id="1ea5bab9-bf87-812c-895e-eaadb3b9ec9d" class="numbered-list" start="1"><li><del>XML    ( outdated )</del></li></ol></div><div style="display:contents" dir="auto"><ol type="1" id="1ea5bab9-bf87-81c3-8c4f-db25076b08c2" class="numbered-list" start="2"><li>Annotation  ( good for classes that we write )</li></ol></div><div style="display:contents" dir="auto"><ol type="1" id="1ea5bab9-bf87-819e-b3de-e538a4145758" class="numbered-list" start="3"><li><a href="https://www.notion.so/DXC-pages-1b45bab9bf8780a09a44e40cb43df58a?pvs=21">Java-config  ( good for every classes )</a></li></ol></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-817b-be19-dcae11fec852" class="">
+</p></div></div></p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-81b2-8b7f-efb6f77e875d" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1ea5bab9-bf87-815a-bd04-c1e2875569c7"/></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8163-8c0d-f49143460b13" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-81f8-9994-c0f7040f154c" class="">Spring configuration</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-81ab-87c8-d2473b90d8b0" class=""><div class="indented"><div style="display:contents" dir="auto"><ul id="1ea5bab9-bf87-81d6-bce9-c31348110885" class="bulleted-list"><li style="list-style-type:disc">Manual Configuration</li></ul></div><div style="display:contents" dir="auto"><ul id="1ea5bab9-bf87-81a7-b30e-c1ca16e0475c" class="bulleted-list"><li style="list-style-type:disc">Auto Configuration ( Spring-boot )</li></ul></div></div></p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8153-99b6-f9c4652f1c66" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1ea5bab9-bf87-81ed-8c99-ea88b2b72f90"/></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8124-9e2d-c31580173c2d" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-81ce-b5bb-e0273204a979" class="">XML only</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8130-9d91-f0db6eba708e" class="">XML + Annotation</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-812c-8240-cfaeca0f18d8" class="">JavaConfig + Annotation. ( Most used by current developers )</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8171-b081-e36e63822e45" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1ea5bab9-bf87-81a1-a882-e011fa06f92a"/></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8127-b4db-fc8a3e37f958" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-819f-8a52-c719faa65224" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8123-87dc-d3cb25515d38" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8195-b49b-c36f2523d654" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-819d-8aa4-dd4a2695a8ce" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8132-baad-c56aa87fbfc0" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1ea5bab9-bf87-8183-8e97-cb2a6ebd0199" class="">
+</p></div></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

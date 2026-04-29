@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Home - V3 JWT Security</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: #333; }
+        h3 { margin-top: 25px; }
+        .nav { background: #333; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+        .nav a { color: white; text-decoration: none; margin-right: 15px; padding: 8px 16px; border-radius: 4px; }
+        .nav a:hover { background: #555; }
+        .info { background: #cce5ff; border: 1px solid #b8daff; padding: 15px; border-radius: 8px; margin: 15px 0; }
+        .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 15px 0; }
+        .compare > div { padding: 15px; border-radius: 8px; }
+        .session-box { background: #f8d7da; border: 1px solid #f5c6cb; }
+        .jwt-box { background: #d4edda; border: 1px solid #c3e6cb; }
+        .section { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 15px 0; }
+        input, select { padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
+        button { padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; color: white; }
+        .btn-primary { background: #007bff; }
+        .btn-success { background: #28a745; }
+        .btn-warning { background: #ffc107; color: #333; }
+        .btn-danger { background: #dc3545; }
+        button:hover { opacity: 0.9; }
+        .result { margin-top: 10px; padding: 15px; border-radius: 4px; background: #1e1e1e; color: #d4d4d4; font-family: monospace; font-size: 13px; white-space: pre-wrap; word-break: break-all; max-height: 300px; overflow-y: auto; display: none; }
+        .token-display { background: #fff3cd; padding: 10px; border-radius: 4px; font-family: monospace; font-size: 12px; word-break: break-all; margin: 10px 0; display: none; }
+        .status { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; margin-left: 10px; }
+        .status-ok { background: #d4edda; color: #155724; }
+        .status-err { background: #f8d7da; color: #721c24; }
+        table { border-collapse: collapse; width: 100%; margin: 10px 0; }
+        th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #f8f9fa; }
+        code { background: #e9ecef; padding: 2px 6px; border-radius: 3px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+    </div>
+
+    <h1>V3 - JWT Token Security Demo</h1>
+
+    <div class="info">
+        <strong>What changed from V2 (Session)?</strong> No more <code>JSESSIONID</code> cookie!
+        Now the client gets a JWT token and sends it in the <code>Authorization: Bearer &lt;token&gt;</code> header.
+        The server is <strong>stateless</strong> - it does not store any session.
+    </div>
+
+    <div class="compare">
+        <div class="session-box">
+            <strong>V2 Session-Based:</strong><br/>
+            - Server stores session in memory<br/>
+            - Cookie: <code>JSESSIONID=abc123</code><br/>
+            - Server must look up session on each request<br/>
+            - Hard to scale (sticky sessions needed)
+        </div>
+        <div class="jwt-box">
+            <strong>V3 JWT-Based:</strong><br/>
+            - Server stores NOTHING (stateless)<br/>
+            - Header: <code>Authorization: Bearer eyJhb...</code><br/>
+            - Token contains all user info (self-contained)<br/>
+            - Easy to scale (any server can verify)
+        </div>
+    </div>
+
+    <!-- STEP 1: LOGIN -->
+    <h3>Step 1: Login to get JWT Token</h3>
+    <div class="section">
+        <label>Username:</label>
+        <select id="username">
+            <option value="user">user (USER role)</option>
+            <option value="admin">admin (ADMIN role)</option>
+        </select>
+        <label style="margin-left:10px;">Password:</label>
+        <input type="text" id="password" value="password" readonly style="width:100px;"/>
+        <button class="btn-primary" onclick="doLogin()">Login & Get Token</button>
+        <span id="loginStatus"></span>
+
+        <div id="tokenDisplay" class="token-display"></div>
+        <div id="loginResult" class="result"></div>
+    </div>
+
+    <!-- STEP 2: CALL APIs -->
+    <h3>Step 2: Call Protected APIs with Token</h3>
+    <div class="section">
+        <table>
+            <tr><th>Endpoint</th><th>Access</th><th>Action</th></tr>
+            <tr>
+                <td><code>GET /api/public/greeting</code></td>
+                <td>Public</td>
+                <td><button class="btn-success" onclick="callApi('/api/public/greeting', false)">Call (no token)</button></td>
+            </tr>
+            <tr>
+                <td><code>GET /api/private/users</code></td>
+                <td>USER / ADMIN</td>
+                <td>
+                    <button class="btn-warning" onclick="callApi('/api/private/users', false)">Without Token</button>
+                    <button class="btn-success" onclick="callApi('/api/private/users', true)">With Token</button>
+                </td>
+            </tr>
+            <tr>
+                <td><code>GET /api/private/admin/settings</code></td>
+                <td>ADMIN only</td>
+                <td>
+                    <button class="btn-warning" onclick="callApi('/api/private/admin/settings', false)">Without Token</button>
+                    <button class="btn-success" onclick="callApi('/api/private/admin/settings', true)">With Token</button>
+                </td>
+            </tr>
+        </table>
+        <span id="apiStatus"></span>
+        <div id="apiResult" class="result"></div>
+    </div>
+
+    <!-- STEP 3: INSPECT TOKEN -->
+    <h3>Step 3: Inspect the JWT Token</h3>
+    <div class="section">
+        <p>A JWT has 3 parts separated by dots: <code>HEADER.PAYLOAD.SIGNATURE</code></p>
+        <button class="btn-primary" onclick="decodeToken()">Decode Current Token</button>
+        <div id="decodeResult" class="result"></div>
+    </div>
+
+    <h3>Test with cURL:</h3>
+    <div class="section" style="background: #1e1e1e; color: #d4d4d4; font-family: monospace; font-size: 13px;">
+        <div style="color: #6a9955;"># Step 1: Get token</div>
+        curl -X POST http://localhost:8080/api/auth/login \<br/>
+        &nbsp;&nbsp;-H "Content-Type: application/json" \<br/>
+        &nbsp;&nbsp;-d '{"username":"user","password":"password"}'<br/><br/>
+        <div style="color: #6a9955;"># Step 2: Use token</div>
+        curl http://localhost:8080/api/private/users \<br/>
+        &nbsp;&nbsp;-H "Authorization: Bearer YOUR_TOKEN_HERE"
+    </div>
+</div>
+
+<script>
+    let currentToken = null;
+
+    function doLogin() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+        })
+        .then(r => r.json())
+        .then(data => {
+            currentToken = data.token;
+            document.getElementById('loginStatus').innerHTML =
+                '<span class="status status-ok">Logged in as ' + data.username + ' (' + data.role + ')</span>';
+            document.getElementById('tokenDisplay').style.display = 'block';
+            document.getElementById('tokenDisplay').textContent = 'JWT Token: ' + data.token;
+            document.getElementById('loginResult').style.display = 'block';
+            document.getElementById('loginResult').textContent = JSON.stringify(data, null, 2);
+        })
+        .catch(err => {
+            document.getElementById('loginStatus').innerHTML =
+                '<span class="status status-err">Login failed!</span>';
+        });
+    }
+
+    function callApi(url, withToken) {
+        const headers = {};
+        if (withToken && currentToken) {
+            headers['Authorization'] = 'Bearer ' + currentToken;
+        }
+
+        fetch(url, { headers })
+        .then(r => {
+            const status = r.status;
+            return r.text().then(text => ({ status, text }));
+        })
+        .then(({ status, text }) => {
+            const label = status === 200 ? 'status-ok' : 'status-err';
+            document.getElementById('apiStatus').innerHTML =
+                '<span class="status ' + label + '">' + status + (withToken ? ' (with token)' : ' (no token)') + '</span>';
+            document.getElementById('apiResult').style.display = 'block';
+            try {
+                document.getElementById('apiResult').textContent = JSON.stringify(JSON.parse(text), null, 2);
+            } catch(e) {
+                document.getElementById('apiResult').textContent = text;
+            }
+        });
+    }
+
+    function decodeToken() {
+        const el = document.getElementById('decodeResult');
+        el.style.display = 'block';
+        if (!currentToken) {
+            el.textContent = 'No token yet! Login first.';
+            return;
+        }
+        try {
+            const parts = currentToken.split('.');
+            const header = JSON.parse(atob(parts[0]));
+            const payload = JSON.parse(atob(parts[1]));
+            el.textContent =
+                '=== HEADER ===\n' + JSON.stringify(header, null, 2) +
+                '\n\n=== PAYLOAD ===\n' + JSON.stringify(payload, null, 2) +
+                '\n\n=== SIGNATURE ===\n' + parts[2] +
+                '\n\n=== Issued At: ' + new Date(payload.iat * 1000).toLocaleString() +
+                '\n=== Expires:   ' + new Date(payload.exp * 1000).toLocaleString();
+        } catch(e) {
+            el.textContent = 'Error decoding: ' + e.message;
+        }
+    }
+</script>
+</body>
+</html>

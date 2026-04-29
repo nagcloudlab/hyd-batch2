@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Orders - V4 OAuth2</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .nav { background: #333; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; flex-wrap: wrap; gap: 5px; }
+        .nav a { color: white; text-decoration: none; padding: 8px 16px; border-radius: 4px; }
+        .nav a:hover { background: #555; }
+        .nav .spacer { flex-grow: 1; }
+        .success { background: #d4edda; border: 1px solid #c3e6cb; padding: 15px; border-radius: 8px; margin: 15px 0; }
+        .flow { background: #e2e3e5; padding: 15px; border-radius: 8px; margin: 15px 0; font-family: monospace; font-size: 14px; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { padding: 10px 15px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #007bff; color: white; }
+        .json { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 13px; white-space: pre-wrap; margin: 15px 0; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/orders">Orders</a>
+        <a href="/token-info">Token Info</a>
+        <span class="spacer"></span>
+        <form th:action="@{/logout}" method="post" style="display:inline;">
+            <button type="submit" style="background:#dc3545;color:white;border:none;padding:8px 16px;border-radius:4px;cursor:pointer;">Logout</button>
+        </form>
+    </div>
+
+    <h1>Orders from Resource Server</h1>
+
+    <div class="success">
+        <strong>Cross-service call successful!</strong> Client App (:8080) called Resource Server (:8081)
+        using the OAuth2 token obtained from Auth Server (:9000).
+    </div>
+
+    <div class="flow">
+        Client App (:8080) --[Bearer token]--> Resource Server (:8081) --[validates with]--> Auth Server (:9000)
+    </div>
+
+    <h3>Raw Response from Resource Server:</h3>
+    <div class="json" th:text="${orders}"></div>
+
+    <p><a href="/dashboard">Back to Dashboard</a></p>
+</div>
+</body>
+</html>

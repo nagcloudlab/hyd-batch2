@@ -1,0 +1,11 @@
+/Users/nag/spring-boot-mum-batch1/spring-security-demo/v5-database-rbac/src/main/java/com/example/security/config/DataSeeder.java
+/Users/nag/spring-boot-mum-batch1/spring-security-demo/v5-database-rbac/src/main/java/com/example/security/entity/Role.java
+/Users/nag/spring-boot-mum-batch1/spring-security-demo/v5-database-rbac/src/main/java/com/example/security/config/SecurityConfig.java
+/Users/nag/spring-boot-mum-batch1/spring-security-demo/v5-database-rbac/src/main/java/com/example/security/service/CustomUserDetailsService.java
+/Users/nag/spring-boot-mum-batch1/spring-security-demo/v5-database-rbac/src/main/java/com/example/security/repository/UserRepository.java
+/Users/nag/spring-boot-mum-batch1/spring-security-demo/v5-database-rbac/src/main/java/com/example/security/controller/AdminController.java
+/Users/nag/spring-boot-mum-batch1/spring-security-demo/v5-database-rbac/src/main/java/com/example/security/entity/User.java
+/Users/nag/spring-boot-mum-batch1/spring-security-demo/v5-database-rbac/src/main/java/com/example/security/SecurityDemoApp.java
+/Users/nag/spring-boot-mum-batch1/spring-security-demo/v5-database-rbac/src/main/java/com/example/security/controller/RegistrationController.java
+/Users/nag/spring-boot-mum-batch1/spring-security-demo/v5-database-rbac/src/main/java/com/example/security/controller/PageController.java
+/Users/nag/spring-boot-mum-batch1/spring-security-demo/v5-database-rbac/src/main/java/com/example/security/repository/RoleRepository.java

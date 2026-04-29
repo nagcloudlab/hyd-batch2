@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Home - V2 Session Security</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: #333; }
+        .nav { background: #333; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; flex-wrap: wrap; gap: 5px; }
+        .nav a { color: white; text-decoration: none; padding: 8px 16px; border-radius: 4px; }
+        .nav a:hover { background: #555; }
+        .nav .spacer { flex-grow: 1; }
+        .nav .user-info { color: #aaa; font-size: 14px; }
+        .badge { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
+        .badge-public { background: #d4edda; color: #155724; }
+        .badge-private { background: #d4edda; color: #155724; }
+        .success { background: #d4edda; border: 1px solid #c3e6cb; padding: 15px; border-radius: 8px; margin: 20px 0; }
+        .endpoint-list { list-style: none; padding: 0; }
+        .endpoint-list li { padding: 10px; margin: 5px 0; background: #f8f9fa; border-radius: 4px; }
+        .info { background: #cce5ff; border: 1px solid #b8daff; padding: 15px; border-radius: 8px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/admin">Admin</a>
+        <a href="/profile">Profile</a>
+        <span class="spacer"></span>
+        <span sec:authorize="isAnonymous()">
+            <a href="/login" style="background: #28a745;">Login</a>
+        </span>
+        <span sec:authorize="isAuthenticated()">
+            <span class="user-info">Logged in as: <b sec:authentication="name"></b></span>
+            <form th:action="@{/logout}" method="post" style="display:inline;">
+                <button type="submit" style="background:#dc3545;color:white;border:none;padding:8px 16px;border-radius:4px;cursor:pointer;font-size:inherit;">Logout</button>
+            </form>
+        </span>
+    </div>
+
+    <h1>V2 - Session-Based Security Demo</h1>
+    <p th:text="${message}"></p>
+
+    <div class="success">
+        <strong>Improvement over V1:</strong> Private endpoints now require login!
+        Spring Security uses <code>JSESSIONID</code> cookie for session tracking.
+    </div>
+
+    <div class="info">
+        <strong>How it works:</strong><br/>
+        1. User submits username/password via form login<br/>
+        2. Server creates a session and sends <code>JSESSIONID</code> cookie<br/>
+        3. Browser sends cookie with every request - server knows who you are<br/>
+        4. Logout invalidates the session and deletes the cookie
+    </div>
+
+    <h3>Test Credentials:</h3>
+    <table style="border-collapse: collapse; width: 100%;">
+        <tr style="background: #f8f9fa;"><th style="padding: 10px; text-align: left;">Username</th><th style="padding: 10px;">Password</th><th style="padding: 10px;">Role</th><th style="padding: 10px;">Can Access</th></tr>
+        <tr><td style="padding: 10px;"><code>user</code></td><td style="padding: 10px;"><code>password</code></td><td style="padding: 10px;">USER</td><td style="padding: 10px;">dashboard, profile, api/private</td></tr>
+        <tr><td style="padding: 10px;"><code>admin</code></td><td style="padding: 10px;"><code>password</code></td><td style="padding: 10px;">ADMIN</td><td style="padding: 10px;">dashboard, profile, admin, api/private</td></tr>
+    </table>
+
+    <h3>Endpoints:</h3>
+    <ul class="endpoint-list">
+        <li><span class="badge badge-public">PUBLIC</span> <code>/</code> - Home page</li>
+        <li><span class="badge badge-public">PUBLIC</span> <code>/about</code> - About page</li>
+        <li><span class="badge badge-public">PUBLIC</span> <code>/api/public/greeting</code> - Public REST API</li>
+        <li><span class="badge badge-private">USER+ADMIN</span> <code>/dashboard</code> - Dashboard</li>
+        <li><span class="badge badge-private">USER+ADMIN</span> <code>/profile</code> - User profile</li>
+        <li><span class="badge" style="background:#fff3cd;color:#856404;">ADMIN ONLY</span> <code>/admin</code> - Admin panel</li>
+        <li><span class="badge badge-private">USER+ADMIN</span> <code>/api/private/users</code> - Private REST API</li>
+    </ul>
+</div>
+</body>
+</html>

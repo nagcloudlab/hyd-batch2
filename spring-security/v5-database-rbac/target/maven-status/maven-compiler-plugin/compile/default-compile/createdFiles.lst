@@ -1,0 +1,11 @@
+com/example/security/repository/UserRepository.class
+com/example/security/SecurityDemoApp.class
+com/example/security/entity/User.class
+com/example/security/repository/RoleRepository.class
+com/example/security/config/SecurityConfig.class
+com/example/security/controller/PageController.class
+com/example/security/service/CustomUserDetailsService.class
+com/example/security/controller/RegistrationController.class
+com/example/security/entity/Role.class
+com/example/security/controller/AdminController.class
+com/example/security/config/DataSeeder.class

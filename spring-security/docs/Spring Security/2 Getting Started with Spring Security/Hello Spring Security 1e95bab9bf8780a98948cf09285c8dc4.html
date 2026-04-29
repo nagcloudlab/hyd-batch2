@@ -1,0 +1,778 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Hello Spring Security</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+/* Override strong tags inside headings to maintain consistent weight */
+h1 strong,
+h2 strong,
+h3 strong {
+	font-weight: 600;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 10px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+
+	table.collection-content {
+		width: 100%;
+		table-layout: fixed;
+	}
+
+	table.collection-content th,
+	table.collection-content td {
+		overflow-wrap: anywhere;
+	}
+
+	table.collection-content td > .user,
+	table.collection-content td > time {
+		white-space: pre-wrap;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content-wrapper {
+	overflow-x: auto;
+}
+
+@media only print {
+	.collection-content-wrapper {
+		overflow-x: visible;
+	}
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.collection-content td {
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+
+.column-list {
+	display: flex;
+	gap: 46px;
+}
+
+.column {
+	min-width: 0;
+	overflow: hidden;
+}
+
+.column > *:first-child {
+	margin-top: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+table {
+	border-collapse: collapse;
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol.numbered-list.numbered-list-digits-2 {
+	padding-inline-start: 2em;
+}
+
+ol.numbered-list.numbered-list-digits-3plus {
+	padding-inline-start: 2.4em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+	margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.callout img.notion-static-icon {
+	width: 1em;
+	height: 1em;
+}
+
+.callout p {
+	margin: 0;
+}
+
+.callout h1,
+.callout h2,
+.callout h3 {
+	margin: 0 0 0.6rem;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+blockquote.quote-large {
+	font-size: 1.25em;
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray {
+	color: rgba(125, 122, 117, 1);
+	fill: rgba(125, 122, 117, 1);
+}
+.highlight-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.highlight-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.highlight-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.highlight-blue {
+	color: rgba(56, 125, 201, 1);
+	fill: rgba(56, 125, 201, 1);
+}
+.highlight-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.highlight-default_background {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray_background {
+	background: rgba(42, 28, 0, 0.07);
+}
+.highlight-brown_background {
+	background: rgba(139, 46, 0, 0.086);
+}
+.highlight-orange_background {
+	background: rgba(224, 101, 1, 0.129);
+}
+.highlight-yellow_background {
+	background: rgba(211, 168, 0, 0.137);
+}
+.highlight-teal_background {
+	background: rgba(0, 100, 45, 0.09);
+}
+.highlight-blue_background {
+	background: rgba(0, 124, 215, 0.094);
+}
+.highlight-purple_background {
+	background: rgba(102, 0, 178, 0.078);
+}
+.highlight-pink_background {
+	background: rgba(197, 0, 93, 0.086);
+}
+.highlight-red_background {
+	background: rgba(223, 22, 0, 0.094);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(125, 122, 117, 1);
+	fill: rgba(125, 122, 117, 1);
+}
+.block-color-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.block-color-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.block-color-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.block-color-blue {
+	color: rgba(56, 125, 201, 1);
+	fill: rgba(56, 125, 201, 1);
+}
+.block-color-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(240, 239, 237, 1);
+}
+.block-color-brown_background {
+	background: rgba(245, 237, 233, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 235, 222, 1);
+}
+.block-color-yellow_background {
+	background: rgba(249, 243, 220, 1);
+}
+.block-color-teal_background {
+	background: rgba(232, 241, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(229, 242, 252, 1);
+}
+.block-color-purple_background {
+	background: rgba(243, 235, 249, 1);
+}
+.block-color-pink_background {
+	background: rgba(250, 233, 241, 1);
+}
+.block-color-red_background {
+	background: rgba(252, 233, 231, 1);
+}
+.select-value-color-default { background-color: rgba(42, 28, 0, 0.07); }
+.select-value-color-gray { background-color: rgba(28, 19, 1, 0.11); }
+.select-value-color-brown { background-color: rgba(127, 51, 0, 0.156); }
+.select-value-color-orange { background-color: rgba(196, 88, 0, 0.203); }
+.select-value-color-yellow { background-color: rgba(209, 156, 0, 0.282); }
+.select-value-color-green { background-color: rgba(0, 96, 38, 0.156); }
+.select-value-color-blue { background-color: rgba(0, 118, 217, 0.203); }
+.select-value-color-purple { background-color: rgba(92, 0, 163, 0.141); }
+.select-value-color-pink { background-color: rgba(183, 0, 78, 0.152); }
+.select-value-color-red { background-color: rgba(206, 24, 0, 0.164); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="1e95bab9-bf87-80a9-8948-cf09285c8dc4" class="page sans"><header><h1 class="page-title" dir="auto">Hello Spring Security</h1><p class="page-description" dir="auto"></p></header><div class="page-body"><div style="display:contents" dir="auto"><hr id="1e95bab9-bf87-8061-8d91-e9dd5468c243"/></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80c6-a646-dc3409f5dc46" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="1e95bab9-bf87-80d7-be74-cca77a25a344" class="">🔹 Goal of This Section</h3></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-8039-a2d5-f8f31f0f9925" class="bulleted-list"><li style="list-style-type:disc">Introduce <strong>Spring Security</strong> using a <strong>minimal, working setup</strong>.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-80d7-8635-da127676a3e7" class="bulleted-list"><li style="list-style-type:disc">Secure a basic web app with <strong>username/password-based authentication</strong>.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-80f1-a2a1-c8faed10c24b" class="bulleted-list"><li style="list-style-type:disc">Understand the <strong>flow of authentication and filters</strong> in a web application.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-808c-b530-f3e074267fcb" class="bulleted-list"><li style="list-style-type:disc">Use <strong>Java-based configuration</strong> (no XML).</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-8074-8303-f3083491af2d" class="bulleted-list"><li style="list-style-type:disc">Introduce <strong>in-memory user management</strong> for demo purposes.</li></ul></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-803c-9e48-e3b949a6053e" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e95bab9-bf87-8004-81f0-f09946f0b588"/></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80e1-af80-cc7dd558431f" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="1e95bab9-bf87-80f4-9e29-f87034cae65f" class="">✅ 1. Start from an Unsafe App</h3></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-80a7-8b58-e6ca34d53cad" class="bulleted-list"><li style="list-style-type:disc">Use the <code>chapter02.00-calendar</code> project as the base.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-80a3-af14-ead4026ec8f2" class="bulleted-list"><li style="list-style-type:disc">The goal: Secure this using the <strong>simplest Spring Security setup</strong>.</li></ul></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-801e-9016-fbe8376c8d57" class="">📌 This is the same calendar app used in Chapter 1, but with Spring Security dependencies added.</p></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80b5-b516-c5df1837cec0" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e95bab9-bf87-8026-82b3-e624517feafb"/></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-805e-8332-c705c55c4584" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="1e95bab9-bf87-80b9-989f-fc6d9da5f582" class="">✅ 2. Add Spring Security Dependencies (Gradle)</h3></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="1e95bab9-bf87-8068-a7f9-c0b1d94de545" class="code code-wrap"><code class="language-groovy" style="white-space:pre-wrap;word-break:break-all">
+
+implementation &#x27;org.springframework.security:spring-security-config&#x27;
+implementation &#x27;org.springframework.security:spring-security-web&#x27;
+
+</code></pre></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-803f-911b-e61ad080bad4" class="">🔸 Purpose:</p></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-8061-a994-e693ab0a31a2" class="bulleted-list"><li style="list-style-type:disc"><code>spring-security-config</code>: Core APIs and DSLs for configuring Spring Security.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-8021-8dfd-f4a0cf9ac123" class="bulleted-list"><li style="list-style-type:disc"><code>spring-security-web</code>: Servlet filter and web integration layer.</li></ul></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-8062-931b-c9175a7e34f1" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-801e-b9ec-f72abdfd53ed" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e95bab9-bf87-8058-aedc-c0eb5178cb1b"/></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-8037-9e60-c4197d66c1ad" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="1e95bab9-bf87-80a5-9c30-ff8e5622328f" class="">✅ 3. Implement Java-Based Security Configuration</h3></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-8016-96ec-dee854a12523" class="">🗂️ File: <code>SecurityConfig.java</code></p></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-80f2-930e-ea36c3f4ae59" class="bulleted-list"><li style="list-style-type:disc">Uses <code>@Configuration</code> + <code>@EnableWebSecurity</code>.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-8096-bfd0-ec1c99bd78fc" class="bulleted-list"><li style="list-style-type:disc">Defines a user using <code>InMemoryUserDetailsManager</code>.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-8077-a7fa-cee67de312d7" class="bulleted-list"><li style="list-style-type:disc">Sets a <code>SecurityFilterChain</code> bean to define rules.</li></ul></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80de-a888-cbf7c92c5182" class="">🔸 Highlights:</p></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-8063-97d1-da485abdd427" class="bulleted-list"><li style="list-style-type:disc">All pages require <code>ROLE_USER</code>.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-8067-995f-f01bfcae8e95" class="bulleted-list"><li style="list-style-type:disc">Uses <code>.formLogin()</code> with defaults.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-801a-8306-e8455a579146" class="bulleted-list"><li style="list-style-type:disc">CSRF disabled temporarily.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-80b8-877f-faed9670bb8d" class="bulleted-list"><li style="list-style-type:disc">H2 console headers disabled.</li></ul></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80d6-aecd-f865ce879267" class="">✅ This configuration provides:</p></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-80c7-92d9-e3161c2b52b1" class="bulleted-list"><li style="list-style-type:disc"><strong>Form login</strong></li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-800f-9e63-d86fc4af6134" class="bulleted-list"><li style="list-style-type:disc"><strong>Basic user authentication</strong></li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-80f4-b8d2-cd1ba59ad670" class="bulleted-list"><li style="list-style-type:disc"><strong>Filter chain setup</strong></li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-804c-9c3b-e1108e8afff0" class="bulleted-list"><li style="list-style-type:disc"><strong>Minimal secure web app</strong></li></ul></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-807e-ad1d-ed0d9f6488a2" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e95bab9-bf87-8048-9bba-e9d539fa59a9"/></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80bf-a027-fb93085498e2" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="1e95bab9-bf87-8014-8223-fb382bd90ec2" class="">✅ 5. The Security Filter Chain Explained</h3></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-8065-b97b-c70472daf077" class="bulleted-list"><li style="list-style-type:disc">Spring Security uses servlet filters to control access.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-800f-8f7e-c3f939b0de50" class="bulleted-list"><li style="list-style-type:disc"><code>SecurityFilterChain</code> creates a <strong>filter bean</strong> called <code>springSecurityFilterChain</code>.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-801b-85b6-eb557ce2f96d" class="bulleted-list"><li style="list-style-type:disc">All HTTP requests pass through this filter for:<div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-80d8-9b27-f9a7cac67e23" class="bulleted-list"><li style="list-style-type:circle">Authentication</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-80f0-94bc-e45a69333c69" class="bulleted-list"><li style="list-style-type:circle">Authorization</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-802b-b635-dc5442750cde" class="bulleted-list"><li style="list-style-type:circle">CSRF</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-8034-a19f-c23928d65cba" class="bulleted-list"><li style="list-style-type:circle">Session management</li></ul></div></li></ul></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-8076-87ff-d067adc3eef8" class="">🧠 <strong>Analogy</strong>: Like airport security—every request must pass through it.</p></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-801b-89c3-c4a4a50df339" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-803f-a658-f3a3471f5b4d" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e95bab9-bf87-8041-bd1a-f2ee93920123"/></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-8074-b650-ddfad4031f48" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="1e95bab9-bf87-8060-bc94-c39b5ed8855f" class="">✅ 6. WebAppInitializer: Bootstrapping the Security Filter</h3></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80ad-a1c8-ea5cce5ceb35" class="">🗂️ File: <code>SecurityWebAppInitializer.java</code></p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js" integrity="sha512-xKcnbsdT0KMoA4yrozkqZM1XJVTrPsjdQwvigxlAlxEDu8YDvC/jl+LfVqn0fY3Vs6m2y4a89JCHEIA/Z9zpmQ==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><pre id="1e95bab9-bf87-8086-8650-c60a61a21294" class="code code-wrap"><code class="language-java" style="white-space:pre-wrap;word-break:break-all">
+
+@Order(1)
+public class SecurityWebAppInitializer extends 
+AbstractSecurityWebApplicationInitializer {}
+
+</code></pre></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80ef-8d53-f92f53e81c52" class="">🔍 Why it matters:</p></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-80ac-9894-d93cef1d81c7" class="bulleted-list"><li style="list-style-type:disc">Registers <code>springSecurityFilterChain</code>.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-80bd-bb2e-ec2ef1be3059" class="bulleted-list"><li style="list-style-type:disc">Ensures it’s the <strong>first filter in the chain</strong>.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-805e-b53f-ca748a3d77cf" class="bulleted-list"><li style="list-style-type:disc">Loaded using <code>ContextLoaderListener</code>.</li></ul></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80a8-9961-d9783aa8a5ee" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e95bab9-bf87-8059-b04b-e24c26a1f64a"/></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-8038-ad12-fc911b71647e" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="1e95bab9-bf87-800e-a1f5-f1dfbd941fb3" class="">✅ 7. Servlet Context &amp; Filter Setup – Key Concepts</h3></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-80c7-aa8a-fd8caa41551c" class="bulleted-list"><li style="list-style-type:disc"><code>DispatcherServlet</code>: Loads Spring MVC-specific beans (controllers, view resolvers).</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-8079-ae13-ed7954d8cb18" class="bulleted-list"><li style="list-style-type:disc"><code>ContextLoaderListener</code>: Loads Spring Security beans (filters, authentication manager).</li></ul></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-808d-b834-e439f1cb7b76" class="">📌 Important:</p></div><div style="display:contents" dir="auto"><blockquote id="1e95bab9-bf87-8070-9fb6-ea95bdb1c301" class="">Spring MVC beans can access Security beans, but not vice versa.</blockquote></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80fe-b073-c77eb1b7acc9" class="">
+</p></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-80da-9a62-c23a64358976" class="toggle"><li><details open=""><summary></summary><div style="display:contents" dir="ltr"><figure id="1e95bab9-bf87-8072-a7eb-ec016c188831" class="image"><a href="Hello%20Spring%20Security/image.png"><img style="width:681.9885864257812px" src="Hello%20Spring%20Security/image.png"/></a></figure></div></details></li></ul></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80b0-ada1-e87cb34e82c1" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e95bab9-bf87-80a7-85b4-cd2135a03c47"/></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80d5-9dec-f3aee7bdeee5" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="1e95bab9-bf87-80d2-97b2-d7b9931ac3f2" class="">✅ 8. DelegatingFilterProxy</h3></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-8056-abe3-f57321a9eb5d" class="bulleted-list"><li style="list-style-type:disc">A Servlet <code>Filter</code> that <strong>delegates work to a Spring-managed bean</strong>.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-808a-ab6a-f29d41c82c97" class="bulleted-list"><li style="list-style-type:disc">Key to integrating Spring Security into any web container.</li></ul></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-8003-834a-e00f2235bf27" class="">💡 Spring Boot users don’t need to worry—it&#x27;s auto-configured.</p></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-8031-95b4-ec59445d0d5d" class="">But in pure Spring MVC apps, this setup is essential.</p></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-801f-beff-fe6f98fc49fd" class="">
+</p></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-8052-a05f-f33616c8ea48" class="toggle"><li><details open=""><summary></summary><div style="display:contents" dir="ltr"><figure id="1e95bab9-bf87-8036-b9b0-c9e5f4b73393" class="image"><a href="Hello%20Spring%20Security/image%201.png"><img style="width:681.9957275390625px" src="Hello%20Spring%20Security/image%201.png"/></a></figure></div></details></li></ul></div><div style="display:contents" dir="auto"><hr id="1e95bab9-bf87-803b-b470-f2a6152ef372"/></div><div style="display:contents" dir="auto"><h3 id="1e95bab9-bf87-8070-9484-d7f44c1c17cf" class="">✅ 9. FilterChainProxy – The Security Enforcer</h3></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-8006-a0f6-f45fb2c8baa2" class="bulleted-list"><li style="list-style-type:disc">Receives requests from <code>DelegatingFilterProxy</code>.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-8059-88df-fd57554b0dd5" class="bulleted-list"><li style="list-style-type:disc">Delegates to a <strong>chain of security filters</strong>:<div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-80bd-b3c7-dd772e23ddae" class="bulleted-list"><li style="list-style-type:circle"><code>UsernamePasswordAuthenticationFilter</code></li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-80b0-a271-c8be55c94062" class="bulleted-list"><li style="list-style-type:circle"><code>ExceptionTranslationFilter</code></li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-80ea-b961-cb5223cb45f8" class="bulleted-list"><li style="list-style-type:circle"><code>SecurityContextPersistenceFilter</code></li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-80f1-8865-d0ef6568f002" class="bulleted-list"><li style="list-style-type:circle">...and more.</li></ul></div></li></ul></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80b7-af57-e5e0bfb7af2b" class="">🔁 Applies filters <strong>conditionally</strong> depending on the request.</p></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-8058-b806-f14a1500dc0f" class="">
+</p></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-8088-bafe-ccd04ae53c0d" class="toggle"><li><details open=""><summary></summary><div style="display:contents" dir="ltr"><figure id="1e95bab9-bf87-8073-a148-e958a5908408" class="image"><a href="Hello%20Spring%20Security/image%202.png"><img style="width:709.9857788085938px" src="Hello%20Spring%20Security/image%202.png"/></a></figure></div></details></li></ul></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-8042-a6cf-f65f65dab375" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e95bab9-bf87-806e-8b19-f2427d149091"/></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80f5-8d85-d6ca32d35a93" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="1e95bab9-bf87-80d9-ab1c-ed917e3d35b9" class="">✅ 10. Start the Application – You’re Secure!</h3></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80a8-a1a3-f97ce1410466" class="">🔗 Visit: <code>http://localhost:8080/</code></p></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-801b-b114-e9135bd96c37" class="">You’ll be redirected to Spring’s default login form:</p></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-80ba-9a80-dbe6b3bfd481" class="bulleted-list"><li style="list-style-type:disc">Username: <code>user1@example.com</code></li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-80aa-b26d-c3dace076867" class="bulleted-list"><li style="list-style-type:disc">Password: <code>user1</code></li></ul></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80b8-8cbe-d76348f8d267" class="">📌 The Welcome Page confirms:</p></div><div style="display:contents" dir="auto"><blockquote id="1e95bab9-bf87-80b2-9b61-db982bd0ef6b" class="">Spring Security is now active and protecting your app.</blockquote></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-8027-aeda-e07fd88807fb" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e95bab9-bf87-80be-bb34-f7b89c46df1c"/></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-809b-a947-cb996e18d132" class="">
+</p></div></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

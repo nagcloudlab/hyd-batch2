@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Admin - User Management</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
+        .container { max-width: 1000px; margin: auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .nav { background: #333; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; flex-wrap: wrap; gap: 5px; }
+        .nav a { color: white; text-decoration: none; padding: 8px 16px; border-radius: 4px; }
+        .nav a:hover { background: #555; }
+        .nav .spacer { flex-grow: 1; }
+        h1 { color: #333; }
+        .alert-success { background: #d4edda; color: #155724; padding: 10px 15px; border-radius: 4px; margin-bottom: 15px; }
+        .alert-error { background: #f8d7da; color: #721c24; padding: 10px 15px; border-radius: 4px; margin-bottom: 15px; }
+        table { border-collapse: collapse; width: 100%; margin: 15px 0; }
+        th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #ddd; vertical-align: middle; }
+        th { background: #343a40; color: white; }
+        tr:hover { background: #f8f9fa; }
+        .badge { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; margin: 1px; }
+        .badge-user { background: #d4edda; color: #155724; }
+        .badge-mgr { background: #fff3cd; color: #856404; }
+        .badge-admin { background: #f8d7da; color: #721c24; }
+        .badge-enabled { background: #d4edda; color: #155724; }
+        .badge-disabled { background: #f8d7da; color: #721c24; }
+        .btn { padding: 5px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; color: white; }
+        .btn-sm { padding: 3px 8px; font-size: 12px; }
+        .btn-success { background: #28a745; }
+        .btn-warning { background: #ffc107; color: #333; }
+        .btn-danger { background: #dc3545; }
+        .btn-primary { background: #007bff; }
+        .btn:hover { opacity: 0.9; }
+        .add-form { background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; }
+        .add-form input, .add-form select { padding: 6px 10px; border: 1px solid #ddd; border-radius: 4px; margin-right: 8px; }
+        .role-form { display: inline; }
+        .role-checkboxes { display: inline-flex; gap: 5px; align-items: center; }
+        .role-checkboxes label { font-size: 12px; cursor: pointer; }
+        .info { background: #cce5ff; border: 1px solid #b8daff; padding: 12px; border-radius: 8px; margin: 15px 0; font-size: 14px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/profile">Profile</a>
+        <a href="/manager">Manager</a>
+        <a href="/admin/users" style="background:#ffc107;color:#333;">Admin Panel</a>
+        <span class="spacer"></span>
+        <form th:action="@{/logout}" method="post" style="display:inline;">
+            <button type="submit" style="background:#dc3545;color:white;border:none;padding:8px 16px;border-radius:4px;cursor:pointer;">Logout</button>
+        </form>
+    </div>
+
+    <h1>Admin - User Management</h1>
+
+    <div class="info">
+        Manage users and roles dynamically. Changes take effect on next login.
+        Browse the database at <a href="/h2-console" target="_blank">/h2-console</a>
+        (JDBC URL: <code>jdbc:h2:mem:securitydb</code>)
+    </div>
+
+    <div th:if="${success}" class="alert-success" th:text="${success}"></div>
+    <div th:if="${error}" class="alert-error" th:text="${error}"></div>
+
+    <!-- USER TABLE -->
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Full Name</th>
+            <th>Roles</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.username}"></td>
+            <td th:text="${user.fullName}"></td>
+            <td>
+                <span th:each="role : ${user.roles}">
+                    <span class="badge"
+                          th:classappend="${role.name == 'ROLE_ADMIN'} ? 'badge-admin' : (${role.name == 'ROLE_MANAGER'} ? 'badge-mgr' : 'badge-user')"
+                          th:text="${role.name}"></span>
+                </span>
+            </td>
+            <td>
+                <span class="badge" th:classappend="${user.enabled} ? 'badge-enabled' : 'badge-disabled'"
+                      th:text="${user.enabled} ? 'ENABLED' : 'DISABLED'"></span>
+            </td>
+            <td>
+                <!-- Toggle enable/disable -->
+                <form th:action="@{'/admin/users/' + ${user.id} + '/toggle'}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-sm"
+                            th:classappend="${user.enabled} ? 'btn-warning' : 'btn-success'"
+                            th:text="${user.enabled} ? 'Disable' : 'Enable'"></button>
+                </form>
+
+                <!-- Change Roles -->
+                <form th:action="@{'/admin/users/' + ${user.id} + '/roles'}" method="post" style="display:inline;">
+                    <span class="role-checkboxes">
+                        <span th:each="role : ${allRoles}">
+                            <input type="checkbox" name="roleIds" th:value="${role.id}"
+                                   th:checked="${user.roles.contains(role)}"
+                                   th:id="${'role_' + user.id + '_' + role.id}"/>
+                            <label th:for="${'role_' + user.id + '_' + role.id}"
+                                   th:text="${#strings.replace(role.name, 'ROLE_', '')}"></label>
+                        </span>
+                    </span>
+                    <button type="submit" class="btn btn-sm btn-primary">Save Roles</button>
+                </form>
+
+                <!-- Delete -->
+                <form th:action="@{'/admin/users/' + ${user.id} + '/delete'}" method="post" style="display:inline;"
+                      onsubmit="return confirm('Delete this user?');">
+                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- ADD NEW USER -->
+    <div class="add-form">
+        <h3>Add New User</h3>
+        <form th:action="@{/admin/users/add}" method="post" style="display:flex; align-items:center; flex-wrap:wrap; gap:8px;">
+            <input type="text" name="username" placeholder="Username" required/>
+            <input type="password" name="password" placeholder="Password" required/>
+            <input type="text" name="fullName" placeholder="Full Name" required/>
+            <span class="role-checkboxes">
+                <span th:each="role : ${allRoles}">
+                    <input type="checkbox" name="roleIds" th:value="${role.id}" th:id="${'new_' + role.id}"/>
+                    <label th:for="${'new_' + role.id}" th:text="${#strings.replace(role.name, 'ROLE_', '')}"></label>
+                </span>
+            </span>
+            <button type="submit" class="btn btn-success">Add User</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

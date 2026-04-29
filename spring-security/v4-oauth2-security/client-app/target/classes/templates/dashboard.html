@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Dashboard - V4 OAuth2</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .nav { background: #333; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; flex-wrap: wrap; gap: 5px; }
+        .nav a { color: white; text-decoration: none; padding: 8px 16px; border-radius: 4px; }
+        .nav a:hover { background: #555; }
+        .nav .spacer { flex-grow: 1; }
+        .nav .user-info { color: #aaa; font-size: 14px; }
+        .success { background: #d4edda; border: 1px solid #c3e6cb; padding: 15px; border-radius: 8px; margin: 15px 0; }
+        .token-box { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 12px; word-break: break-all; margin: 15px 0; max-height: 200px; overflow-y: auto; }
+        .claims { background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 15px 0; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #e9ecef; }
+        code { background: #e9ecef; padding: 2px 6px; border-radius: 3px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/orders">Orders</a>
+        <a href="/token-info">Token Info</a>
+        <span class="spacer"></span>
+        <span class="user-info">Logged in as: <b th:text="${username}"></b></span>
+        <form th:action="@{/logout}" method="post" style="display:inline;">
+            <button type="submit" style="background:#dc3545;color:white;border:none;padding:8px 16px;border-radius:4px;cursor:pointer;">Logout</button>
+        </form>
+    </div>
+
+    <h1>Dashboard - OAuth2 Authenticated</h1>
+
+    <div class="success">
+        <strong>OAuth2 Login Successful!</strong> You logged in via the Auth Server (:9000).
+        The Client App received an access token and can now call the Resource Server (:8081).
+    </div>
+
+    <h3>Your OAuth2 Access Token:</h3>
+    <div class="token-box" th:text="${accessToken}"></div>
+
+    <h3>Token Claims (from OIDC):</h3>
+    <div class="claims">
+        <table>
+            <tr th:each="entry : ${claims}">
+                <td th:text="${entry.key}" style="font-weight:bold;"></td>
+                <td th:text="${entry.value}"></td>
+            </tr>
+        </table>
+    </div>
+
+    <p>Try: <a href="/orders">Call Resource Server for Orders</a> |
+        <a href="/token-info">See Token Info from Resource Server</a></p>
+</div>
+</body>
+</html>

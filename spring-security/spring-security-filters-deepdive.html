@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Servlet Filters to Spring Security Filters — Deep Dive</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--green:#1e8e3e;--green-light:#e6f4ea;--green-dark:#137333;--blue:#1a73e8;--blue-light:#e8f0fe;--blue-dark:#1557b0;--orange:#ea8600;--orange-light:#fef7e0;--red:#d93025;--red-light:#fce8e6;--red-dark:#b31412;--purple:#7b1fa2;--purple-light:#f3e5f5;--purple-dark:#4a148c;--cyan:#00838f;--cyan-light:#e0f7fa;--teal:#00695c;--teal-light:#e0f2f1;--text:#1a1a2e;--text-sub:#5f6368;--text-light:#9aa0a6;--bg:#fff;--bg-soft:#f8f9fa;--border:#dadce0;--border-light:#f0f0f0;--radius:16px;--rs:10px;--px:90px;--py:48px;--ease:cubic-bezier(.4,0,.2,1);--dur:.35s}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Inter',-apple-system,sans-serif;background:#0a0a0a;color:var(--text);-webkit-font-smoothing:antialiased}
+.deck{position:relative;width:100vw;height:100vh}
+.slide{position:absolute;inset:0;background:var(--bg);display:flex;flex-direction:column;padding:var(--py) var(--px) 44px;opacity:0;visibility:hidden;pointer-events:none;transition:opacity var(--dur) var(--ease);overflow-y:auto}
+.slide.active{opacity:1;visibility:visible;pointer-events:auto;z-index:2}
+.slide.exiting,.slide.exiting-prev{opacity:0;visibility:visible;z-index:1}.slide.entering-prev{opacity:0}
+.sh{flex-shrink:0;padding-bottom:12px;margin-bottom:20px;border-bottom:2px solid var(--blue-light)}
+.sh h2{font-size:2.4rem;font-weight:800;letter-spacing:-1px;line-height:1.15;margin:0 0 5px}
+.sh h2 .hl{color:var(--green)}.sh h2 .hb{color:var(--blue)}.sh h2 .ho{color:var(--orange)}.sh h2 .hr{color:var(--red)}.sh h2 .hp{color:var(--purple)}.sh h2 .hc{color:var(--cyan)}.sh h2 .ht{color:var(--teal)}
+.sh .sub{font-size:1.12rem;color:var(--text-sub);font-weight:400;line-height:1.5;margin:0}
+.tag{display:inline-block;padding:3px 12px;border-radius:50px;font-size:.68rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px}
+.tag.b{background:var(--blue-light);color:var(--blue-dark)}.tag.o{background:var(--orange-light);color:#b45309}.tag.p{background:var(--purple-light);color:var(--purple-dark)}.tag.g{background:var(--green-light);color:var(--green-dark)}.tag.r{background:var(--red-light);color:var(--red-dark)}.tag.c{background:var(--cyan-light);color:var(--cyan)}.tag.t{background:var(--teal-light);color:var(--teal)}
+.sb{flex:1;display:flex;flex-direction:column;min-height:0}
+.snum{position:absolute;bottom:12px;right:32px;font-size:.82rem;font-weight:600;color:var(--text-light)}
+.progress{position:fixed;bottom:0;left:0;height:4px;background:var(--blue);z-index:100;transition:width .35s var(--ease);border-radius:0 3px 3px 0}
+.nav-btn{position:fixed;top:50%;transform:translateY(-50%);z-index:90;width:46px;height:46px;border-radius:50%;border:1.5px solid var(--border);background:rgba(255,255,255,.92);color:var(--text-sub);font-size:1.1rem;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px)}
+.nav-btn:hover{background:var(--blue);color:#fff;border-color:var(--blue)}.nav-btn.prev{left:16px}.nav-btn.next{right:16px}.nav-btn:disabled{opacity:0;pointer-events:none}
+.hint{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);font-size:.8rem;color:var(--text-light);z-index:80;transition:opacity .6s}.hint.hide{opacity:0;pointer-events:none}
+
+.slide--hero{background:linear-gradient(135deg,#1a73e8,#1557b0 40%,#0d47a1);color:#fff;text-align:center;justify-content:center!important;padding:80px var(--px)}.slide--hero .snum{color:rgba(255,255,255,.25)}.slide--hero .badge{display:inline-block;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);padding:8px 24px;border-radius:50px;font-size:.88rem;font-weight:600;letter-spacing:2px;text-transform:uppercase}.slide--hero h1{font-size:3.6rem;font-weight:900;letter-spacing:-2px;line-height:1.1;margin:22px 0 14px}.slide--hero .tagline{font-size:1.4rem;font-weight:300;opacity:.72;margin:0}
+.slide--sec{color:#fff;text-align:center;justify-content:center!important}.slide--sec h2{color:#fff;font-size:2.6rem;font-weight:800;margin-bottom:6px;border:none}.slide--sec .sub{color:rgba(255,255,255,.7);font-size:1.25rem}.slide--sec .snum{color:rgba(255,255,255,.25)}.slide--sec .sh{border:none;margin:0;padding:0}
+.slide--sec.blue{background:linear-gradient(135deg,#1a73e8,#0d47a1)}.slide--sec.orange{background:linear-gradient(135deg,#e65100,#bf360c)}.slide--sec.purple{background:linear-gradient(135deg,#7b1fa2,#4a148c)}.slide--sec.green{background:linear-gradient(135deg,#1e8e3e,#0d5a28)}.slide--sec.red{background:linear-gradient(135deg,#c62828,#b71c1c)}.slide--sec.cyan{background:linear-gradient(135deg,#00838f,#006064)}.slide--sec.teal{background:linear-gradient(135deg,#00695c,#004d40)}
+.slide--end{background:linear-gradient(135deg,#1a73e8,#0d47a1);color:#fff;text-align:center;justify-content:center!important}.slide--end .snum{color:rgba(255,255,255,.25)}.slide--end h2{color:#fff;font-size:2.6rem;font-weight:800;margin-bottom:10px}.slide--end p{color:rgba(255,255,255,.78);font-size:1.3rem;margin-bottom:4px}
+
+p{font-size:1.12rem;color:var(--text-sub);margin-bottom:12px;line-height:1.6}strong{color:var(--text);font-weight:700}
+code{font-family:'JetBrains Mono',monospace;font-size:.83em;background:var(--bg-soft);border:1px solid var(--border-light);padding:1px 6px;border-radius:4px;color:var(--blue-dark)}
+.callout{font-size:1.08rem;font-weight:500;color:var(--text);padding:16px 22px;border-radius:var(--rs);border-left:4px solid var(--blue);background:var(--blue-light);margin-top:14px;line-height:1.5}
+.callout.green{background:var(--green-light);border-color:var(--green)}.callout.orange{background:var(--orange-light);border-color:var(--orange)}.callout.red{background:var(--red-light);border-color:var(--red)}.callout.purple{background:var(--purple-light);border-color:var(--purple)}.callout.cyan{background:var(--cyan-light);border-color:var(--cyan)}
+.cards{display:grid;gap:12px}.c2{grid-template-columns:1fr 1fr}.c3{grid-template-columns:1fr 1fr 1fr}
+.card{background:var(--bg-soft);border:1px solid var(--border);border-radius:var(--rs);padding:16px;transition:box-shadow .2s}.card:hover{box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.card .ct{font-size:1.08rem;font-weight:700;color:var(--text);margin-bottom:3px}.card p{font-size:.95rem;margin:0;color:var(--text-sub);line-height:1.5}
+.card.rb{border-left:4px solid var(--red)}.card.gb{border-left:4px solid var(--green)}.card.bb{border-left:4px solid var(--blue)}.card.ob{border-left:4px solid var(--orange)}.card.pb{border-left:4px solid var(--purple)}.card.cb{border-left:4px solid var(--cyan)}
+.card.cen{text-align:center;padding:20px 16px}
+table{width:100%;border-collapse:separate;border-spacing:0;border-radius:var(--rs);overflow:hidden;border:1px solid var(--border);font-size:.98rem}
+thead th{background:var(--blue);color:#fff;font-weight:700;text-align:left;padding:10px 14px;font-size:.8rem;text-transform:uppercase;letter-spacing:.5px}
+thead th.o{background:var(--orange)}thead th.p{background:var(--purple)}thead th.g{background:var(--green)}thead th.r{background:var(--red)}thead th.c{background:var(--cyan)}
+tbody td{padding:9px 14px;border-bottom:1px solid var(--border-light);color:var(--text-sub)}tbody tr:last-child td{border-bottom:none}tbody tr:nth-child(even){background:var(--bg-soft)}tbody td strong{color:var(--text)}
+.arch{display:flex;flex-direction:column;align-items:center;gap:0;margin:6px 0}
+.an{padding:9px 24px;border-radius:var(--rs);font-weight:600;font-size:.92rem;text-align:center;border:1.5px solid var(--border);background:var(--bg-soft);min-width:240px;max-width:520px}
+.an.blue{border-color:var(--blue);background:var(--blue-light);color:var(--blue-dark)}.an.green{border-color:var(--green);background:var(--green-light);color:var(--green-dark)}.an.red{border-color:var(--red);background:var(--red-light);color:var(--red-dark)}.an.orange{border-color:var(--orange);background:var(--orange-light);color:#b45309}.an.purple{border-color:var(--purple);background:var(--purple-light);color:var(--purple-dark)}.an.cyan{border-color:var(--cyan);background:var(--cyan-light);color:var(--cyan)}.an.teal{border-color:var(--teal);background:var(--teal-light);color:var(--teal)}
+.an.hl{border-width:3px;font-size:.98rem}
+.an .as{font-weight:400;font-size:.78rem;display:block;margin-top:2px}
+.ad{font-size:1.1rem;color:var(--text-light);line-height:1;padding:2px 0}
+.split{display:flex;gap:24px;align-items:flex-start}.split>*{flex:1}
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:12px}.compare-box{border-radius:var(--rs);border:1px solid var(--border-light);overflow:hidden}.compare-box .ch{padding:9px 14px;font-weight:700;font-size:.8rem;text-transform:uppercase;letter-spacing:.8px}.compare-box.bad .ch{background:var(--red-light);color:var(--red-dark)}.compare-box.good .ch{background:var(--green-light);color:var(--green-dark)}.compare-box.info .ch{background:var(--blue-light);color:var(--blue-dark)}.compare-box.warn .ch{background:var(--orange-light);color:#b45309}.compare-box .cb{padding:12px 14px;background:var(--bg)}.compare-box .cb p{margin:0;font-size:.98rem}
+.code-block{background:#1e1e2e;border-radius:var(--rs);padding:14px 18px;margin:6px 0;overflow-x:auto;position:relative}.code-block .lang{position:absolute;top:7px;right:10px;font-size:.64rem;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.25)}.code-block pre{margin:0;font-family:'JetBrains Mono',monospace;font-size:.8rem;line-height:1.5;color:#cdd6f4;white-space:pre-wrap}
+.kw{color:#c678dd}.str{color:#98c379}.cm{color:#6c7086;font-style:italic}.fn{color:#61afef}.ann{color:#e5c07b}.type{color:#e06c75}
+.big{font-size:1.9rem;font-weight:800;color:var(--text);text-align:center;margin:14px 0;line-height:1.4}.big .hb{color:var(--blue)}.big .ho{color:var(--orange)}.big .hp{color:var(--purple)}.big .hl{color:var(--green)}.big .hr{color:var(--red)}
+
+/* filter-chain visual */
+.fc{display:flex;flex-direction:column;align-items:center;gap:0;margin:6px 0}
+.fn-box{width:420px;padding:8px 16px;border-radius:8px;font-size:.85rem;font-weight:600;text-align:center;border-left:5px solid;position:relative}
+.fn-box.servlet{border-color:#78909c;background:#eceff1;color:#37474f}
+.fn-box.spring{border-color:var(--green);background:var(--green-light);color:var(--green-dark)}
+.fn-box.security{border-color:var(--blue);background:var(--blue-light);color:var(--blue-dark)}
+.fn-box.auth{border-color:var(--purple);background:var(--purple-light);color:var(--purple-dark)}
+.fn-box.csrf{border-color:var(--orange);background:var(--orange-light);color:#b45309}
+.fn-box.exc{border-color:var(--red);background:var(--red-light);color:var(--red-dark)}
+.fn-box.custom{border-color:var(--cyan);background:var(--cyan-light);color:var(--cyan)}
+.fn-box .fn-sub{font-weight:400;font-size:.75rem;opacity:.8}
+.fc .ad{font-size:.9rem;padding:1px 0}
+
+/* layer visual */
+.layer-row{display:flex;align-items:center;gap:12px;margin:4px 0}
+.layer-label{min-width:120px;font-size:.82rem;font-weight:700;text-align:right;color:var(--text-light)}
+.layer-bar{flex:1;padding:10px 16px;border-radius:var(--rs);font-weight:600;font-size:.9rem;text-align:center}
+
+@media(max-width:1024px){:root{--px:44px;--py:32px}.sh h2{font-size:2rem}.slide--hero h1{font-size:2.8rem}.fn-box{width:320px}}
+@media(max-width:768px){:root{--px:22px;--py:24px}.sh h2{font-size:1.6rem}.slide--hero h1{font-size:2.2rem}.c2,.c3{grid-template-columns:1fr}.split{flex-direction:column}.compare{grid-template-columns:1fr}.fn-box{width:260px;font-size:.78rem}}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<button class="nav-btn prev" id="btnPrev">&#8592;</button>
+<button class="nav-btn next" id="btnNext">&#8594;</button>
+<div class="hint" id="hint">&#8592; &#8594; arrow keys &middot; swipe &middot; press <b>F</b> for fullscreen</div>
+<div class="deck">
+
+<!-- ═══ TITLE ═══ -->
+<div class="slide slide--hero active"><div class="badge">Deep Dive</div><h1>Servlet Filters to<br>Spring Security Filters</h1><p class="tagline">The complete journey — how every HTTP request is secured</p><div class="snum"></div></div>
+
+<!-- ═══ S1: SERVLET FILTERS ═══ -->
+<div class="slide slide--sec blue"><div class="sh"><h2>Part 1</h2><p class="sub">Servlet Filters — The Foundation</p></div><div class="snum"></div></div>
+
+<div class="slide"><div class="sh"><span class="tag b">Servlet Filters</span><h2>What is a <span class="hb">Servlet</span>?</h2><p class="sub">Before filters, understand the basic request lifecycle</p></div><div class="sb"><div class="arch"><div class="an blue">Client (Browser / Postman)</div><div class="ad">&darr; HTTP Request</div><div class="an" style="min-width:300px">Servlet Container (Tomcat, Jetty)<span class="as">Manages the lifecycle of Servlets</span></div><div class="ad">&darr; routes to</div><div class="an green hl" style="min-width:300px">Servlet (e.g. DispatcherServlet)<span class="as">Processes request &rarr; generates response</span></div><div class="ad">&darr; HTTP Response</div><div class="an blue">Client</div></div><div class="callout"><strong>Servlet</strong> = a Java class that handles HTTP requests. <strong>Servlet Container</strong> (Tomcat) = the runtime that manages servlets. Spring MVC's <code>DispatcherServlet</code> is just a servlet.</div></div><div class="snum"></div></div>
+
+<div class="slide"><div class="sh"><span class="tag b">Servlet Filters</span><h2>What is a <span class="hb">Servlet Filter</span>?</h2><p class="sub">An interceptor that sits between client and servlet</p></div><div class="sb"><div class="arch"><div class="an blue">HTTP Request</div><div class="ad">&darr;</div><div class="an" style="border-color:#78909c;background:#eceff1;color:#37474f;min-width:300px">Filter 1 (Logging)<span class="as">Can inspect, modify, or block the request</span></div><div class="ad">&darr;</div><div class="an" style="border-color:#78909c;background:#eceff1;color:#37474f;min-width:300px">Filter 2 (Encoding)<span class="as">Sets character encoding</span></div><div class="ad">&darr;</div><div class="an" style="border-color:#78909c;background:#eceff1;color:#37474f;min-width:300px">Filter 3 (Authentication)<span class="as">Checks credentials</span></div><div class="ad">&darr;</div><div class="an green">Servlet (DispatcherServlet)</div></div></div><div class="snum"></div></div>
+
+<div class="slide"><div class="sh"><span class="tag b">Servlet Filters</span><h2>The <span class="hb">Filter</span> Interface</h2><p class="sub">javax.servlet.Filter (Jakarta EE: jakarta.servlet.Filter)</p></div><div class="sb"><div class="code-block"><div class="lang">Java</div><pre><span class="kw">public interface</span> <span class="type">Filter</span> {
+
+    <span class="kw">void</span> <span class="fn">init</span>(FilterConfig config);         <span class="cm">// called once at startup</span>
+
+    <span class="kw">void</span> <span class="fn">doFilter</span>(
+        ServletRequest request,
+        ServletResponse response,
+        FilterChain chain                     <span class="cm">// the chain of remaining filters</span>
+    );
+
+    <span class="kw">void</span> <span class="fn">destroy</span>();                          <span class="cm">// called once at shutdown</span>
+}</pre></div><div class="callout"><strong>Key method: <code>doFilter()</code></strong>. You can:<br>1. Inspect/modify the request <strong>before</strong> passing it on<br>2. Call <code>chain.doFilter(request, response)</code> to continue the chain<br>3. Inspect/modify the response <strong>after</strong> the servlet runs<br>4. Or <strong>block</strong> the request entirely (don't call chain.doFilter)</div></div><div class="snum"></div></div>
+
+<div class="slide"><div class="sh"><span class="tag b">Servlet Filters</span><h2>A Simple Filter <span class="hb">Example</span></h2></div><div class="sb"><div class="code-block"><div class="lang">Java</div><pre><span class="kw">public class</span> <span class="type">LoggingFilter</span> <span class="kw">implements</span> Filter {
+
+    <span class="ann">@Override</span>
+    <span class="kw">public void</span> <span class="fn">doFilter</span>(ServletRequest request, ServletResponse response,
+                          FilterChain chain) <span class="kw">throws</span> IOException, ServletException {
+
+        HttpServletRequest req = (HttpServletRequest) request;
+
+        <span class="cm">// BEFORE — runs before the servlet</span>
+        System.out.println(<span class="str">"Incoming: "</span> + req.getMethod() + <span class="str">" "</span> + req.getRequestURI());
+
+        <span class="cm">// PASS IT ON — continue to next filter or servlet</span>
+        chain.doFilter(request, response);
+
+        <span class="cm">// AFTER — runs after the servlet has responded</span>
+        System.out.println(<span class="str">"Response status: "</span> + ((HttpServletResponse) response).getStatus());
+    }
+}</pre></div><div class="callout"><strong>chain.doFilter()</strong> is the key call. It invokes the next filter in the chain. If you don't call it, the request is <strong>blocked</strong> — the servlet never executes.</div></div><div class="snum"></div></div>
+
+<div class="slide"><div class="sh"><span class="tag b">Servlet Filters</span><h2>The <span class="hb">FilterChain</span></h2><p class="sub">Filters execute in a strict, configured order</p></div><div class="sb"><div class="big" style="font-size:1.5rem"><span class="hb">Request</span> &rarr; Filter A &rarr; Filter B &rarr; Filter C &rarr; <span class="hl">Servlet</span> &rarr; Filter C &rarr; Filter B &rarr; Filter A &rarr; <span class="hb">Response</span></div><div class="callout"><strong>Nested execution:</strong> Each filter wraps around the next. Like Russian dolls. The outermost filter sees the request first and the response last. This is why it's called a <strong>chain</strong>.</div><div class="code-block" style="margin-top:12px"><div class="lang">Pseudocode</div><pre><span class="cm">// Filter A</span>
+doFilter(req, res, chain) {
+    <span class="cm">// A: before</span>
+    chain.doFilter(req, res);  <span class="cm">// calls Filter B</span>
+        <span class="cm">// B: before</span>
+        chain.doFilter(req, res);  <span class="cm">// calls Filter C</span>
+            <span class="cm">// C: before</span>
+            chain.doFilter(req, res);  <span class="cm">// calls Servlet</span>
+            <span class="cm">// C: after</span>
+        <span class="cm">// B: after</span>
+    <span class="cm">// A: after</span>
+}</pre></div></div><div class="snum"></div></div>
+
+<div class="slide"><div class="sh"><span class="tag b">Servlet Filters</span><h2>Registering Filters in <span class="hb">web.xml</span></h2><p class="sub">Traditional way — before Spring Boot</p></div><div class="sb"><div class="code-block"><div class="lang">web.xml</div><pre><span class="cm">&lt;!-- Traditional Servlet filter registration --&gt;</span>
+&lt;filter&gt;
+    &lt;filter-name&gt;<span class="str">loggingFilter</span>&lt;/filter-name&gt;
+    &lt;filter-class&gt;<span class="str">com.example.LoggingFilter</span>&lt;/filter-class&gt;
+&lt;/filter&gt;
+&lt;filter-mapping&gt;
+    &lt;filter-name&gt;<span class="str">loggingFilter</span>&lt;/filter-name&gt;
+    &lt;url-pattern&gt;<span class="str">/*</span>&lt;/url-pattern&gt;
+&lt;/filter-mapping&gt;</pre></div><div class="callout"><strong>Order in web.xml = execution order.</strong> Filters listed first run first. In Spring Boot, you use <code>@Order</code> or <code>FilterRegistrationBean</code> instead.</div></div><div class="snum"></div></div>
+
+<div class="slide"><div class="sh"><span class="tag b">Servlet Filters</span><h2>The <span class="hb">Problem</span></h2><p class="sub">Servlet Filters live in the Servlet Container world. Spring beans live in the Spring world.</p></div><div class="sb"><div class="compare"><div class="compare-box warn"><div class="ch">Servlet Container World</div><div class="cb"><p>Tomcat manages Servlet Filters.<br>Doesn't know about Spring beans.<br>Can't inject dependencies.<br>Can't use @Autowired.</p></div></div><div class="compare-box info"><div class="ch">Spring ApplicationContext World</div><div class="cb"><p>Spring manages beans.<br>Full DI support.<br>All your services, repos, configs.<br>But Tomcat doesn't see these beans.</p></div></div></div><div class="callout red" style="margin-top:14px"><strong>How do we use Spring-managed security logic inside a Servlet Filter?</strong> We need a bridge. That bridge is <code>DelegatingFilterProxy</code>.</div></div><div class="snum"></div></div>
+
+<!-- ═══ S2: THE BRIDGE ═══ -->
+<div class="slide slide--sec orange"><div class="sh"><h2>Part 2</h2><p class="sub">The Bridge — DelegatingFilterProxy</p></div><div class="snum"></div></div>
+
+<div class="slide"><div class="sh"><span class="tag o">Bridge</span><h2><span class="ho">DelegatingFilterProxy</span></h2><p class="sub">A Servlet Filter that delegates to a Spring bean</p></div><div class="sb"><div class="arch"><div class="an" style="border-color:#78909c;background:#eceff1;color:#37474f;min-width:360px">Servlet Container (Tomcat)<span class="as">Knows about Servlet Filters only</span></div><div class="ad">&darr; registers</div><div class="an orange hl" style="min-width:360px">DelegatingFilterProxy<span class="as">IS a Servlet Filter — but delegates all work to a Spring bean</span></div><div class="ad">&darr; looks up bean named "springSecurityFilterChain"</div><div class="an green hl" style="min-width:360px">FilterChainProxy (Spring bean)<span class="as">The actual Spring Security entry point</span></div></div></div><div class="snum"></div></div>
+
+<div class="slide"><div class="sh"><span class="tag o">Bridge</span><h2>How <span class="ho">DelegatingFilterProxy</span> Works</h2><p class="sub">Step by step — what happens on every request</p></div><div class="sb"><div class="code-block"><div class="lang">Simplified internals</div><pre><span class="kw">public class</span> <span class="type">DelegatingFilterProxy</span> <span class="kw">extends</span> GenericFilterBean {
+
+    <span class="kw">private</span> String targetBeanName = <span class="str">"springSecurityFilterChain"</span>;
+
+    <span class="ann">@Override</span>
+    <span class="kw">public void</span> <span class="fn">doFilter</span>(ServletRequest req, ServletResponse res, FilterChain chain) {
+
+        <span class="cm">// 1. Look up the Spring bean from ApplicationContext</span>
+        Filter delegate = applicationContext.getBean(targetBeanName, Filter.<span class="kw">class</span>);
+
+        <span class="cm">// 2. Delegate the actual filtering to the Spring bean</span>
+        delegate.doFilter(req, res, chain);
+    }
+}</pre></div><div class="callout orange"><strong>That's it!</strong> DelegatingFilterProxy is just a bridge. It finds a Spring-managed Filter bean by name and delegates. All the real security logic lives in the Spring bean.</div></div><div class="snum"></div></div>
+
+<div class="slide"><div class="sh"><span class="tag o">Bridge</span><h2>Spring Boot <span class="ho">Auto-Configuration</span></h2><p class="sub">In Spring Boot, you never register DelegatingFilterProxy manually</p></div><div class="sb"><div class="cards c2"><div class="card ob"><div class="ct">Without Spring Boot (manual)</div><p>You must create <code>SecurityWebAppInitializer extends AbstractSecurityWebApplicationInitializer</code>. This registers DelegatingFilterProxy as a Servlet Filter with <code>@Order(1)</code>.</p></div><div class="card gb"><div class="ct">With Spring Boot (automatic)</div><p><code>SecurityFilterAutoConfiguration</code> registers DelegatingFilterProxy automatically when <code>spring-boot-starter-security</code> is on the classpath. Zero config needed.</p></div></div><div class="callout green"><strong>Spring Boot magic:</strong> You just add the dependency. Everything is wired. But understanding this plumbing helps you debug and customize.</div></div><div class="snum"></div></div>
+
+<!-- ═══ S3: FILTERCHAINPROXY ═══ -->
+<div class="slide slide--sec green"><div class="sh"><h2>Part 3</h2><p class="sub">FilterChainProxy — The Security Dispatcher</p></div><div class="snum"></div></div>
+
+<div class="slide"><div class="sh"><span class="tag g">FilterChainProxy</span><h2>What is <span class="hl">FilterChainProxy</span>?</h2><p class="sub">The Spring-managed bean that DelegatingFilterProxy delegates to</p></div><div class="sb"><div class="cards c2"><div class="card gb"><div class="ct">Single entry point</div><p>All security processing starts here. Registered as the bean named <code>"springSecurityFilterChain"</code>.</p></div><div class="card gb"><div class="ct">Holds multiple chains</div><p>Contains a <code>List&lt;SecurityFilterChain&gt;</code>. Selects the right chain for each request URL.</p></div><div class="card gb"><div class="ct">URL matching</div><p>First SecurityFilterChain whose request matcher matches wins. Order matters!</p></div><div class="card gb"><div class="ct">Debugging single point</div><p>Add a breakpoint here to see ALL security processing. One place to debug everything.</p></div></div></div><div class="snum"></div></div>
+
+<div class="slide"><div class="sh"><span class="tag g">FilterChainProxy</span><h2>Multiple <span class="hl">SecurityFilterChains</span></h2><p class="sub">Different URL patterns can have completely different security configs</p></div><div class="sb"><div class="arch"><div class="an green hl" style="min-width:380px">FilterChainProxy<span class="as">Receives request from DelegatingFilterProxy</span></div><div class="ad">&darr; which chain matches?</div><div class="an blue" style="min-width:380px">SecurityFilterChain #1: <code>/api/**</code><span class="as">Stateless, JWT filter, no CSRF, no sessions</span></div><div class="an purple" style="min-width:380px">SecurityFilterChain #2: <code>/admin/**</code><span class="as">Form login, CSRF enabled, session-based</span></div><div class="an" style="min-width:380px">SecurityFilterChain #3: <code>/**</code><span class="as">Default catch-all chain</span></div></div><div class="code-block" style="margin-top:10px"><div class="lang">Java</div><pre><span class="ann">@Bean</span> <span class="ann">@Order</span>(<span class="str">1</span>)
+SecurityFilterChain <span class="fn">apiChain</span>(HttpSecurity http) { <span class="cm">// matches /api/**</span> }
+
+<span class="ann">@Bean</span> <span class="ann">@Order</span>(<span class="str">2</span>)
+SecurityFilterChain <span class="fn">adminChain</span>(HttpSecurity http) { <span class="cm">// matches /admin/**</span> }
+
+<span class="ann">@Bean</span> <span class="ann">@Order</span>(<span class="str">3</span>)
+SecurityFilterChain <span class="fn">defaultChain</span>(HttpSecurity http) { <span class="cm">// matches /**</span> }</pre></div></div><div class="snum"></div></div>
+
+<div class="slide"><div class="sh"><span class="tag g">FilterChainProxy</span><h2>The <span class="hl">Full Journey</span> So Far</h2><p class="sub">From HTTP request to SecurityFilterChain</p></div><div class="sb"><div class="fc"><div class="fn-box servlet">HTTP Request arrives at Tomcat<div class="fn-sub">Servlet Container level</div></div><div class="ad">&darr;</div><div class="fn-box servlet">Other Servlet Filters (encoding, logging, etc.)<div class="fn-sub">Standard web filters run first</div></div><div class="ad">&darr;</div><div class="fn-box" style="border-color:var(--orange);background:var(--orange-light);color:#b45309">DelegatingFilterProxy<div class="fn-sub">Bridges Servlet &rarr; Spring</div></div><div class="ad">&darr;</div><div class="fn-box spring">FilterChainProxy (Spring bean)<div class="fn-sub">Selects matching SecurityFilterChain</div></div><div class="ad">&darr;</div><div class="fn-box security">SecurityFilterChain (~15 Security Filters)<div class="fn-sub">Your security configuration</div></div><div class="ad">&darr;</div><div class="fn-box spring">DispatcherServlet &rarr; Controller<div class="fn-sub">Your business logic</div></div></div></div><div class="snum"></div></div>
+
+<!-- ═══ S4: THE ~15 SECURITY FILTERS ═══ -->
+<div class="slide slide--sec purple"><div class="sh"><h2>Part 4</h2><p class="sub">The ~15 Security Filters — In Order</p></div><div class="snum"></div></div>
+
+<div class="slide"><div class="sh"><span class="tag p">Security Filters</span><h2>The <span class="hp">Complete Order</span></h2><p class="sub">Each filter has a specific job — executed in strict sequence</p></div><div class="sb"><div class="fc"><div class="fn-box security">1. DisableEncodeUrlFilter<div class="fn-sub">Prevents session ID from appearing in URLs</div></div><div class="ad">&darr;</div><div class="fn-box security">2. WebAsyncManagerIntegrationFilter<div class="fn-sub">Integrates SecurityContext with async requests</div></div><div class="ad">&darr;</div><div class="fn-box security" style="border-color:var(--blue);background:var(--blue-light);color:var(--blue-dark)">3. SecurityContextHolderFilter<div class="fn-sub">Loads SecurityContext for this request thread</div></div><div class="ad">&darr;</div><div class="fn-box security">4. HeaderWriterFilter<div class="fn-sub">Adds security headers (X-Frame-Options, etc.)</div></div><div class="ad">&darr;</div><div class="fn-box csrf">5. CsrfFilter<div class="fn-sub">Validates CSRF token on POST/PUT/DELETE</div></div><div class="ad">&darr;</div><div class="fn-box security">6. LogoutFilter<div class="fn-sub">Processes /logout requests</div></div><div class="ad">&darr;</div><div class="fn-box auth">7. UsernamePasswordAuthenticationFilter<div class="fn-sub">Processes POST /login form submissions</div></div><div class="ad">&darr; ... more filters ... &darr;</div><div class="fn-box exc">13. ExceptionTranslationFilter<div class="fn-sub">Catches security exceptions &rarr; 401/403</div></div><div class="ad">&darr;</div><div class="fn-box spring" style="border-color:var(--green)">14. AuthorizationFilter<div class="fn-sub">Checks hasRole/hasAuthority rules — LAST filter</div></div></div></div><div class="snum"></div></div>
+
+<div class="slide"><div class="sh"><span class="tag p">Security Filters</span><h2>Filter #3: <span class="hb">SecurityContextHolderFilter</span></h2><p class="sub">Loads the authenticated user into the current thread</p></div><div class="sb"><div class="arch"><div class="an blue hl" style="min-width:400px">SecurityContextHolderFilter</div><div class="ad">&darr;</div><div class="an" style="min-width:400px">Reads SecurityContext from SecurityContextRepository<span class="as">(HttpSession for session-based, nothing for stateless)</span></div><div class="ad">&darr;</div><div class="an green" style="min-width:400px">Sets it in SecurityContextHolder (ThreadLocal)<span class="as">Now accessible anywhere: SecurityContextHolder.getContext().getAuthentication()</span></div><div class="ad">&darr; after request completes</div><div class="an" style="min-width:400px">Clears the ThreadLocal<span class="as">Prevents leaking auth to the next request on this thread</span></div></div></div><div class="snum"></div></div>
+
+<div class="slide"><div class="sh"><span class="tag p">Security Filters</span><h2>Filter #5: <span class="ho">CsrfFilter</span></h2><p class="sub">Protects against Cross-Site Request Forgery</p></div><div class="sb"><div class="cards c2"><div class="card ob"><div class="ct">What it does</div><p>On every state-changing request (POST, PUT, DELETE), checks that a valid CSRF token is present. Rejects if missing or invalid.</p></div><div class="card ob"><div class="ct">How it works</div><p>Server generates a random token per session. Token must be included in form (<code>_csrf</code> hidden field) or header (<code>X-CSRF-TOKEN</code>).</p></div></div><div class="code-block" style="margin-top:10px"><div class="lang">Flow</div><pre><span class="cm">// CsrfFilter pseudocode</span>
+<span class="kw">if</span> (request.method is GET/HEAD/OPTIONS) {
+    chain.doFilter(req, res);  <span class="cm">// skip — safe methods</span>
+} <span class="kw">else</span> {
+    CsrfToken expected = tokenRepository.loadToken(request);
+    String actual = request.getHeader(<span class="str">"X-CSRF-TOKEN"</span>);
+    <span class="kw">if</span> (!expected.getToken().equals(actual)) {
+        <span class="kw">throw new</span> InvalidCsrfTokenException();  <span class="cm">// 403!</span>
+    }
+    chain.doFilter(req, res);
+}</pre></div></div><div class="snum"></div></div>
+
+<div class="slide"><div class="sh"><span class="tag p">Security Filters</span><h2>Filter #7: <span class="hp">UsernamePasswordAuthenticationFilter</span></h2><p class="sub">Processes form login — the authentication trigger</p></div><div class="sb"><div class="arch"><div class="an purple hl" style="min-width:420px">UsernamePasswordAuthenticationFilter<span class="as">Only activates on POST /login</span></div><div class="ad">&darr;</div><div class="an" style="min-width:420px">Extracts username &amp; password from request parameters</div><div class="ad">&darr;</div><div class="an" style="min-width:420px">Creates UsernamePasswordAuthenticationToken<span class="as">(unauthenticated — no authorities yet)</span></div><div class="ad">&darr;</div><div class="an purple" style="min-width:420px">Calls AuthenticationManager.authenticate(token)</div><div class="ad">&darr; success</div><div class="an green" style="min-width:420px">Stores authenticated token in SecurityContextHolder<span class="as">Redirects to defaultSuccessUrl</span></div></div></div><div class="snum"></div></div>
+
+<div class="slide"><div class="sh"><span class="tag p">Security Filters</span><h2>Filter #13: <span class="hr">ExceptionTranslationFilter</span></h2><p class="sub">Catches security exceptions and translates them to HTTP responses</p></div><div class="sb"><div class="code-block"><div class="lang">Pseudocode</div><pre><span class="kw">try</span> {
+    chain.doFilter(req, res);  <span class="cm">// calls AuthorizationFilter (next)</span>
+
+} <span class="kw">catch</span> (AuthenticationException e) {
+    <span class="cm">// User is NOT authenticated</span>
+    authenticationEntryPoint.commence(req, res, e);
+    <span class="cm">// Form login: redirect to /login</span>
+    <span class="cm">// HTTP Basic: 401 + WWW-Authenticate header</span>
+
+} <span class="kw">catch</span> (AccessDeniedException e) {
+    <span class="kw">if</span> (isAnonymous) {
+        authenticationEntryPoint.commence(req, res, e);  <span class="cm">// 401</span>
+    } <span class="kw">else</span> {
+        accessDeniedHandler.handle(req, res, e);          <span class="cm">// 403</span>
+    }
+}</pre></div><div class="callout red"><strong>Key insight:</strong> ExceptionTranslationFilter wraps around AuthorizationFilter. If AuthorizationFilter throws, this filter catches and handles it.</div></div><div class="snum"></div></div>
+
+<div class="slide"><div class="sh"><span class="tag p">Security Filters</span><h2>Filter #14: <span class="hl">AuthorizationFilter</span></h2><p class="sub">The LAST security filter — checks if the request is allowed</p></div><div class="sb"><div class="arch"><div class="an green hl" style="min-width:420px">AuthorizationFilter<span class="as">Last filter before DispatcherServlet</span></div><div class="ad">&darr;</div><div class="an purple" style="min-width:420px">Calls AuthorizationManager.check(authentication, request)<span class="as">Evaluates your authorizeHttpRequests() rules</span></div><div class="ad">&darr;</div><div class="an" style="display:flex;gap:12px;justify-content:center;padding:10px 20px;min-width:420px"><span style="background:var(--green-light);color:var(--green-dark);padding:5px 16px;border-radius:8px;font-weight:700">GRANTED</span><span style="color:var(--text-light)">or</span><span style="background:var(--red-light);color:var(--red-dark);padding:5px 16px;border-radius:8px;font-weight:700">AccessDeniedException</span></div></div><div class="callout green"><strong>This is where your rules execute:</strong> <code>requestMatchers("/admin").hasRole("ADMIN")</code>. If denied, ExceptionTranslationFilter (previous filter) catches the exception.</div></div><div class="snum"></div></div>
+
+<!-- ═══ S5: CUSTOM FILTERS ═══ -->
+<div class="slide slide--sec cyan"><div class="sh"><h2>Part 5</h2><p class="sub">Custom Filters — Where JWT Lives</p></div><div class="snum"></div></div>
+
+<div class="slide"><div class="sh"><span class="tag c">Custom Filters</span><h2>Adding Your Own <span class="hc">Filter</span></h2><p class="sub">Insert a custom filter at a specific position in the chain</p></div><div class="sb"><div class="code-block"><div class="lang">Java</div><pre><span class="cm">// Insert BEFORE UsernamePasswordAuthenticationFilter</span>
+http.<span class="fn">addFilterBefore</span>(
+    jwtAuthFilter,
+    UsernamePasswordAuthenticationFilter.<span class="kw">class</span>
+);
+
+<span class="cm">// Insert AFTER a specific filter</span>
+http.<span class="fn">addFilterAfter</span>(loggingFilter, CsrfFilter.<span class="kw">class</span>);
+
+<span class="cm">// Replace a filter at the same position</span>
+http.<span class="fn">addFilterAt</span>(myAuthFilter, UsernamePasswordAuthenticationFilter.<span class="kw">class</span>);</pre></div><div class="callout cyan"><strong>addFilterBefore</strong> is the most common. For JWT: your filter runs before Spring tries form login. If JWT is valid, Spring's filter is skipped (auth already set in SecurityContext).</div></div><div class="snum"></div></div>
+
+<div class="slide"><div class="sh"><span class="tag c">Custom Filters</span><h2>Where <span class="hc">JWT Filter</span> Sits</h2><p class="sub">The chain with a custom JWT filter inserted</p></div><div class="sb"><div class="fc"><div class="fn-box security">SecurityContextHolderFilter</div><div class="ad">&darr;</div><div class="fn-box security">HeaderWriterFilter</div><div class="ad">&darr;</div><div class="fn-box csrf">CsrfFilter (disabled for stateless)</div><div class="ad">&darr;</div><div class="fn-box security">LogoutFilter</div><div class="ad">&darr;</div><div class="fn-box custom" style="border-width:3px;font-size:.92rem">JwtAuthFilter (YOUR CUSTOM FILTER)<div class="fn-sub">Validates JWT, sets SecurityContext</div></div><div class="ad">&darr;</div><div class="fn-box auth" style="opacity:.5">UsernamePasswordAuthenticationFilter (skipped)<div class="fn-sub">Auth already set by JWT filter</div></div><div class="ad">&darr;</div><div class="fn-box exc">ExceptionTranslationFilter</div><div class="ad">&darr;</div><div class="fn-box spring" style="border-color:var(--green)">AuthorizationFilter</div></div></div><div class="snum"></div></div>
+
+<div class="slide"><div class="sh"><span class="tag c">Custom Filters</span><h2>JWT Filter <span class="hc">Implementation</span></h2><p class="sub">OncePerRequestFilter guarantees one execution per request</p></div><div class="sb"><div class="code-block"><div class="lang">Java</div><pre><span class="kw">public class</span> <span class="type">JwtAuthFilter</span> <span class="kw">extends</span> OncePerRequestFilter {
+
+    <span class="ann">@Override</span>
+    <span class="kw">protected void</span> <span class="fn">doFilterInternal</span>(HttpServletRequest request,
+            HttpServletResponse response, FilterChain chain) {
+
+        String header = request.getHeader(<span class="str">"Authorization"</span>);
+
+        <span class="kw">if</span> (header != <span class="kw">null</span> && header.startsWith(<span class="str">"Bearer "</span>)) {
+            String token = header.substring(<span class="str">7</span>);
+            <span class="kw">if</span> (jwtUtil.isValid(token)) {
+                <span class="cm">// Extract user info from token</span>
+                String username = jwtUtil.getUsername(token);
+                <span class="kw">var</span> authorities = jwtUtil.getAuthorities(token);
+
+                <span class="cm">// SET authentication — this is the key line!</span>
+                <span class="kw">var</span> auth = <span class="kw">new</span> UsernamePasswordAuthenticationToken(
+                    username, <span class="kw">null</span>, authorities);
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            }
+        }
+        chain.doFilter(request, response);  <span class="cm">// continue chain</span>
+    }
+}</pre></div></div><div class="snum"></div></div>
+
+<div class="slide"><div class="sh"><span class="tag c">Custom Filters</span><h2>Why <span class="hc">OncePerRequestFilter</span>?</h2><p class="sub">Not javax.servlet.Filter — and for good reason</p></div><div class="sb"><div class="compare"><div class="compare-box warn"><div class="ch">javax.servlet.Filter</div><div class="cb"><p>May execute <strong>multiple times</strong> per request (forwards, includes, error dispatches). You'd need to check manually.</p></div></div><div class="compare-box good"><div class="ch">OncePerRequestFilter</div><div class="cb"><p>Spring guarantees <strong>exactly once per request</strong>. Handles dispatches internally. Also provides <code>shouldNotFilter()</code> to skip certain URLs.</p></div></div></div><div class="code-block" style="margin-top:10px"><div class="lang">Java</div><pre><span class="cm">// Skip the filter for certain URLs</span>
+<span class="ann">@Override</span>
+<span class="kw">protected boolean</span> <span class="fn">shouldNotFilter</span>(HttpServletRequest request) {
+    <span class="kw">return</span> request.getRequestURI().startsWith(<span class="str">"/public"</span>);
+}</pre></div></div><div class="snum"></div></div>
+
+<!-- ═══ S6: THE COMPLETE PICTURE ═══ -->
+<div class="slide slide--sec teal"><div class="sh"><h2>Part 6</h2><p class="sub">The Complete Picture</p></div><div class="snum"></div></div>
+
+<div class="slide"><div class="sh"><span class="tag t">Complete Picture</span><h2>End-to-End: <span class="ht">Session Login</span></h2><p class="sub">What happens when a user submits a login form</p></div><div class="sb"><div class="fc"><div class="fn-box servlet">Browser: POST /login (username=admin, password=pass)</div><div class="ad">&darr;</div><div class="fn-box servlet">Tomcat receives HTTP request</div><div class="ad">&darr;</div><div class="fn-box" style="border-color:var(--orange);background:var(--orange-light);color:#b45309">DelegatingFilterProxy &rarr; FilterChainProxy</div><div class="ad">&darr;</div><div class="fn-box security">SecurityContextHolderFilter — loads empty context</div><div class="ad">&darr;</div><div class="fn-box csrf">CsrfFilter — validates CSRF token</div><div class="ad">&darr;</div><div class="fn-box auth" style="border-width:3px">UsernamePasswordAuthenticationFilter — MATCH! POST /login<div class="fn-sub">Extracts creds &rarr; AuthenticationManager &rarr; UserDetailsService &rarr; PasswordEncoder</div></div><div class="ad">&darr; authenticated!</div><div class="fn-box spring">Stores Authentication in SecurityContextHolder &amp; HttpSession<div class="fn-sub">Redirects to defaultSuccessUrl (/dashboard)</div></div></div></div><div class="snum"></div></div>
+
+<div class="slide"><div class="sh"><span class="tag t">Complete Picture</span><h2>End-to-End: <span class="ht">Session Subsequent Request</span></h2><p class="sub">User visits /dashboard after logging in</p></div><div class="sb"><div class="fc"><div class="fn-box servlet">Browser: GET /dashboard + Cookie: JSESSIONID=abc123</div><div class="ad">&darr;</div><div class="fn-box" style="border-color:var(--orange);background:var(--orange-light);color:#b45309">DelegatingFilterProxy &rarr; FilterChainProxy</div><div class="ad">&darr;</div><div class="fn-box security" style="border-width:3px">SecurityContextHolderFilter<div class="fn-sub">Reads session &rarr; finds Authentication &rarr; sets in SecurityContextHolder</div></div><div class="ad">&darr;</div><div class="fn-box csrf">CsrfFilter — GET request, skipped</div><div class="ad">&darr;</div><div class="fn-box auth" style="opacity:.5">UsernamePasswordAuthFilter — not POST /login, skipped</div><div class="ad">&darr;</div><div class="fn-box exc">ExceptionTranslationFilter — wraps next filter</div><div class="ad">&darr;</div><div class="fn-box spring" style="border-color:var(--green);border-width:3px">AuthorizationFilter<div class="fn-sub">Checks: /dashboard requires USER role &rarr; user has ROLE_USER &rarr; GRANTED</div></div><div class="ad">&darr;</div><div class="fn-box spring">DispatcherServlet &rarr; DashboardController &rarr; Response</div></div></div><div class="snum"></div></div>
+
+<div class="slide"><div class="sh"><span class="tag t">Complete Picture</span><h2>End-to-End: <span class="ht">JWT API Request</span></h2><p class="sub">Client sends Bearer token to a REST API</p></div><div class="sb"><div class="fc"><div class="fn-box servlet">Client: GET /api/users + Authorization: Bearer eyJhbG...</div><div class="ad">&darr;</div><div class="fn-box" style="border-color:var(--orange);background:var(--orange-light);color:#b45309">DelegatingFilterProxy &rarr; FilterChainProxy</div><div class="ad">&darr;</div><div class="fn-box security">SecurityContextHolderFilter — empty (stateless, no session)</div><div class="ad">&darr;</div><div class="fn-box custom" style="border-width:3px">JwtAuthFilter (CUSTOM)<div class="fn-sub">Extracts token &rarr; validates signature &rarr; extracts user &amp; roles &rarr; sets SecurityContext</div></div><div class="ad">&darr;</div><div class="fn-box auth" style="opacity:.5">UsernamePasswordAuthFilter — skipped (auth already set)</div><div class="ad">&darr;</div><div class="fn-box exc">ExceptionTranslationFilter</div><div class="ad">&darr;</div><div class="fn-box spring" style="border-color:var(--green);border-width:3px">AuthorizationFilter<div class="fn-sub">Checks: /api/users requires ROLE_USER &rarr; JWT had role USER &rarr; GRANTED</div></div><div class="ad">&darr;</div><div class="fn-box spring">DispatcherServlet &rarr; ApiController &rarr; JSON Response</div></div></div><div class="snum"></div></div>
+
+<div class="slide"><div class="sh"><span class="tag t">Complete Picture</span><h2>End-to-End: <span class="ht">Access Denied</span></h2><p class="sub">Regular user tries to access /admin</p></div><div class="sb"><div class="fc"><div class="fn-box servlet">Browser: GET /admin + Cookie: JSESSIONID=abc123 (user has ROLE_USER)</div><div class="ad">&darr;</div><div class="fn-box security">SecurityContextHolderFilter — loads user from session</div><div class="ad">&darr;</div><div class="fn-box exc" style="border-width:3px">ExceptionTranslationFilter — wraps next filter in try/catch</div><div class="ad">&darr;</div><div class="fn-box spring" style="border-color:var(--green);border-width:3px">AuthorizationFilter<div class="fn-sub">/admin requires ROLE_ADMIN. User has ROLE_USER. &rarr; throws AccessDeniedException!</div></div><div class="ad">&uarr; exception bubbles up</div><div class="fn-box exc" style="border-width:3px">ExceptionTranslationFilter catches it<div class="fn-sub">User IS authenticated but lacks permission &rarr; 403 Forbidden</div></div></div></div><div class="snum"></div></div>
+
+<div class="slide"><div class="sh"><span class="tag t">Complete Picture</span><h2>End-to-End: <span class="ht">Unauthenticated</span></h2><p class="sub">Anonymous user tries to access /dashboard</p></div><div class="sb"><div class="fc"><div class="fn-box servlet">Browser: GET /dashboard (no cookie, no token)</div><div class="ad">&darr;</div><div class="fn-box security">SecurityContextHolderFilter — empty context (anonymous)</div><div class="ad">&darr;</div><div class="fn-box exc" style="border-width:3px">ExceptionTranslationFilter — wraps next filter</div><div class="ad">&darr;</div><div class="fn-box spring" style="border-color:var(--green);border-width:3px">AuthorizationFilter<div class="fn-sub">/dashboard requires authenticated. User is anonymous. &rarr; throws AccessDeniedException!</div></div><div class="ad">&uarr; exception bubbles up</div><div class="fn-box exc" style="border-width:3px">ExceptionTranslationFilter catches it<div class="fn-sub">User is NOT authenticated &rarr; AuthenticationEntryPoint &rarr; redirect to /login</div></div></div><div class="callout red"><strong>Key difference:</strong> Unauthenticated user &rarr; 401 (redirect to login). Authenticated but unauthorized &rarr; 403 (access denied page).</div></div><div class="snum"></div></div>
+
+<!-- ═══ SUMMARY ═══ -->
+<div class="slide"><div class="sh"><h2>The <span class="hb">Layer Cake</span></h2><p class="sub">From outermost to innermost — the complete stack</p></div><div class="sb"><div class="layer-row"><div class="layer-label">Servlet Container</div><div class="layer-bar" style="background:#eceff1;color:#37474f;border:2px solid #78909c">Tomcat / Jetty — manages Servlet Filters</div></div><div class="layer-row"><div class="layer-label">Bridge</div><div class="layer-bar" style="background:var(--orange-light);color:#b45309;border:2px solid var(--orange)">DelegatingFilterProxy — bridges to Spring</div></div><div class="layer-row"><div class="layer-label">Dispatcher</div><div class="layer-bar" style="background:var(--green-light);color:var(--green-dark);border:2px solid var(--green)">FilterChainProxy — selects SecurityFilterChain</div></div><div class="layer-row"><div class="layer-label">Security Chain</div><div class="layer-bar" style="background:var(--blue-light);color:var(--blue-dark);border:2px solid var(--blue)">~15 Security Filters — your config</div></div><div class="layer-row"><div class="layer-label">Your Code</div><div class="layer-bar" style="background:var(--purple-light);color:var(--purple-dark);border:2px solid var(--purple)">DispatcherServlet &rarr; Controller &rarr; Service &rarr; Repository</div></div></div><div class="snum"></div></div>
+
+<div class="slide"><div class="sh"><h2>Key <span class="hl">Takeaways</span></h2></div><div class="sb"><div class="cards c2"><div class="card bb"><div class="ct">Servlet Filters are the foundation</div><p>Spring Security IS a set of Servlet Filters. Understanding Filter &amp; FilterChain is essential.</p></div><div class="card ob"><div class="ct">DelegatingFilterProxy bridges worlds</div><p>Connects Servlet Container to Spring ApplicationContext. Auto-configured by Spring Boot.</p></div><div class="card gb"><div class="ct">FilterChainProxy dispatches</div><p>Holds multiple SecurityFilterChains. URL pattern matching. First match wins.</p></div><div class="card pb"><div class="ct">~15 filters, strict order</div><p>SecurityContextHolder &rarr; CSRF &rarr; Authentication &rarr; Exception &rarr; Authorization. Each has ONE job.</p></div><div class="card cb"><div class="ct">Custom filters slot in</div><p>addFilterBefore/After/At. JWT filters go before UsernamePasswordAuthFilter.</p></div><div class="card rb"><div class="ct">ExceptionTranslation wraps Authorization</div><p>401 for unauthenticated. 403 for unauthorized. The catch block that translates exceptions.</p></div></div></div><div class="snum"></div></div>
+
+<div class="slide slide--end"><h2>Thank You!</h2><p>Servlet Filters &rarr; Spring Security Filters</p><p style="font-size:1rem;opacity:.5">The complete journey — now you know what happens on every request</p><div class="snum"></div></div>
+
+</div>
+<script>
+(function(){
+'use strict';var s=document.querySelectorAll('.slide'),t=s.length,c=0,l=false;
+s.forEach(function(e,i){var n=e.querySelector('.snum');if(n)n.textContent=(i+1)+' / '+t});
+function show(n){if(n===c||n<0||n>=t||l)return;l=true;var b=n<c,o=s[c],i=s[n];if(b)i.classList.add('entering-prev');o.classList.remove('active');o.classList.add(b?'exiting-prev':'exiting');i.offsetHeight;i.classList.remove('exiting','exiting-prev','entering-prev');i.classList.add('active');function d(){o.removeEventListener('transitionend',d);o.classList.remove('exiting','exiting-prev');l=false}o.addEventListener('transitionend',d,{once:true});setTimeout(function(){l=false;o.classList.remove('exiting','exiting-prev')},400);c=n;ui()}
+function go(d){show(c+d)}
+function ui(){var b=document.getElementById('progress');if(b)b.style.width=((c+1)/t*100)+'%';var p=document.getElementById('btnPrev'),x=document.getElementById('btnNext');if(p)p.disabled=c===0;if(x)x.disabled=c===t-1;if(c>0){var h=document.getElementById('hint');if(h)h.classList.add('hide')}if(history.replaceState)history.replaceState(null,'','#slide='+(c+1))}
+document.addEventListener('keydown',function(e){switch(e.key){case'ArrowRight':case' ':case'PageDown':e.preventDefault();go(1);break;case'ArrowLeft':case'PageUp':e.preventDefault();go(-1);break;case'Home':e.preventDefault();show(0);break;case'End':e.preventDefault();show(t-1);break;case'f':case'F':if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();break}});
+document.getElementById('btnPrev').addEventListener('click',function(){go(-1)});document.getElementById('btnNext').addEventListener('click',function(){go(1)});
+var tx=0;document.addEventListener('touchstart',function(e){tx=e.touches[0].clientX},{passive:true});document.addEventListener('touchend',function(e){var d=tx-e.changedTouches[0].clientX;if(Math.abs(d)>60)go(d>0?1:-1)},{passive:true});
+(function(){var m=location.hash.match(/slide=(\d+)/);if(m){var n=parseInt(m[1],10)-1;if(n>=0&&n<t&&n!==0){s[0].classList.remove('active');s[n].classList.add('active');c=n}}ui()})();
+window.go=go;window.showSlide=show;
+})();
+</script>
+</body>
+</html>

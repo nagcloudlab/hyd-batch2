@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>About - V2 Session Security</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: #333; }
+        .nav { background: #333; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; flex-wrap: wrap; gap: 5px; }
+        .nav a { color: white; text-decoration: none; padding: 8px 16px; border-radius: 4px; }
+        .nav a:hover { background: #555; }
+        .nav .spacer { flex-grow: 1; }
+        .nav .user-info { color: #aaa; font-size: 14px; }
+        .badge { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; background: #d4edda; color: #155724; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/admin">Admin</a>
+        <a href="/profile">Profile</a>
+        <span class="spacer"></span>
+        <span sec:authorize="isAnonymous()"><a href="/login" style="background:#28a745;">Login</a></span>
+        <span sec:authorize="isAuthenticated()">
+            <span class="user-info">Logged in as: <b sec:authentication="name"></b></span>
+            <form th:action="@{/logout}" method="post" style="display:inline;">
+                <button type="submit" style="background:#dc3545;color:white;border:none;padding:8px 16px;border-radius:4px;cursor:pointer;font-size:inherit;">Logout</button>
+            </form>
+        </span>
+    </div>
+
+    <h1>About Page <span class="badge">PUBLIC</span></h1>
+    <p th:text="${message}"></p>
+    <p>This page is public - accessible to everyone, even without login.</p>
+</div>
+</body>
+</html>

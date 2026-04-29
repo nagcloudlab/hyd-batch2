@@ -1,0 +1,783 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>1. Anatomy of an Unsafe Application</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+/* Override strong tags inside headings to maintain consistent weight */
+h1 strong,
+h2 strong,
+h3 strong {
+	font-weight: 600;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 10px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+
+	table.collection-content {
+		width: 100%;
+		table-layout: fixed;
+	}
+
+	table.collection-content th,
+	table.collection-content td {
+		overflow-wrap: anywhere;
+	}
+
+	table.collection-content td > .user,
+	table.collection-content td > time {
+		white-space: pre-wrap;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content-wrapper {
+	overflow-x: auto;
+}
+
+@media only print {
+	.collection-content-wrapper {
+		overflow-x: visible;
+	}
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.collection-content td {
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+
+.column-list {
+	display: flex;
+	gap: 46px;
+}
+
+.column {
+	min-width: 0;
+	overflow: hidden;
+}
+
+.column > *:first-child {
+	margin-top: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+table {
+	border-collapse: collapse;
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol.numbered-list.numbered-list-digits-2 {
+	padding-inline-start: 2em;
+}
+
+ol.numbered-list.numbered-list-digits-3plus {
+	padding-inline-start: 2.4em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+	margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.callout img.notion-static-icon {
+	width: 1em;
+	height: 1em;
+}
+
+.callout p {
+	margin: 0;
+}
+
+.callout h1,
+.callout h2,
+.callout h3 {
+	margin: 0 0 0.6rem;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+blockquote.quote-large {
+	font-size: 1.25em;
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray {
+	color: rgba(125, 122, 117, 1);
+	fill: rgba(125, 122, 117, 1);
+}
+.highlight-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.highlight-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.highlight-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.highlight-blue {
+	color: rgba(56, 125, 201, 1);
+	fill: rgba(56, 125, 201, 1);
+}
+.highlight-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.highlight-default_background {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray_background {
+	background: rgba(42, 28, 0, 0.07);
+}
+.highlight-brown_background {
+	background: rgba(139, 46, 0, 0.086);
+}
+.highlight-orange_background {
+	background: rgba(224, 101, 1, 0.129);
+}
+.highlight-yellow_background {
+	background: rgba(211, 168, 0, 0.137);
+}
+.highlight-teal_background {
+	background: rgba(0, 100, 45, 0.09);
+}
+.highlight-blue_background {
+	background: rgba(0, 124, 215, 0.094);
+}
+.highlight-purple_background {
+	background: rgba(102, 0, 178, 0.078);
+}
+.highlight-pink_background {
+	background: rgba(197, 0, 93, 0.086);
+}
+.highlight-red_background {
+	background: rgba(223, 22, 0, 0.094);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(125, 122, 117, 1);
+	fill: rgba(125, 122, 117, 1);
+}
+.block-color-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.block-color-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.block-color-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.block-color-blue {
+	color: rgba(56, 125, 201, 1);
+	fill: rgba(56, 125, 201, 1);
+}
+.block-color-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(240, 239, 237, 1);
+}
+.block-color-brown_background {
+	background: rgba(245, 237, 233, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 235, 222, 1);
+}
+.block-color-yellow_background {
+	background: rgba(249, 243, 220, 1);
+}
+.block-color-teal_background {
+	background: rgba(232, 241, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(229, 242, 252, 1);
+}
+.block-color-purple_background {
+	background: rgba(243, 235, 249, 1);
+}
+.block-color-pink_background {
+	background: rgba(250, 233, 241, 1);
+}
+.block-color-red_background {
+	background: rgba(252, 233, 231, 1);
+}
+.select-value-color-default { background-color: rgba(42, 28, 0, 0.07); }
+.select-value-color-gray { background-color: rgba(28, 19, 1, 0.11); }
+.select-value-color-brown { background-color: rgba(127, 51, 0, 0.156); }
+.select-value-color-orange { background-color: rgba(196, 88, 0, 0.203); }
+.select-value-color-yellow { background-color: rgba(209, 156, 0, 0.282); }
+.select-value-color-green { background-color: rgba(0, 96, 38, 0.156); }
+.select-value-color-blue { background-color: rgba(0, 118, 217, 0.203); }
+.select-value-color-purple { background-color: rgba(92, 0, 163, 0.141); }
+.select-value-color-pink { background-color: rgba(183, 0, 78, 0.152); }
+.select-value-color-red { background-color: rgba(206, 24, 0, 0.164); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="1e85bab9-bf87-8016-ad4c-da766dded15a" class="page sans"><header><h1 class="page-title" dir="auto">1. Anatomy of an Unsafe Application</h1><p class="page-description" dir="auto"></p></header><div class="page-body"><div style="display:contents" dir="auto"><hr id="1e85bab9-bf87-80cd-ae8e-c65399138f0d"/></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-80b5-8ffb-c592daa4756d" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-801f-aacd-e45f7157a5ff" class="">
+</p></div><div style="display:contents" dir="auto"><blockquote id="1e85bab9-bf87-8075-a903-c07eca5285bb" class="">“Instead of introducing Spring Security first, let’s examine what happens when a web app is built <strong>without</strong> any security at all.”</blockquote></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-806a-a216-d7a0d5152345" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-80c9-9877-fccbacd65256" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e85bab9-bf87-8074-a5dc-dbc4a74c0c02"/></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-80f2-87be-f960030d4b16" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="1e85bab9-bf87-80e4-8ffd-d3b9536a0d9a" class="">🔷 Understanding Architecture Styles and Security Challenges</h3></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-80fc-9a05-e14358ee1713" class="">Application architecture directly impacts how and where security controls should be applied.</p></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-8091-92b4-cdb1ffa8578d" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e85bab9-bf87-80c6-b580-cf9c922d5fe1"/></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-80ce-b883-ca6f7aad0b14" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="1e85bab9-bf87-8054-b49b-e7a959bd7211" class="">✅ 1. Monolithic Architecture</h3></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8017-a23b-eb19aa9b150d" class="bulleted-list"><li style="list-style-type:disc">The entire application is deployed as a <strong>single unit</strong> (one WAR or binary).</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80ba-af26-c4beac7a3fba" class="bulleted-list"><li style="list-style-type:disc">Often used in older or small-scale systems.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8037-b25f-db438224bf39" class="bulleted-list"><li style="list-style-type:disc"><strong>Drawback:</strong> If one part is compromised, the <strong>entire app is exposed</strong>.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80b8-9b89-e19753918f1d" class="bulleted-list"><li style="list-style-type:disc">Security controls are typically coarse-grained and harder to isolate.</li></ul></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-80e0-b394-cfc41d2f3d0a" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e85bab9-bf87-8005-83d4-f616ec1d1cfc"/></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-8074-81a1-db76227e7c2e" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="1e85bab9-bf87-80b3-a666-fa015b6213c2" class="">✅ 2. N-Tier / Layered / MVC Architecture</h3></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-808b-af79-ec1dc73fc1b5" class="bulleted-list"><li style="list-style-type:disc">The application is split into layers:<div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8015-8d3b-f669d13e94e9" class="bulleted-list"><li style="list-style-type:circle">Presentation (Controller)</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8023-94dd-c9743560bbf7" class="bulleted-list"><li style="list-style-type:circle">Service (Business logic)</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8051-a194-e12f8c216143" class="bulleted-list"><li style="list-style-type:circle">Persistence (DAO, database)</li></ul></div></li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80bf-9797-fe9dfeb64ed9" class="bulleted-list"><li style="list-style-type:disc">Encourages <strong>separation of concerns</strong>.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80f4-96a9-eabd64bdeac5" class="bulleted-list"><li style="list-style-type:disc">Allows security to be applied at:<div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80f0-ae9c-dd60a1dcf3b7" class="bulleted-list"><li style="list-style-type:circle">UI level → Input validation</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-809c-b4c4-f53f92915757" class="bulleted-list"><li style="list-style-type:circle">Service level → Access control</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80c0-b7ce-f941b4cb9a4e" class="bulleted-list"><li style="list-style-type:circle">DAO level → Data filtering</li></ul></div></li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80e7-bf98-e937a3532d1b" class="bulleted-list"><li style="list-style-type:disc">This model is common in Spring MVC applications.</li></ul></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-80b0-a4ee-d94c9e24d287" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e85bab9-bf87-8091-ab00-e56108cc0f24"/></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-8021-9ce5-eedb1e81680c" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="1e85bab9-bf87-8044-b82a-e814692a9a6a" class="">✅ 3. Service-Oriented Architecture (SOA)</h3></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8037-b9da-e6b17bd2b513" class="bulleted-list"><li style="list-style-type:disc">Application is composed of <strong>independent, reusable services</strong>.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80e9-94eb-db6009380a19" class="bulleted-list"><li style="list-style-type:disc">Each service has a <strong>well-defined interface</strong>.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8083-a9a5-f50fc3cbcbc3" class="bulleted-list"><li style="list-style-type:disc">Services communicate over the network via SOAP or REST.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8055-97b1-d44cee081aee" class="bulleted-list"><li style="list-style-type:disc">Requires <strong>authenticating each call</strong> and <strong>securing service endpoints</strong>.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8089-8d68-f0b6140a928b" class="bulleted-list"><li style="list-style-type:disc"><strong>Drawback:</strong> Role-based permissions often become too generic or inconsistent.</li></ul></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-8007-bd79-e5388c42b01f" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e85bab9-bf87-80c7-917b-d3ee5e75344a"/></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-80d4-9421-fd882b2f0875" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="1e85bab9-bf87-80af-9adb-da6b57ac4b1e" class="">✅ 4. Microservices Architecture</h3></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80e8-8c48-de96b573fdf8" class="bulleted-list"><li style="list-style-type:disc">Each module is a <strong>self-contained service</strong>, often running in containers.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80d0-95a3-e21a4cea81c1" class="bulleted-list"><li style="list-style-type:disc">Promotes agility and scalability.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-806b-ac8d-e0339d73fc07" class="bulleted-list"><li style="list-style-type:disc">Communicate via REST, RPC, messaging.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-80d3-bbe2-e58fe686151b" class="bulleted-list"><li style="list-style-type:disc">🔒 Microservices shift security from the app to <strong>infrastructure</strong> and <strong>API gateways</strong>.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8010-932d-e7a68b025c41" class="bulleted-list"><li style="list-style-type:disc">Introduces new security needs:<div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-801d-96fb-e4fd0babdfa7" class="bulleted-list"><li style="list-style-type:circle">Identity propagation (carry auth across services)</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80ef-953d-e9858544c0c2" class="bulleted-list"><li style="list-style-type:circle">Service-to-service encryption (mTLS)</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-802f-9846-ec0ed826899a" class="bulleted-list"><li style="list-style-type:circle">API gateway for entry point and enforcement</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8064-91c5-e5790c22f7c8" class="bulleted-list"><li style="list-style-type:circle">Token-based authentication (OAuth2, JWT)</li></ul></div></li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80fe-b5c3-d63b3b1425d3" class="bulleted-list"><li style="list-style-type:disc">Each service must be <strong>individually protected</strong>.</li></ul></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-8052-be5f-d8627f9e69d8" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e95bab9-bf87-802f-ab97-c12bb9450f65"/></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-808a-860d-e949e0930669" class="">
+</p></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-80bd-b101-ffbec9fb5d4a" class="toggle"><li><details open=""><summary></summary><div style="display:contents" dir="ltr"><figure id="1e95bab9-bf87-80ca-9f5c-ff8e43263703" class="image"><a href="1%20Anatomy%20of%20an%20Unsafe%20Application/image.png"><img style="width:681.9874877929688px" src="1%20Anatomy%20of%20an%20Unsafe%20Application/image.png"/></a></figure></div></details></li></ul></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-8038-a832-e28e199c6e6f" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e85bab9-bf87-809e-90cc-c4384c70e060"/></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-80a3-b49f-f609661088b5" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-8068-a351-e77bd09b78d4" class=""><strong>Lesson:</strong></p></div><div style="display:contents" dir="auto"><blockquote id="1e85bab9-bf87-8086-ae32-cdc85b49e931" class="">As the architecture becomes more distributed, security must become decentralized, granular, and automated.</blockquote></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-8089-83b4-da508be563e3" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e85bab9-bf87-8026-add7-e753593c5d69"/></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-801e-a397-ed8d4e955a62" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="1e85bab9-bf87-8079-8cc6-e305a9f74a7f" class="">🔷 Introducing the Case Study App – JBCP Calendar</h3></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-807d-b987-f276fa78cf19" class="">You’ll work with a deliberately insecure app called <strong>JBCP (Jim Bob Circle Pants ) Calendar</strong> to observe and fix common security flaws.</p></div><div style="display:contents" dir="auto"><hr id="1e85bab9-bf87-8059-9234-eb288daaafb4"/></div><div style="display:contents" dir="auto"><h3 id="1e85bab9-bf87-8077-824c-f09e68d06de9" class="">✅ App Design</h3></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80f8-812f-c7d758a6ba33" class="bulleted-list"><li style="list-style-type:disc">Built with <strong>Spring MVC</strong> (no Spring Boot).</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-806d-aebc-e1607d17dbaf" class="bulleted-list"><li style="list-style-type:disc">Uses:<div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-802b-b4fc-f29e03947112" class="bulleted-list"><li style="list-style-type:circle">Controllers for HTTP endpoints</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80f7-89fb-c0d0e4b7c41d" class="bulleted-list"><li style="list-style-type:circle">Service layer for business logic</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80fb-819a-ce369922e6f9" class="bulleted-list"><li style="list-style-type:circle">DAO layer for JDBC + H2 database access</li></ul></div></li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-803d-8f92-c00db257eea9" class="bulleted-list"><li style="list-style-type:disc">UI is made with Template Engine ( Thymeleaf )</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80c8-b2ac-ef32664fba24" class="bulleted-list"><li style="list-style-type:disc"><strong>No authentication, no role checks, and no ownership validation</strong>.</li></ul></div><div style="display:contents" dir="auto"><hr id="1e85bab9-bf87-809f-954a-cc836e3fce87"/></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-8033-b81c-eed9434b3869" class=""><strong>Why this app?</strong></p></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8012-86a2-fc9509e5bee1" class="bulleted-list"><li style="list-style-type:disc">Provides a realistic, layered Spring web application.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8029-ab01-f41d6bf02bce" class="bulleted-list"><li style="list-style-type:disc">Designed to be <strong>vulnerable</strong> on purpose so you can <strong>harden it step-by-step</strong>.</li></ul></div><div style="display:contents" dir="auto"><hr id="1e85bab9-bf87-80db-9540-c0ed727aa19f"/></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80ee-9a72-d3b9326f88fd" class="">
+</p></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-809e-b10a-caa7c0968484" class="toggle"><li><details open=""><summary></summary><div style="display:contents" dir="ltr"><figure id="1e95bab9-bf87-80e9-86cf-f412c1674daa" class="image"><a href="1%20Anatomy%20of%20an%20Unsafe%20Application/image%201.png"><img style="width:682.0001831054688px" src="1%20Anatomy%20of%20an%20Unsafe%20Application/image%201.png"/></a></figure></div></details></li></ul></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-809d-bab9-dee9052fcb65" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e95bab9-bf87-80db-b954-efe933ed71ec"/></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80a4-bb72-ec7dcf0b72bf" class="">
+</p></div><div style="display:contents" dir="ltr"><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="1e95bab9-bf87-800c-944c-c8028d2da4d1"><div style="font-size:1.5em"><span class="icon">👉</span></div><div style="width:100%"><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80d4-a64e-e94c21b650fd" class="">JBCP Calendar - walk-through</p></div></div></figure></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80f1-ab46-e9912a11af70" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e95bab9-bf87-809f-81a5-dbdc86aa6362"/></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-804c-9bc3-ca7f3a2bd280" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="1e85bab9-bf87-80f5-8587-e9b311f1e526" class="">🔷 Security Audit: A Realistic Scenario</h3></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-8012-8291-dca5fdf9be17" class="">Imagine a security team conducts an audit on the live JBCP Calendar app. </p></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-8022-affc-f5d801d8081e" class="">Their findings are severe.</p></div><div style="display:contents" dir="auto"><hr id="1e85bab9-bf87-8002-b7a6-e0c391b9f84e"/></div><div style="display:contents" dir="auto"><h3 id="1e85bab9-bf87-80ba-bfc2-fde5798475d3" class="">✅ Security Audit Findings</h3></div><div style="display:contents" dir="auto"><ol type="1" id="1e85bab9-bf87-8041-bfad-cf19e59178d8" class="numbered-list" start="1"><li><strong>Unrestricted Admin Access</strong><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8084-8f70-e6ec18e4cc43" class="bulleted-list"><li style="list-style-type:disc">Any user can access <code>/admin</code> directly — no login required.</li></ul></div></li></ol></div><div style="display:contents" dir="auto"><ol type="1" id="1e85bab9-bf87-8097-b032-cb820e3e6685" class="numbered-list" start="2"><li><strong>No Role-Based Access</strong><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-808b-ad98-d94d214fd454" class="bulleted-list"><li style="list-style-type:disc">All users have the same privileges.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8017-b5a2-d58502e68542" class="bulleted-list"><li style="list-style-type:disc">No differentiation between regular users and administrators.</li></ul></div></li></ol></div><div style="display:contents" dir="auto"><ol type="1" id="1e85bab9-bf87-80d5-a0cc-ed37e63f6b67" class="numbered-list" start="3"><li><strong>Passwords Stored in Plaintext</strong><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-805d-b199-ff0e263b35c5" class="bulleted-list"><li style="list-style-type:disc">Credentials are saved without encryption or hashing.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80a2-8557-d5dd8b43ba95" class="bulleted-list"><li style="list-style-type:disc">Anyone with DB access can see real passwords.</li></ul></div></li></ol></div><div style="display:contents" dir="auto"><ol type="1" id="1e85bab9-bf87-801d-87c2-c670d973e90b" class="numbered-list" start="4"><li><strong>Unencrypted Communication</strong><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8086-8698-f765f39bc1ff" class="bulleted-list"><li style="list-style-type:disc">The app uses plain HTTP.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80ee-a239-f18b6a7018f9" class="bulleted-list"><li style="list-style-type:disc">Login credentials can be sniffed by network attackers.</li></ul></div></li></ol></div><div style="display:contents" dir="auto"><ol type="1" id="1e85bab9-bf87-8040-b12a-cd79e733b26f" class="numbered-list" start="5"><li><strong>Sensitive Information Leaked</strong><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8005-91ce-d837d26571d9" class="bulleted-list"><li style="list-style-type:disc">User data like name, email, and event details are publicly exposed.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8095-a4a2-d9f623b56c17" class="bulleted-list"><li style="list-style-type:disc">No control over who accesses what.</li></ul></div></li></ol></div><div style="display:contents" dir="auto"><ol type="1" id="1e85bab9-bf87-80c6-b15d-fcfc3823cdd0" class="numbered-list" start="6"><li><strong>Missing CSRF and XSS Protection</strong><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8061-b9c4-eaf32f7b0c5d" class="bulleted-list"><li style="list-style-type:disc">Forms are open to <strong>cross-site request forgery</strong> attacks.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8030-acfa-cca67f9dae31" class="bulleted-list"><li style="list-style-type:disc">User inputs are not escaped — vulnerable to <strong>JavaScript injection</strong>.</li></ul></div></li></ol></div><div style="display:contents" dir="auto"><ol type="1" id="1e85bab9-bf87-807b-a035-ff206813c57f" class="numbered-list" start="7"><li><strong>SQL Injection Risk</strong><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-807b-9b4e-fedf55ab2296" class="bulleted-list"><li style="list-style-type:disc">Inputs are not validated or sanitized before database use.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8040-bf16-f0889121fc04" class="bulleted-list"><li style="list-style-type:disc">Application is open to malicious SQL statements.</li></ul></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-8073-967e-f7c6263edbc9" class="">
+</p></div></li></ol></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-8027-89ba-cbbe36e75b03" class="">📌 Because of these issues, the application <strong>must be taken offline</strong> until all problems are resolved.</p></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-806a-ae53-e416221e0c9c" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e85bab9-bf87-8033-a57d-df1f413347ea"/></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80bb-a2e2-f014053efe94" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="1e95bab9-bf87-808c-a152-d74496e64a4a" class="">🔷 Hands-On Activity: See the Insecurity Yourself</h3></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-8013-8339-c7d90c1b78b2" class="">🧪 Run the <code>chapter01.00-calendar</code> project and test it.</p></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-8081-911c-ecbf23c55f68" class="">Try:</p></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-80aa-bb43-ebf21bbf034f" class="bulleted-list"><li style="list-style-type:disc">Accessing <code>/admin</code> directly → works without login</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-80e3-bedb-fde656fde7e6" class="bulleted-list"><li style="list-style-type:disc">Submitting a form with <code>&lt;script&gt;alert(&#x27;XSS&#x27;)&lt;/script&gt;</code> → triggers JavaScript</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-80c0-9b80-f46f8158b1fe" class="bulleted-list"><li style="list-style-type:disc">Modifying an event ID in URL to see someone else’s data</li></ul></div><div style="display:contents" dir="auto"><ul id="1e95bab9-bf87-801d-9d4c-eaf512e3b3e3" class="bulleted-list"><li style="list-style-type:disc">Inspecting database — passwords are raw</li></ul></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-8028-a1d1-da0dd6b76d4f" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e95bab9-bf87-8057-8385-d2089ba07a8a"/></div><div style="display:contents" dir="auto"><p id="1e95bab9-bf87-80e8-865f-c69c768d2b26" class="">
+</p></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-8044-8e8a-d49a63fb83d9" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="1e85bab9-bf87-80e4-bd07-c9ba3bf10b1f" class="">🔷 Legal and Compliance Responsibilities</h3></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-8021-939a-c9afbe3df71c" class="">Security isn’t just best practice — it’s legally required in many industries.</p></div><div style="display:contents" dir="auto"><hr id="1e85bab9-bf87-8058-8c0d-fb5f555f2166"/></div><div style="display:contents" dir="auto"><h3 id="1e85bab9-bf87-80e7-9938-d5aac864b546" class="">✅ Key Regulatory Areas</h3></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80e7-9c4f-ef246bb3a203" class="bulleted-list"><li style="list-style-type:disc"><strong>PCI-DSS</strong> – For apps handling payment card information.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80ac-a3bf-e49f513789dc" class="bulleted-list"><li style="list-style-type:disc"><strong>HIPAA</strong> – For apps processing healthcare data.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8093-ad07-c862fe67c87e" class="bulleted-list"><li style="list-style-type:disc"><strong>Data Privacy Laws</strong> – GDPR, CCPA, and internal enterprise policies.</li></ul></div><div style="display:contents" dir="auto"><hr id="1e85bab9-bf87-8016-b947-ed23421181a7"/></div><div style="display:contents" dir="auto"><h3 id="1e85bab9-bf87-80fb-9a0a-d62d4154a682" class="">✅ Even Internal Apps Must Be Secure</h3></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-807f-bddf-f31ab6c85eb2" class="">Sensitive fields like:</p></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8053-849c-c66f5a202f8a" class="bulleted-list"><li style="list-style-type:disc">User name</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80dd-9d2c-de4c985c5d7e" class="bulleted-list"><li style="list-style-type:disc">Email address</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80fd-8e3c-c521d941d33d" class="bulleted-list"><li style="list-style-type:disc">Event details</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80b2-8acf-ed5c8b882f92" class="bulleted-list"><li style="list-style-type:disc">Contact numbers</li></ul></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-8023-92dc-d06804893ac7" class="">… must be protected even if the app is <strong>only used internally</strong>.</p></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-8067-a3fe-c95b42366f4a" class="">Failure to secure them can result in:</p></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8033-8694-ca34323d27e5" class="bulleted-list"><li style="list-style-type:disc">Regulatory penalties</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-807e-998a-c8230df27ab5" class="bulleted-list"><li style="list-style-type:disc">Data breach notifications</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8063-b6ff-fe0eda339210" class="bulleted-list"><li style="list-style-type:disc">Loss of customer trust</li></ul></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-8017-a8aa-f6d6abb5d389" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e85bab9-bf87-8017-9c59-d2495e1fe4dd"/></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-8072-8209-f10fab0e1cec" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="1e85bab9-bf87-8079-b50d-df61484303f9" class="">🔷 Authentication: Identifying Users</h3></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-802e-94b4-d76c7e2334a3" class=""><strong>Authentication = verifying the identity of the user.</strong></p></div><div style="display:contents" dir="auto"><hr id="1e85bab9-bf87-805a-bec9-d6a5e5660522"/></div><div style="display:contents" dir="auto"><h3 id="1e85bab9-bf87-80cb-951e-f4cfaf55e572" class="">✅ Common Authentication Mechanisms</h3></div><div style="display:contents" dir="auto"><ol type="1" id="1e85bab9-bf87-80a6-a3eb-e9d54a843300" class="numbered-list" start="1"><li><code><strong>Username + Password</strong></code><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8078-a39c-c89a01077e24" class="bulleted-list"><li style="list-style-type:disc">Most common, but easily compromised if not hashed and protected.</li></ul></div></li></ol></div><div style="display:contents" dir="auto"><ol type="1" id="1e85bab9-bf87-8081-9585-d63c75d89420" class="numbered-list" start="2"><li><strong>Two-Factor Authentication</strong><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80cd-9428-d900e00c02b6" class="bulleted-list"><li style="list-style-type:disc">Something you know (password) + something you have (OTP/token).</li></ul></div></li></ol></div><div style="display:contents" dir="auto"><ol type="1" id="1e85bab9-bf87-800f-979e-f94a6fb47647" class="numbered-list" start="3"><li><strong>Biometric / Hardware-Based</strong><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8037-90e3-d8f1cfebcb75" class="bulleted-list"><li style="list-style-type:disc">RSA tokens, fingerprint, face recognition, etc.</li></ul></div></li></ol></div><div style="display:contents" dir="auto"><ol type="1" id="1ed5bab9-bf87-80a2-9e69-d91c32e16a21" class="numbered-list" start="4"><li>certificate..</li></ol></div><div style="display:contents" dir="auto"><ol type="1" id="1ed5bab9-bf87-807b-8c7a-d5fa98fb411f" class="numbered-list" start="5"><li>….</li></ol></div><div style="display:contents" dir="auto"><hr id="1e85bab9-bf87-8052-b54e-c818fa8772a7"/></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-80ab-8019-e1a8bf786770" class=""><strong>In the Calendar app:</strong></p></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80fe-84a2-db42313ab667" class="bulleted-list"><li style="list-style-type:disc">Authenticated users should see their events.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80cb-8099-ea9dd8f59688" class="bulleted-list"><li style="list-style-type:disc">Anonymous users should be restricted to public views.</li></ul></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-80bf-9c2c-f895120319d5" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e85bab9-bf87-8033-b881-f4bd7f07d73e"/></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-803f-8fa9-c64d1c5a9fd4" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="1e85bab9-bf87-80a9-94d3-d45c4ac86e71" class="">🔷 Authorization: Granting Access</h3></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-8084-98f2-e5b011e985fc" class=""><strong>Authorization = deciding what a user is allowed to do.</strong></p></div><div style="display:contents" dir="auto"><hr id="1e85bab9-bf87-80aa-92c2-fc12175fd0d6"/></div><div style="display:contents" dir="auto"><h3 id="1e85bab9-bf87-8021-a77f-fc4115403e70" class="">✅ Role-Based Access Control (RBAC)</h3></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8021-a2d1-ea63158219ca" class="bulleted-list"><li style="list-style-type:disc">Users are assigned roles like:<div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-805b-87d7-eff4882036f1" class="bulleted-list"><li style="list-style-type:circle"><code>ROLE_USER</code>, <code>ROLE_ADMIN</code>, <code>ROLE_MANAGER</code></li></ul></div></li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8075-9675-da7ed5ebeced" class="bulleted-list"><li style="list-style-type:disc">Access control is applied to:<div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8050-8682-f554bed58ae0" class="bulleted-list"><li style="list-style-type:circle">HTTP endpoints (URL paths)</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-809b-ad77-e3d9d636c692" class="bulleted-list"><li style="list-style-type:circle">Controller methods</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-808b-bdb0-c5e3b28d704d" class="bulleted-list"><li style="list-style-type:circle">View logic (e.g., show/hide menu links)</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8026-9f6b-c7ab8aa87cd9" class="bulleted-list"><li style="list-style-type:circle">Domain logic (e.g., &quot;only owner can edit&quot;)</li></ul></div></li></ul></div><div style="display:contents" dir="auto"><hr id="1e85bab9-bf87-8050-b0e2-cf7475a8814f"/></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-8034-9806-df2e5975b2e1" class=""><strong>In the app:</strong></p></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80b9-a2d5-e69fbef716f0" class="bulleted-list"><li style="list-style-type:disc">All users can access everything — there’s no role check.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8067-85eb-ead6390baef8" class="bulleted-list"><li style="list-style-type:disc">A user can even edit someone else’s calendar event.</li></ul></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-8086-a254-fa8ce1756bfc" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e85bab9-bf87-8062-abb5-e4b5ac772004"/></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-8088-accf-d5fe7b06f717" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="1e85bab9-bf87-8020-9a96-c2d788927df4" class="">🔷 Critical Technical Vulnerabilities in the App Code</h3></div><div style="display:contents" dir="auto"><hr id="1e85bab9-bf87-8023-8c4a-f425638d2316"/></div><div style="display:contents" dir="auto"><ol type="1" id="1e85bab9-bf87-807d-a801-c076ff49119e" class="numbered-list" start="1"><li><strong>No Authentication</strong><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8041-9225-cb9933cd01b5" class="bulleted-list"><li style="list-style-type:disc">Users can browse the app as &quot;anonymous.&quot;</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80f5-bdd0-d54885b19463" class="bulleted-list"><li style="list-style-type:disc">There&#x27;s no login form, no session-based user context.</li></ul></div></li></ol></div><div style="display:contents" dir="auto"><ol type="1" id="1e85bab9-bf87-80d2-85f5-d67afa59d51d" class="numbered-list" start="2"><li><strong>No Authorization</strong><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80b9-856c-e4ff3f4e9c8d" class="bulleted-list"><li style="list-style-type:disc">No role checks, no guards.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8095-a36a-ffbf65d1d397" class="bulleted-list"><li style="list-style-type:disc">Admin sections are exposed.</li></ul></div></li></ol></div><div style="display:contents" dir="auto"><ol type="1" id="1e85bab9-bf87-8044-bc15-ecec54184ce9" class="numbered-list" start="3"><li><strong>Plaintext Passwords</strong><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80bf-874d-dd1df5c34004" class="bulleted-list"><li style="list-style-type:disc">Passwords are stored raw in the database.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80d3-a02a-d6f78a1793f6" class="bulleted-list"><li style="list-style-type:disc">No hashing, no salt.</li></ul></div></li></ol></div><div style="display:contents" dir="auto"><ol type="1" id="1e85bab9-bf87-8015-958c-d57e4137e055" class="numbered-list" start="4"><li><strong>Config File Secrets</strong><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8041-b5b1-ffa90c8e6a89" class="bulleted-list"><li style="list-style-type:disc">Credentials (like DB password) are hardcoded in <code>.properties</code> files.</li></ul></div></li></ol></div><div style="display:contents" dir="auto"><ol type="1" id="1e85bab9-bf87-8072-be57-c64872dc7710" class="numbered-list" start="5"><li><strong>No HTTPS</strong><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-804f-9e20-d3335b9db6d6" class="bulleted-list"><li style="list-style-type:disc">App is served over HTTP.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80ab-b8a5-e447a4c9fbd2" class="bulleted-list"><li style="list-style-type:disc">Network sniffers can steal session cookies and credentials.</li></ul></div></li></ol></div><div style="display:contents" dir="auto"><ol type="1" id="1e85bab9-bf87-80c3-b4c3-ea3aade4daa6" class="numbered-list" start="6"><li><strong>No CSRF/XSS Protections</strong><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80ce-8979-f8cc24b71b61" class="bulleted-list"><li style="list-style-type:disc">Forms can be posted from anywhere.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8089-ac8e-cb54c5bd2205" class="bulleted-list"><li style="list-style-type:disc">Inputs are not escaped or sanitized.</li></ul></div></li></ol></div><div style="display:contents" dir="auto"><ol type="1" id="1e85bab9-bf87-8004-bea0-d7e1139af040" class="numbered-list" start="7"><li><strong>No Resource Ownership</strong><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80fa-ab60-db8a7122c303" class="bulleted-list"><li style="list-style-type:disc">No logic to restrict users to their own events.</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8030-976d-e03cea71b28c" class="bulleted-list"><li style="list-style-type:disc">User A can view/edit/delete User B’s events by manipulating URLs.</li></ul></div></li></ol></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-806c-8a2b-e97f0c0c0b0e" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e85bab9-bf87-808f-9c83-da3a2758dd0e"/></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-80cb-b2a9-ef53f5f22c89" class="">
+</p></div><div style="display:contents" dir="auto"><h3 id="1e85bab9-bf87-8049-ab63-ddac45876351" class="">🔷 What Spring Security Will Help You Do</h3></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-803d-89c6-d6f932571e95" class="">Spring Security helps <strong>fix these flaws</strong> by providing secure defaults and deep customization.</p></div><div style="display:contents" dir="auto"><hr id="1e85bab9-bf87-80a0-9308-f33b06032ff5"/></div><div style="display:contents" dir="auto"><h3 id="1e85bab9-bf87-80cc-8ca3-d9d6e2f845c2" class="">✅ Features Spring Security Provides</h3></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8018-8942-eb960729ffd9" class="bulleted-list"><li style="list-style-type:disc"><strong>Authentication:</strong><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8036-920f-edd2434042c8" class="bulleted-list"><li style="list-style-type:circle">Form login</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8084-b52d-d3c0aa1e8290" class="bulleted-list"><li style="list-style-type:circle">Basic Auth</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80c3-b0de-f4127c4aeb55" class="bulleted-list"><li style="list-style-type:circle">OAuth2 and OpenID</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80f1-a588-e04fe19aaed1" class="bulleted-list"><li style="list-style-type:circle">JWT support</li></ul></div></li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8083-beb7-c78e14d518a3" class="bulleted-list"><li style="list-style-type:disc"><strong>Authorization:</strong><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80bd-ba40-d26f4927a2ad" class="bulleted-list"><li style="list-style-type:circle">Role-based URL and method protection</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8042-b698-cfc00aee46ed" class="bulleted-list"><li style="list-style-type:circle">Access control expressions</li></ul></div></li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80f4-b7f0-f10ecda7cc8d" class="bulleted-list"><li style="list-style-type:disc"><strong>Session Management:</strong><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-804e-a9da-e51c3160409e" class="bulleted-list"><li style="list-style-type:circle">Timeout settings</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-808b-9fd2-c8fb2444e99f" class="bulleted-list"><li style="list-style-type:circle">Concurrent session control</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8071-9aad-c66f3fe095c4" class="bulleted-list"><li style="list-style-type:circle">Session fixation protection</li></ul></div></li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8077-b366-d97686bef630" class="bulleted-list"><li style="list-style-type:disc"><strong>CSRF Protection:</strong><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8047-ba1e-cdb2ed6f7c92" class="bulleted-list"><li style="list-style-type:circle">Enabled by default</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8088-a4eb-c187510e7983" class="bulleted-list"><li style="list-style-type:circle">Tokens in every form</li></ul></div></li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8051-9176-f3704c767763" class="bulleted-list"><li style="list-style-type:disc"><strong>XSS Prevention:</strong><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-804c-9db0-c89006e8f1df" class="bulleted-list"><li style="list-style-type:circle">Output encoding in Spring MVC views</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80d1-87d5-c4ef1f2a90fa" class="bulleted-list"><li style="list-style-type:circle">Input sanitization with validators</li></ul></div></li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-8002-9f9f-f4f845abf5e3" class="bulleted-list"><li style="list-style-type:disc"><strong>Password Management:</strong><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80ef-980e-dba692911eef" class="bulleted-list"><li style="list-style-type:circle">Secure hashing using <code>BCryptPasswordEncoder</code></li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80a7-a6c2-dd6acc39a93f" class="bulleted-list"><li style="list-style-type:circle">Avoids storing raw passwords</li></ul></div></li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-805c-a73e-c28c460b5286" class="bulleted-list"><li style="list-style-type:disc"><strong>HTTPS Support:</strong><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80bd-a0cd-f192e9ce040c" class="bulleted-list"><li style="list-style-type:circle">Secure headers</li></ul></div><div style="display:contents" dir="auto"><ul id="1e85bab9-bf87-80e9-87d7-c237f59dce41" class="bulleted-list"><li style="list-style-type:circle">SSL enforcement and redirection</li></ul></div><div style="display:contents" dir="auto"><p id="1f45bab9-bf87-8079-8af4-cab49928df48" class="">….</p></div></li></ul></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-80bc-b755-d83899a4765e" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="1e85bab9-bf87-80dd-9b24-d84e9ebcdf7d"/></div><div style="display:contents" dir="auto"><p id="1e85bab9-bf87-80f2-b2f2-e8fff09697a9" class="">
+</p></div></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

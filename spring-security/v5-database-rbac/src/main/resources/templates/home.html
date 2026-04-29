@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Home - V5 Database RBAC</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: #333; }
+        .nav { background: #333; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; flex-wrap: wrap; gap: 5px; }
+        .nav a { color: white; text-decoration: none; padding: 8px 16px; border-radius: 4px; }
+        .nav a:hover { background: #555; }
+        .nav .spacer { flex-grow: 1; }
+        .nav .user-info { color: #aaa; font-size: 14px; }
+        .info { background: #cce5ff; border: 1px solid #b8daff; padding: 15px; border-radius: 8px; margin: 15px 0; }
+        .success { background: #d4edda; border: 1px solid #c3e6cb; padding: 15px; border-radius: 8px; margin: 15px 0; }
+        table { border-collapse: collapse; width: 100%; margin: 10px 0; }
+        th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #f8f9fa; }
+        code { background: #e9ecef; padding: 2px 6px; border-radius: 3px; }
+        .badge { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
+        .badge-user { background: #d4edda; color: #155724; }
+        .badge-mgr { background: #fff3cd; color: #856404; }
+        .badge-admin { background: #f8d7da; color: #721c24; }
+        .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 15px 0; }
+        .compare > div { padding: 15px; border-radius: 8px; }
+        .v2-box { background: #f8d7da; }
+        .v5-box { background: #d4edda; }
+        .endpoint-list { list-style: none; padding: 0; }
+        .endpoint-list li { padding: 8px; margin: 4px 0; background: #f8f9fa; border-radius: 4px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <span sec:authorize="isAuthenticated()">
+            <a href="/dashboard">Dashboard</a>
+            <a href="/profile">Profile</a>
+        </span>
+        <span sec:authorize="hasAnyRole('MANAGER','ADMIN')">
+            <a href="/manager">Manager</a>
+        </span>
+        <span sec:authorize="hasRole('ADMIN')">
+            <a href="/admin/users" style="background:#ffc107;color:#333;">Admin Panel</a>
+        </span>
+        <span class="spacer"></span>
+        <span sec:authorize="isAnonymous()">
+            <a href="/register" style="background:#17a2b8;">Register</a>
+            <a href="/login" style="background:#28a745;">Login</a>
+        </span>
+        <span sec:authorize="isAuthenticated()">
+            <span class="user-info">
+                <b sec:authentication="name"></b>
+                [<span sec:authentication="authorities"></span>]
+            </span>
+            <form th:action="@{/logout}" method="post" style="display:inline;">
+                <button type="submit" style="background:#dc3545;color:white;border:none;padding:8px 16px;border-radius:4px;cursor:pointer;">Logout</button>
+            </form>
+        </span>
+    </div>
+
+    <h1>V5 - Database RBAC Demo</h1>
+
+    <div class="info">
+        <strong>What changed from V2?</strong> Instead of in-memory users, we now store
+        Users and Roles in an <strong>H2 database</strong> with JPA. New users can register,
+        and admins can manage users/roles dynamically!
+    </div>
+
+    <div class="compare">
+        <div class="v2-box">
+            <strong>V2 - In-Memory Users</strong><br/>
+            - Users hardcoded in SecurityConfig<br/>
+            - 2 roles: USER, ADMIN<br/>
+            - No registration<br/>
+            - Restart = reset users
+        </div>
+        <div class="v5-box">
+            <strong>V5 - Database RBAC</strong><br/>
+            - Users in H2 database (JPA)<br/>
+            - 3 roles: USER, MANAGER, ADMIN<br/>
+            - Self-registration page<br/>
+            - Admin panel to manage users/roles<br/>
+            - Enable/disable users<br/>
+            - Custom UserDetailsService
+        </div>
+    </div>
+
+    <h3>3 Roles with Hierarchy:</h3>
+    <table>
+        <tr><th>Role</th><th>Can Access</th></tr>
+        <tr>
+            <td><span class="badge badge-user">USER</span></td>
+            <td>Dashboard, Profile</td>
+        </tr>
+        <tr>
+            <td><span class="badge badge-mgr">MANAGER</span></td>
+            <td>Dashboard, Profile, Manager Page</td>
+        </tr>
+        <tr>
+            <td><span class="badge badge-admin">ADMIN</span></td>
+            <td>Dashboard, Profile, Manager Page, Admin Panel (user management)</td>
+        </tr>
+    </table>
+
+    <h3>Test Credentials:</h3>
+    <table>
+        <tr><th>Username</th><th>Password</th><th>Roles</th></tr>
+        <tr><td><code>user</code></td><td><code>password</code></td><td><span class="badge badge-user">USER</span></td></tr>
+        <tr><td><code>manager</code></td><td><code>password</code></td><td><span class="badge badge-user">USER</span> <span class="badge badge-mgr">MANAGER</span></td></tr>
+        <tr><td><code>admin</code></td><td><code>password</code></td><td><span class="badge badge-user">USER</span> <span class="badge badge-mgr">MANAGER</span> <span class="badge badge-admin">ADMIN</span></td></tr>
+    </table>
+
+    <h3>Features to Demo:</h3>
+    <ul class="endpoint-list">
+        <li><strong>/register</strong> - Self-registration (creates USER role)</li>
+        <li><strong>/admin/users</strong> - Admin panel: list, add, delete, toggle, change roles</li>
+        <li><strong>/h2-console</strong> - Browse the database tables directly</li>
+        <li><strong>/manager</strong> - Manager-only page</li>
+    </ul>
+</div>
+</body>
+</html>

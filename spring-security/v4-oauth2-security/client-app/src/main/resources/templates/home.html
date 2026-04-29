@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <title>Home - V4 OAuth2 Security</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background: #f5f5f5; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: #333; }
+        .nav { background: #333; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; flex-wrap: wrap; gap: 5px; }
+        .nav a { color: white; text-decoration: none; padding: 8px 16px; border-radius: 4px; }
+        .nav a:hover { background: #555; }
+        .nav .spacer { flex-grow: 1; }
+        .nav .user-info { color: #aaa; font-size: 14px; }
+        .info { background: #cce5ff; border: 1px solid #b8daff; padding: 15px; border-radius: 8px; margin: 15px 0; }
+        .arch { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin: 20px 0; }
+        .arch > div { padding: 15px; border-radius: 8px; text-align: center; }
+        .arch .client { background: #d4edda; border: 2px solid #28a745; }
+        .arch .auth { background: #fff3cd; border: 2px solid #ffc107; }
+        .arch .resource { background: #cce5ff; border: 2px solid #007bff; }
+        .arrow { display: flex; align-items: center; justify-content: center; font-size: 24px; }
+        .compare { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 15px 0; }
+        .compare > div { padding: 12px; border-radius: 8px; font-size: 13px; }
+        .v2-box { background: #f8d7da; }
+        .v3-box { background: #fff3cd; }
+        .v4-box { background: #d4edda; }
+        table { border-collapse: collapse; width: 100%; margin: 10px 0; }
+        th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #f8f9fa; }
+        code { background: #e9ecef; padding: 2px 6px; border-radius: 3px; }
+        .section { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 13px; margin: 15px 0; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="nav">
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <span sec:authorize="isAuthenticated()">
+            <a href="/dashboard">Dashboard</a>
+            <a href="/orders">Orders</a>
+            <a href="/token-info">Token Info</a>
+        </span>
+        <span class="spacer"></span>
+        <span sec:authorize="isAnonymous()">
+            <a href="/oauth2/authorization/my-auth-server" style="background:#28a745;">Login with OAuth2</a>
+        </span>
+        <span sec:authorize="isAuthenticated()">
+            <span class="user-info">Logged in as: <b sec:authentication="name"></b></span>
+            <form th:action="@{/logout}" method="post" style="display:inline;">
+                <button type="submit" style="background:#dc3545;color:white;border:none;padding:8px 16px;border-radius:4px;cursor:pointer;">Logout</button>
+            </form>
+        </span>
+    </div>
+
+    <h1>V4 - OAuth2 Security Demo</h1>
+
+    <div class="info">
+        <strong>3 services working together with OAuth2:</strong>
+        Client App gets a token from Auth Server, then uses it to call Resource Server.
+    </div>
+
+    <div class="arch">
+        <div class="client">
+            <strong>Client App</strong><br/>
+            :8080<br/>
+            Thymeleaf UI<br/>
+            <small>OAuth2 Client</small>
+        </div>
+        <div class="auth">
+            <strong>Auth Server</strong><br/>
+            :9000<br/>
+            Issues tokens<br/>
+            <small>Spring Authorization Server</small>
+        </div>
+        <div class="resource">
+            <strong>Resource Server</strong><br/>
+            :8081<br/>
+            Protected APIs<br/>
+            <small>Validates JWT tokens</small>
+        </div>
+    </div>
+
+    <h3>OAuth2 Authorization Code Flow:</h3>
+    <ol>
+        <li>User clicks "Login with OAuth2" on Client App (:8080)</li>
+        <li>Client App redirects to Auth Server (:9000) login page</li>
+        <li>User enters username/password at Auth Server</li>
+        <li>Auth Server shows consent screen (approve scopes)</li>
+        <li>Auth Server redirects back with authorization <b>code</b></li>
+        <li>Client App exchanges code for <b>access token</b> (server-to-server)</li>
+        <li>Client App calls Resource Server (:8081) with <code>Authorization: Bearer &lt;token&gt;</code></li>
+    </ol>
+
+    <h3>V2 vs V3 vs V4 Comparison:</h3>
+    <div class="compare">
+        <div class="v2-box">
+            <strong>V2 - Session</strong><br/>
+            - App stores passwords<br/>
+            - JSESSIONID cookie<br/>
+            - Single app only
+        </div>
+        <div class="v3-box">
+            <strong>V3 - JWT</strong><br/>
+            - App stores passwords<br/>
+            - Self-signed JWT<br/>
+            - Stateless, but still manages users
+        </div>
+        <div class="v4-box">
+            <strong>V4 - OAuth2</strong><br/>
+            - Auth Server manages passwords<br/>
+            - Signed by Auth Server<br/>
+            - Multiple services, SSO
+        </div>
+    </div>
+
+    <h3>Test Credentials (enter at Auth Server :9000):</h3>
+    <table>
+        <tr><th>Username</th><th>Password</th></tr>
+        <tr><td><code>user</code></td><td><code>password</code></td></tr>
+        <tr><td><code>admin</code></td><td><code>password</code></td></tr>
+    </table>
+
+    <h3>cURL - Client Credentials Flow (service-to-service):</h3>
+    <div class="section">
+        <div style="color: #6a9955;"># Get token using client credentials (no user involved)</div>
+        curl -X POST http://localhost:9000/oauth2/token \<br/>
+        &nbsp;&nbsp;-u "service-client:service-secret" \<br/>
+        &nbsp;&nbsp;-d "grant_type=client_credentials&amp;scope=read" <br/><br/>
+        <div style="color: #6a9955;"># Use token to call Resource Server</div>
+        curl http://localhost:8081/api/private/orders \<br/>
+        &nbsp;&nbsp;-H "Authorization: Bearer &lt;TOKEN&gt;"
+    </div>
+
+    <h3>Start all 3 services:</h3>
+    <div class="section">
+        <div style="color: #6a9955;"># Terminal 1 - Auth Server</div>
+        cd auth-server &amp;&amp; mvn spring-boot:run<br/><br/>
+        <div style="color: #6a9955;"># Terminal 2 - Resource Server</div>
+        cd resource-server &amp;&amp; mvn spring-boot:run<br/><br/>
+        <div style="color: #6a9955;"># Terminal 3 - Client App</div>
+        cd client-app &amp;&amp; mvn spring-boot:run
+    </div>
+</div>
+</body>
+</html>
