@@ -19,7 +19,7 @@ public class TodoService {
         this.userRepository = userRepository;
     }
 
-    // @PreAuthorize("hasRole('ADMIN')") // Only users with ROLE_ADMIN can create
+    // @PreAuthorize("hasRole('user')") // Only users with ROLE_ADMIN can create
     // todos
     public void createTodo(CreateTodoDto createTodoDto) {
         Todo todo = new Todo();
@@ -29,6 +29,7 @@ public class TodoService {
         Authentication auth = org.springframework.security.core.context.SecurityContextHolder.getContext()
                 .getAuthentication();
         String username = auth.getName();
+
         com.example.entity.User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
         todo.setUser(user);

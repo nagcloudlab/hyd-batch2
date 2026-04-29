@@ -35,3 +35,5 @@ create table todos (
     updated_at timestamp default current_timestamp,
     user_id int references users(id) on delete cascade
 );
+
+alter table todos add column category varchar(255);

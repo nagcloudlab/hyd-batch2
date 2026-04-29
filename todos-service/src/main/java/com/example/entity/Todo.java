@@ -35,6 +35,10 @@ public class Todo {
     @jakarta.persistence.Column
     private String description;
 
+    @jakarta.persistence.Column
+    @jakarta.persistence.Enumerated(jakarta.persistence.EnumType.STRING)
+    private TodoCategory category;
+
     @jakarta.persistence.Column(nullable = false)
     private boolean completed;
 
