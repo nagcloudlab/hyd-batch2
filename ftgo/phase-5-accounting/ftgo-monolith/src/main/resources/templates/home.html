@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FTGO - Food To Go</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f6fa; min-height: 100vh; }
+        .hero { background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); color: white; padding: 60px 20px; text-align: center; }
+        .hero h1 { font-size: 2.8em; font-weight: 700; letter-spacing: -1px; }
+        .hero p { color: rgba(255,255,255,0.8); margin-top: 8px; font-size: 1.1em; }
+        .container { max-width: 1000px; margin: -40px auto 40px; padding: 0 20px; position: relative; }
+        .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .card { background: white; border-radius: 12px; padding: 32px 24px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.08); transition: transform 0.2s, box-shadow 0.2s; }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 8px 30px rgba(0,0,0,0.12); }
+        .card-icon { width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 1.8em; }
+        .card.consumer .card-icon { background: #e8f5e9; color: #27ae60; }
+        .card.restaurant .card-icon { background: #fff3e0; color: #e67e22; }
+        .card.courier .card-icon { background: #f3e5f5; color: #8e44ad; }
+        .card h2 { color: #2c3e50; margin-bottom: 8px; font-size: 1.3em; }
+        .card p { color: #7f8c8d; margin-bottom: 20px; font-size: 0.9em; line-height: 1.5; }
+        .card-links { display: flex; flex-direction: column; gap: 8px; }
+        .card-links a { display: block; padding: 10px 16px; text-decoration: none; border-radius: 8px; font-size: 0.9em; font-weight: 500; transition: all 0.2s; }
+        .card.consumer .card-links a { background: #e8f5e9; color: #27ae60; }
+        .card.consumer .card-links a:hover { background: #27ae60; color: white; }
+        .card.restaurant .card-links a { background: #fff3e0; color: #e67e22; }
+        .card.restaurant .card-links a:hover { background: #e67e22; color: white; }
+        .card.courier .card-links a { background: #f3e5f5; color: #8e44ad; }
+        .card.courier .card-links a:hover { background: #8e44ad; color: white; }
+        .flow { max-width: 1000px; margin: 0 auto 40px; padding: 0 20px; }
+        .flow-box { background: white; border-radius: 12px; padding: 28px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .flow-box h3 { color: #2c3e50; margin-bottom: 16px; font-size: 1.1em; }
+        .flow-steps { display: flex; align-items: flex-start; gap: 0; flex-wrap: wrap; justify-content: center; }
+        .flow-steps > div { text-align: center; }
+        .step { padding: 8px 16px; border-radius: 20px; font-size: 0.8em; font-weight: 600; color: white; white-space: nowrap; display: inline-block; }
+        .arrow { color: #bdc3c7; font-size: 1.2em; padding: 0 6px; margin-top: 8px; display: inline-block; }
+        .step-placed { background: #3498db; }
+        .step-approved { background: #2ecc71; }
+        .step-preparing { background: #f39c12; }
+        .step-ready { background: #e67e22; }
+        .step-pickup { background: #9b59b6; }
+        .step-delivered { background: #27ae60; }
+        .step-label { font-size: 0.7em; color: #999; display: block; text-align: center; margin-top: 6px; }
+        .info { margin-top: 24px; display: flex; gap: 12px; flex-wrap: wrap; }
+        .info-item { padding: 10px 16px; background: #f8f9fa; border-radius: 8px; font-size: 0.85em; color: #555; line-height: 1.4; }
+        .info-item b { color: #2c3e50; }
+    </style>
+    <style th:replace="~{fragments/navbar :: navbar-styles}"></style>
+</head>
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar('home')}"></nav>
+    <div class="hero">
+        <h1>FTGO</h1>
+        <p>Food To Go &mdash; Monolithic Application</p>
+    </div>
+    <div class="container">
+        <div class="cards">
+            <div class="card consumer">
+                <div class="card-icon">C</div>
+                <h2>Consumer</h2>
+                <p>Browse restaurants, place orders and track your deliveries in real-time</p>
+                <div class="card-links">
+                    <a href="/consumer/restaurants">Browse Restaurants</a>
+                    <a href="/consumer/orders?consumerId=1">My Orders</a>
+                </div>
+            </div>
+            <div class="card restaurant">
+                <div class="card-icon">R</div>
+                <h2>Restaurant</h2>
+                <p>Manage your menu items, approve incoming orders and prepare food</p>
+                <div class="card-links">
+                    <a href="/restaurant">Select Restaurant</a>
+                </div>
+            </div>
+            <div class="card courier">
+                <div class="card-icon">D</div>
+                <h2>Courier</h2>
+                <p>View available deliveries, accept orders and deliver to customers</p>
+                <div class="card-links">
+                    <a href="/courier/available?courierId=1">Available Deliveries</a>
+                    <a href="/courier/my-deliveries?courierId=1">My Deliveries</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="flow">
+        <div class="flow-box">
+            <h3>Order Lifecycle</h3>
+            <div class="flow-steps">
+                <div>
+                    <span class="step step-placed">PLACED</span>
+                    <span class="step-label">Consumer</span>
+                </div>
+                <span class="arrow">&rarr;</span>
+                <div>
+                    <span class="step step-approved">APPROVED</span>
+                    <span class="step-label">Restaurant</span>
+                </div>
+                <span class="arrow">&rarr;</span>
+                <div>
+                    <span class="step step-preparing">PREPARING</span>
+                    <span class="step-label">Restaurant</span>
+                </div>
+                <span class="arrow">&rarr;</span>
+                <div>
+                    <span class="step step-ready">READY FOR PICKUP</span>
+                    <span class="step-label">Restaurant</span>
+                </div>
+                <span class="arrow">&rarr;</span>
+                <div>
+                    <span class="step step-pickup">PICKED UP</span>
+                    <span class="step-label">Courier</span>
+                </div>
+                <span class="arrow">&rarr;</span>
+                <div>
+                    <span class="step step-delivered">DELIVERED</span>
+                    <span class="step-label">Courier</span>
+                </div>
+            </div>
+            <div class="info">
+                <div class="info-item"><b>Database:</b> H2 In-Memory &mdash; <a href="/h2-console" style="color:#3498db">/h2-console</a></div>
+                <div class="info-item"><b>Modules:</b> Restaurant, Order, Delivery, Payment, Notification, Billing</div>
+                <div class="info-item"><b>External Services:</b> Stripe, Twilio, SES (all mocked)</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

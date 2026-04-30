@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FTGO Accounting - Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f6fa; }
+        .header { background: linear-gradient(135deg, #2c3e50, #34495e); color: white; padding: 16px 24px; }
+        .header h1 { font-size: 1.3em; }
+        .header p { font-size: 0.85em; opacity: 0.7; margin-top: 4px; }
+        .container { max-width: 1200px; margin: 24px auto; padding: 0 20px; }
+        .svc-badge { display: inline-block; background: #eef; color: #2c3e50; padding: 4px 12px; border-radius: 12px; font-size: 0.75em; font-weight: 600; margin-bottom: 16px; }
+        .stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+        .stat-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); text-align: center; }
+        .stat-card .value { font-size: 2em; font-weight: 700; color: #2c3e50; }
+        .stat-card .label { font-size: 0.8em; color: #999; margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-card.green .value { color: #27ae60; }
+        .stat-card.blue .value { color: #3498db; }
+        .stat-card.orange .value { color: #e67e22; }
+        h2 { color: #2c3e50; margin-bottom: 16px; font-size: 1.2em; }
+        .section { margin-bottom: 32px; }
+        .table-wrap { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 14px 16px; font-size: 0.75em; text-transform: uppercase; color: #999; background: #fafafa; border-bottom: 2px solid #f0f0f0; letter-spacing: 0.5px; }
+        td { padding: 14px 16px; border-bottom: 1px solid #f5f5f5; font-size: 0.9em; }
+        tr:last-child td { border-bottom: none; }
+        .amount { color: #27ae60; font-weight: 600; }
+        .badge { padding: 4px 12px; border-radius: 20px; font-size: 0.8em; font-weight: 600; }
+        .badge-completed { background: #e8f5e9; color: #27ae60; }
+        .badge-failed { background: #ffeef0; color: #e74c3c; }
+        .badge-pending { background: #fff3e0; color: #e67e22; }
+        .stripe-id { font-family: monospace; font-size: 0.85em; color: #7f8c8d; }
+        .empty { text-align: center; padding: 40px; color: #999; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>FTGO Accounting Service</h1>
+        <p>Payments &amp; Billing Dashboard</p>
+    </div>
+    <div class="container">
+        <span class="svc-badge">accounting-service :8085</span>
+
+        <div class="stats">
+            <div class="stat-card blue">
+                <div class="value" th:text="${payments.size()}">0</div>
+                <div class="label">Total Payments</div>
+            </div>
+            <div class="stat-card green">
+                <div class="value">Rs.<span th:text="${totalRevenue}">0</span></div>
+                <div class="label">Total Revenue</div>
+            </div>
+            <div class="stat-card orange">
+                <div class="value">Rs.<span th:text="${totalTax}">0</span></div>
+                <div class="label">Total Tax (GST)</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Payments</h2>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr><th>Order #</th><th>Amount</th><th>Status</th><th>Stripe ID</th><th>Time</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr th:if="${payments.isEmpty()}"><td colspan="5" class="empty">No payments yet</td></tr>
+                        <tr th:each="p : ${payments}">
+                            <td th:text="${p.orderId}">1</td>
+                            <td class="amount" th:text="'Rs.' + ${p.amount}">Rs.0</td>
+                            <td>
+                                <span class="badge" th:classappend="${p.status.name() == 'COMPLETED' ? 'badge-completed' : (p.status.name() == 'FAILED' ? 'badge-failed' : 'badge-pending')}" th:text="${p.status}">Status</span>
+                            </td>
+                            <td class="stripe-id" th:text="${p.stripePaymentId}">stripe_xxx</td>
+                            <td th:text="${#temporals.format(p.paymentTime, 'dd MMM, hh:mm a')}">Time</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Bills</h2>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr><th>Order #</th><th>Subtotal</th><th>Tax (5%)</th><th>Delivery Fee</th><th>Total</th><th>Generated</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr th:if="${bills.isEmpty()}"><td colspan="6" class="empty">No bills yet</td></tr>
+                        <tr th:each="b : ${bills}">
+                            <td th:text="${b.orderId}">1</td>
+                            <td th:text="'Rs.' + ${b.amount}">Rs.0</td>
+                            <td th:text="'Rs.' + ${b.tax}">Rs.0</td>
+                            <td th:text="'Rs.' + ${b.deliveryFee}">Rs.0</td>
+                            <td class="amount" th:text="'Rs.' + ${b.totalAmount}">Rs.0</td>
+                            <td th:text="${#temporals.format(b.generatedTime, 'dd MMM, hh:mm a')}">Time</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

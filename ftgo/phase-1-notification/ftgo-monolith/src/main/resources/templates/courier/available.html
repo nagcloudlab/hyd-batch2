@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FTGO - Available Deliveries</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f6fa; }
+        .header { background: linear-gradient(135deg, #8e44ad, #9b59b6); color: white; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 1.3em; }
+        .header a { color: white; text-decoration: none; opacity: 0.9; font-size: 0.9em; }
+        .topbar { background: white; border-bottom: 1px solid #eee; padding: 12px 24px; display: flex; gap: 20px; align-items: center; }
+        .topbar a { color: #8e44ad; text-decoration: none; font-weight: 600; font-size: 0.9em; padding: 6px 12px; border-radius: 6px; }
+        .topbar a:hover, .topbar a.active { background: #f3e5f5; }
+        .topbar .user-select { margin-left: auto; display: flex; align-items: center; gap: 8px; font-size: 0.85em; color: #666; }
+        .topbar select { padding: 6px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.85em; }
+        .container { max-width: 1100px; margin: 24px auto; padding: 0 20px; }
+        h2 { color: #2c3e50; margin-bottom: 6px; font-size: 1.4em; }
+        .subtitle { color: #999; font-size: 0.9em; margin-bottom: 20px; }
+        .delivery-card { background: white; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-bottom: 16px; overflow: hidden; border-left: 4px solid #e67e22; display: flex; justify-content: space-between; align-items: center; padding: 20px 24px; gap: 20px; flex-wrap: wrap; }
+        .delivery-info { flex: 1; }
+        .delivery-info h3 { color: #2c3e50; font-size: 1em; margin-bottom: 6px; }
+        .delivery-meta { display: flex; gap: 16px; flex-wrap: wrap; font-size: 0.85em; color: #888; }
+        .delivery-meta b { color: #555; }
+        .route { margin-top: 8px; display: flex; align-items: center; gap: 8px; font-size: 0.85em; }
+        .route .from { color: #e67e22; font-weight: 600; }
+        .route .to { color: #27ae60; font-weight: 600; }
+        .route .arrow { color: #ccc; }
+        .btn { padding: 10px 24px; border: none; border-radius: 8px; cursor: pointer; font-size: 0.9em; font-weight: 600; color: white; transition: all 0.2s; }
+        .btn-accept { background: #27ae60; }
+        .btn-accept:hover { background: #219a52; transform: scale(1.02); }
+        .empty { text-align: center; padding: 60px 20px; background: white; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+        .empty p { color: #999; margin-bottom: 8px; }
+        .empty .hint { font-size: 0.85em; color: #bbb; }
+    </style>
+    <style th:replace="~{fragments/navbar :: navbar-styles}"></style>
+</head>
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar('courier-available')}"></nav>
+    <div class="topbar">
+        <a href="#" class="active">Available Deliveries</a>
+        <a th:href="@{'/courier/my-deliveries?courierId=' + ${courierId}}">My Deliveries</a>
+        <div class="user-select">
+            <span>Courier:</span>
+            <select onchange="window.location='/courier/available?courierId='+this.value">
+                <option th:each="c : ${couriers}" th:value="${c.id}" th:text="${c.name}" th:selected="${c.id == courierId}">Courier</option>
+            </select>
+        </div>
+    </div>
+    <div class="container">
+        <h2>Available Deliveries</h2>
+        <p class="subtitle">These orders are ready for pickup at the restaurant. Accept one to start delivering.</p>
+
+        <div th:if="${deliveries.isEmpty()}" class="empty">
+            <p>No deliveries available right now.</p>
+            <span class="hint">Deliveries appear here when restaurants mark orders as ready for pickup.</span>
+        </div>
+
+        <div th:each="delivery : ${deliveries}" class="delivery-card">
+            <div class="delivery-info">
+                <h3>Order #<span th:text="${delivery.foodOrder.id}">1</span></h3>
+                <div class="delivery-meta">
+                    <span><b>Restaurant:</b> <span th:text="${delivery.foodOrder.restaurant.name}">Name</span></span>
+                    <span><b>Amount:</b> Rs.<span th:text="${delivery.foodOrder.totalAmount}">0</span></span>
+                </div>
+                <div class="route">
+                    <span class="from" th:text="${delivery.foodOrder.restaurant.address}">From</span>
+                    <span class="arrow">&rarr;</span>
+                    <span class="to" th:text="${delivery.foodOrder.deliveryAddress}">To</span>
+                </div>
+            </div>
+            <form th:action="@{/courier/accept}" method="post">
+                <input type="hidden" name="deliveryId" th:value="${delivery.id}" />
+                <input type="hidden" name="courierId" th:value="${courierId}" />
+                <button type="submit" class="btn btn-accept">Accept Delivery</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,9 @@
+com/example/restaurant/repository/RestaurantRepository.class
+com/example/restaurant/entity/MenuItem$MenuItemBuilder.class
+com/example/restaurant/web/RestaurantApiController.class
+com/example/restaurant/repository/MenuItemRepository.class
+com/example/restaurant/service/RestaurantService.class
+com/example/restaurant/entity/Restaurant.class
+com/example/restaurant/entity/Restaurant$RestaurantBuilder.class
+com/example/restaurant/entity/MenuItem.class
+com/example/restaurant/RestaurantServiceApplication.class

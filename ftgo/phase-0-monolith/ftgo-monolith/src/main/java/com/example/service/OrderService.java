@@ -72,7 +72,7 @@ public class OrderService {
         billingService.generateBill(savedOrder);
 
         // Send notifications (mock Twilio SMS + SES email)
-        notificationService.sendOrderConfirmation(savedOrder);
+        notificationService.sendOrderConfirmation(savedOrder); // 3s
 
         // NOTE: Delivery is NOT created here. It is created only when
         // the restaurant marks the order as READY_FOR_PICKUP.

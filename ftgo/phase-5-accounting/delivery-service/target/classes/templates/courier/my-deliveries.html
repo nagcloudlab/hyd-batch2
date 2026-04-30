@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FTGO Delivery - My Deliveries</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f6fa; }
+        .header { background: linear-gradient(135deg, #8e44ad, #9b59b6); color: white; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 1.3em; }
+        .header a { color: white; text-decoration: none; opacity: 0.9; font-size: 0.9em; }
+        .topbar { background: white; border-bottom: 1px solid #eee; padding: 12px 24px; display: flex; gap: 20px; align-items: center; }
+        .topbar a { color: #8e44ad; text-decoration: none; font-weight: 600; font-size: 0.9em; padding: 6px 12px; border-radius: 6px; }
+        .topbar a:hover, .topbar a.active { background: #f3e5f5; }
+        .topbar .user-select { margin-left: auto; display: flex; align-items: center; gap: 8px; font-size: 0.85em; color: #666; }
+        .topbar select { padding: 6px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.85em; }
+        .container { max-width: 1100px; margin: 24px auto; padding: 0 20px; }
+        h2 { color: #2c3e50; margin-bottom: 20px; font-size: 1.4em; }
+        .svc-badge { display: inline-block; background: #f3e5f5; color: #8e44ad; padding: 4px 12px; border-radius: 12px; font-size: 0.75em; font-weight: 600; margin-bottom: 16px; }
+        .card { background: white; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-bottom: 16px; overflow: hidden; border-left: 4px solid #ddd; }
+        .card.ASSIGNED { border-left-color: #3498db; }
+        .card.PICKED_UP { border-left-color: #9b59b6; }
+        .card.DELIVERED { border-left-color: #27ae60; }
+        .card-body { padding: 20px 24px; }
+        .card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .card-top h3 { color: #2c3e50; font-size: 1em; }
+        .status { padding: 4px 12px; border-radius: 20px; font-size: 0.8em; font-weight: 600; color: white; }
+        .status.ASSIGNED { background: #3498db; }
+        .status.PICKED_UP { background: #9b59b6; }
+        .status.DELIVERED { background: #27ae60; }
+        .card-details { color: #888; font-size: 0.85em; margin-bottom: 12px; }
+        .card-details p { margin-bottom: 2px; }
+        .card-actions { display: flex; gap: 12px; align-items: center; }
+        .btn { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 0.85em; font-weight: 600; color: white; transition: all 0.2s; }
+        .btn-pickup { background: #9b59b6; }
+        .btn-pickup:hover { background: #8e44ad; }
+        .btn-deliver { background: #27ae60; }
+        .btn-deliver:hover { background: #219a52; }
+        .hint { font-size: 0.8em; color: #999; }
+        .amount { font-size: 1.1em; font-weight: 700; color: #27ae60; }
+        .empty { text-align: center; padding: 60px 20px; background: white; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); color: #999; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>FTGO Delivery Service</h1>
+        <a href="/courier/available">Available Deliveries</a>
+    </div>
+    <div class="topbar">
+        <a th:href="@{'/courier/available?courierId=' + ${courierId}}">Available Deliveries</a>
+        <a href="#" class="active">My Deliveries</a>
+        <div class="user-select">
+            <span>Courier:</span>
+            <select onchange="window.location='/courier/my-deliveries?courierId='+this.value">
+                <option th:each="c : ${couriers}" th:value="${c.id}" th:text="${c.name}" th:selected="${c.id == courierId}">Courier</option>
+            </select>
+        </div>
+    </div>
+    <div class="container">
+        <span class="svc-badge">delivery-service :8083</span>
+        <h2>My Deliveries</h2>
+
+        <div th:if="${deliveries.isEmpty()}" class="empty">
+            <p>No active deliveries. Accept one from the available deliveries page.</p>
+        </div>
+
+        <div th:each="d : ${deliveries}" class="card" th:classappend="${d.status}">
+            <div class="card-body">
+                <div class="card-top">
+                    <h3>Order #<span th:text="${d.orderId}">1</span> &mdash; <span th:text="${d.restaurantName}">Restaurant</span></h3>
+                    <span class="status" th:classappend="${d.status}" th:text="${d.status}">Status</span>
+                </div>
+                <div class="card-details">
+                    <p>Customer: <span th:text="${d.consumerName}">Consumer</span></p>
+                    <p>Deliver to: <span th:text="${d.deliveryAddress}">Address</span></p>
+                    <p>Amount: <span class="amount">Rs.<span th:text="${d.totalAmount}">0</span></span></p>
+                </div>
+                <div class="card-actions">
+                    <div th:switch="${d.status.name()}">
+                        <div th:case="'ASSIGNED'">
+                            <form th:action="@{'/courier/pickup/' + ${d.id}}" method="post" style="display:inline">
+                                <input type="hidden" name="courierId" th:value="${courierId}" />
+                                <button type="submit" class="btn btn-pickup">Mark Picked Up</button>
+                            </form>
+                            <span class="hint">Pick up the order from the restaurant</span>
+                        </div>
+                        <div th:case="'PICKED_UP'">
+                            <form th:action="@{'/courier/deliver/' + ${d.id}}" method="post" style="display:inline">
+                                <input type="hidden" name="courierId" th:value="${courierId}" />
+                                <button type="submit" class="btn btn-deliver">Mark Delivered</button>
+                            </form>
+                            <span class="hint">Deliver to the customer</span>
+                        </div>
+                        <div th:case="'DELIVERED'">
+                            <span class="hint">Delivery completed!</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

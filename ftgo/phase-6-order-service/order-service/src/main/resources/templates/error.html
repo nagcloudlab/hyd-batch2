@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FTGO - Error</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f6fa; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+        .error-card { background: white; border-radius: 16px; padding: 48px; max-width: 520px; text-align: center; box-shadow: 0 4px 24px rgba(0,0,0,0.08); border-top: 4px solid #e74c3c; }
+        .icon { font-size: 3em; margin-bottom: 16px; }
+        h1 { color: #e74c3c; font-size: 1.6em; margin-bottom: 12px; }
+        .message { color: #555; font-size: 1em; line-height: 1.6; margin-bottom: 24px; padding: 16px; background: #ffeef0; border-radius: 8px; border-left: 4px solid #e74c3c; text-align: left; }
+        .info { color: #888; font-size: 0.85em; margin-bottom: 24px; }
+        .info code { background: #f0f0f0; padding: 2px 8px; border-radius: 4px; font-size: 0.9em; }
+        .btn { display: inline-block; padding: 12px 28px; background: #3498db; color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: all 0.2s; }
+        .btn:hover { background: #2980b9; }
+    </style>
+</head>
+<body>
+    <div class="error-card">
+        <div class="icon">&#9888;</div>
+        <h1 th:text="${errorTitle} ?: 'Something went wrong'">Service Unavailable</h1>
+        <div class="message" th:text="${errorMessage} ?: 'An unexpected error occurred. Please try again.'">
+            Error details here
+        </div>
+        <p class="info">
+            Circuit breaker state: check <code>/actuator/health</code>
+        </p>
+        <a href="/" class="btn">Back to Home</a>
+    </div>
+</body>
+</html>

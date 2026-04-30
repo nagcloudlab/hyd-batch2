@@ -1,0 +1,9 @@
+/Users/nag/hyd-batch2/ftgo/phase-1-notification/notification-service/src/main/java/com/example/notification/NotificationServiceApplication.java
+/Users/nag/hyd-batch2/ftgo/phase-1-notification/notification-service/src/main/java/com/example/notification/adapter/AmazonSesAdapter.java
+/Users/nag/hyd-batch2/ftgo/phase-1-notification/notification-service/src/main/java/com/example/notification/adapter/TwilioAdapter.java
+/Users/nag/hyd-batch2/ftgo/phase-1-notification/notification-service/src/main/java/com/example/notification/consumer/NotificationEventConsumer.java
+/Users/nag/hyd-batch2/ftgo/phase-1-notification/notification-service/src/main/java/com/example/notification/entity/Notification.java
+/Users/nag/hyd-batch2/ftgo/phase-1-notification/notification-service/src/main/java/com/example/notification/entity/NotificationType.java
+/Users/nag/hyd-batch2/ftgo/phase-1-notification/notification-service/src/main/java/com/example/notification/event/NotificationEvent.java
+/Users/nag/hyd-batch2/ftgo/phase-1-notification/notification-service/src/main/java/com/example/notification/repository/NotificationRepository.java
+/Users/nag/hyd-batch2/ftgo/phase-1-notification/notification-service/src/main/java/com/example/notification/service/NotificationService.java

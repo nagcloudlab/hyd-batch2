@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FTGO - Manage Menu</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f6fa; }
+        .header { background: linear-gradient(135deg, #e67e22, #f39c12); color: white; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 1.3em; }
+        .header a { color: white; text-decoration: none; opacity: 0.9; font-size: 0.9em; }
+        .topbar { background: white; border-bottom: 1px solid #eee; padding: 12px 24px; display: flex; gap: 20px; align-items: center; }
+        .topbar a { color: #e67e22; text-decoration: none; font-weight: 600; font-size: 0.9em; padding: 6px 12px; border-radius: 6px; }
+        .topbar a:hover, .topbar a.active { background: #fff3e0; }
+        .topbar .rest-select { margin-left: auto; display: flex; align-items: center; gap: 8px; font-size: 0.85em; color: #666; }
+        .topbar select { padding: 6px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.85em; }
+        .container { max-width: 900px; margin: 24px auto; padding: 0 20px; }
+        h2 { color: #2c3e50; margin-bottom: 20px; font-size: 1.4em; }
+        .add-form { background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); display: flex; gap: 12px; align-items: end; flex-wrap: wrap; }
+        .add-form .field { flex: 1; min-width: 150px; }
+        .add-form label { font-size: 0.8em; color: #888; display: block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .add-form input { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.9em; }
+        .add-form input:focus { outline: none; border-color: #e67e22; box-shadow: 0 0 0 3px rgba(230,126,34,0.1); }
+        .btn { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 0.85em; font-weight: 600; color: white; transition: all 0.2s; }
+        .btn-add { background: #e67e22; height: 42px; }
+        .btn-add:hover { background: #d35400; }
+        .table-wrap { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 14px 16px; font-size: 0.75em; text-transform: uppercase; color: #999; background: #fafafa; border-bottom: 2px solid #f0f0f0; letter-spacing: 0.5px; }
+        td { padding: 14px 16px; border-bottom: 1px solid #f5f5f5; font-size: 0.9em; }
+        tr:last-child td { border-bottom: none; }
+        .price { color: #27ae60; font-weight: 600; }
+        .badge { padding: 4px 12px; border-radius: 20px; font-size: 0.8em; font-weight: 600; }
+        .badge-available { background: #e8f5e9; color: #27ae60; }
+        .badge-unavailable { background: #ffeef0; color: #e74c3c; }
+        .btn-toggle { padding: 6px 14px; border: 1px solid #ddd; background: white; border-radius: 6px; cursor: pointer; font-size: 0.8em; transition: all 0.2s; }
+        .btn-toggle:hover { border-color: #3498db; color: #3498db; }
+    </style>
+    <style th:replace="~{fragments/navbar :: navbar-styles}"></style>
+</head>
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar('restaurant-menu')}"></nav>
+    <div class="topbar">
+        <a href="#" class="active">Manage Menu</a>
+        <a th:href="@{'/restaurant/' + ${restaurant.id} + '/orders'}">View Orders</a>
+        <div class="rest-select">
+            <span>Restaurant:</span>
+            <select onchange="window.location='/restaurant/'+this.value+'/menu'">
+                <option th:each="r : ${allRestaurants}" th:value="${r.id}" th:text="${r.name}" th:selected="${r.id == restaurant.id}">Restaurant</option>
+            </select>
+        </div>
+    </div>
+    <div class="container">
+        <h2>Menu &mdash; <span th:text="${restaurant.name}">Restaurant</span></h2>
+
+        <form th:action="@{'/restaurant/' + ${restaurant.id} + '/menu'}" method="post" class="add-form">
+            <div class="field">
+                <label>Item Name</label>
+                <input type="text" name="name" placeholder="e.g. Paneer Tikka" required />
+            </div>
+            <div class="field" style="max-width:150px">
+                <label>Price (Rs.)</label>
+                <input type="number" name="price" step="0.01" placeholder="250" required />
+            </div>
+            <button type="submit" class="btn btn-add">+ Add Item</button>
+        </form>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr><th>#</th><th>Item Name</th><th>Price</th><th>Status</th><th>Action</th></tr>
+                </thead>
+                <tbody>
+                    <tr th:each="item, stat : ${menuItems}">
+                        <td th:text="${stat.count}">1</td>
+                        <td th:text="${item.name}">Item</td>
+                        <td class="price" th:text="'Rs.' + ${item.price}">Price</td>
+                        <td>
+                            <span th:if="${item.available}" class="badge badge-available">Available</span>
+                            <span th:if="${!item.available}" class="badge badge-unavailable">Unavailable</span>
+                        </td>
+                        <td>
+                            <form th:action="@{'/restaurant/menu/' + ${item.id} + '/toggle'}" method="post" style="display:inline">
+                                <input type="hidden" name="restaurantId" th:value="${restaurant.id}" />
+                                <button type="submit" class="btn-toggle"
+                                        th:text="${item.available} ? 'Mark Unavailable' : 'Mark Available'">Toggle</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FTGO - Restaurant Orders</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f6fa; }
+        .header { background: linear-gradient(135deg, #e67e22, #f39c12); color: white; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 1.3em; }
+        .header a { color: white; text-decoration: none; opacity: 0.9; font-size: 0.9em; }
+        .topbar { background: white; border-bottom: 1px solid #eee; padding: 12px 24px; display: flex; gap: 20px; align-items: center; }
+        .topbar a { color: #e67e22; text-decoration: none; font-weight: 600; font-size: 0.9em; padding: 6px 12px; border-radius: 6px; }
+        .topbar a:hover, .topbar a.active { background: #fff3e0; }
+        .topbar .rest-select { margin-left: auto; display: flex; align-items: center; gap: 8px; font-size: 0.85em; color: #666; }
+        .topbar select { padding: 6px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.85em; }
+        .container { max-width: 1100px; margin: 24px auto; padding: 0 20px; }
+        h2 { color: #2c3e50; margin-bottom: 20px; font-size: 1.4em; }
+        .order-card { background: white; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-bottom: 16px; overflow: hidden; border-left: 4px solid #ddd; }
+        .order-card.PLACED { border-left-color: #3498db; }
+        .order-card.APPROVED { border-left-color: #2ecc71; }
+        .order-card.PREPARING { border-left-color: #f39c12; }
+        .order-card.READY_FOR_PICKUP { border-left-color: #e67e22; }
+        .order-card.PICKED_UP { border-left-color: #9b59b6; }
+        .order-card.DELIVERED { border-left-color: #27ae60; }
+        .order-top { padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .order-top .info h3 { color: #2c3e50; font-size: 1em; }
+        .order-top .info span { color: #999; font-size: 0.8em; }
+        .order-details { padding: 0 20px 16px; display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
+        .order-items { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; }
+        .order-item { background: #f8f9fa; padding: 4px 10px; border-radius: 6px; font-size: 0.85em; color: #555; }
+        .order-amount { font-size: 1.1em; font-weight: 700; color: #27ae60; }
+        .order-actions { padding: 12px 20px; background: #fafafa; border-top: 1px solid #f0f0f0; display: flex; align-items: center; gap: 12px; }
+        .status { padding: 5px 14px; border-radius: 20px; font-size: 0.8em; font-weight: 600; color: white; }
+        .status.PLACED { background: #3498db; }
+        .status.APPROVED { background: #2ecc71; }
+        .status.PREPARING { background: #f39c12; }
+        .status.READY_FOR_PICKUP { background: #e67e22; }
+        .status.PICKED_UP { background: #9b59b6; }
+        .status.DELIVERED { background: #27ae60; }
+        .btn { padding: 8px 18px; border: none; border-radius: 8px; cursor: pointer; font-size: 0.85em; font-weight: 600; color: white; transition: all 0.2s; }
+        .btn-approve { background: #2ecc71; }
+        .btn-approve:hover { background: #27ae60; }
+        .btn-prepare { background: #f39c12; }
+        .btn-prepare:hover { background: #e67e22; }
+        .btn-ready { background: #e67e22; }
+        .btn-ready:hover { background: #d35400; }
+        .hint { font-size: 0.8em; color: #999; }
+        .empty { text-align: center; padding: 60px 20px; background: white; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); color: #999; }
+        .delivery-addr { font-size: 0.85em; color: #888; }
+    </style>
+    <style th:replace="~{fragments/navbar :: navbar-styles}"></style>
+</head>
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar('restaurant-orders')}"></nav>
+    <div class="topbar">
+        <a th:href="@{'/restaurant/' + ${restaurant.id} + '/menu'}">Manage Menu</a>
+        <a href="#" class="active">View Orders</a>
+        <div class="rest-select">
+            <span>Restaurant:</span>
+            <select onchange="window.location='/restaurant/'+this.value+'/orders'">
+                <option th:each="r : ${allRestaurants}" th:value="${r.id}" th:text="${r.name}" th:selected="${r.id == restaurant.id}">Restaurant</option>
+            </select>
+        </div>
+    </div>
+    <div class="container">
+        <h2>Orders &mdash; <span th:text="${restaurant.name}">Restaurant</span></h2>
+
+        <div th:if="${orders.isEmpty()}" class="empty">
+            <p>No orders received yet. Orders will appear here when consumers place them.</p>
+        </div>
+
+        <div th:each="order : ${orders}" class="order-card" th:classappend="${order.status}">
+            <div class="order-top">
+                <div class="info">
+                    <h3>
+                        Order #<span th:text="${order.id}">1</span>
+                        &mdash; <span th:text="${order.consumer.name}">Consumer</span>
+                    </h3>
+                    <span th:text="${#temporals.format(order.orderTime, 'dd MMM yyyy, hh:mm a')}">Time</span>
+                </div>
+                <span class="status" th:classappend="${order.status}" th:text="${order.status}">Status</span>
+            </div>
+            <div class="order-details">
+                <div class="order-items">
+                    <span th:each="item : ${order.lineItems}" class="order-item"
+                          th:text="${item.menuItem.name + ' x ' + item.quantity}">Item</span>
+                </div>
+                <span class="order-amount">Rs.<span th:text="${order.totalAmount}">0</span></span>
+            </div>
+            <div class="order-details">
+                <span class="delivery-addr">Deliver to: <span th:text="${order.deliveryAddress}">Address</span></span>
+            </div>
+            <div class="order-actions">
+                <form th:action="@{'/restaurant/orders/' + ${order.id} + '/status'}" method="post" style="display:inline">
+                    <input type="hidden" name="restaurantId" th:value="${restaurant.id}" />
+                    <div th:switch="${order.status.name()}">
+                        <div th:case="'PLACED'">
+                            <input type="hidden" name="status" value="APPROVED" />
+                            <button type="submit" class="btn btn-approve">Approve Order</button>
+                            <span class="hint">Accept this order to start processing</span>
+                        </div>
+                        <div th:case="'APPROVED'">
+                            <input type="hidden" name="status" value="PREPARING" />
+                            <button type="submit" class="btn btn-prepare">Start Preparing</button>
+                            <span class="hint">Begin cooking this order</span>
+                        </div>
+                        <div th:case="'PREPARING'">
+                            <input type="hidden" name="status" value="READY_FOR_PICKUP" />
+                            <button type="submit" class="btn btn-ready">Ready for Pickup</button>
+                            <span class="hint">Food is ready &mdash; courier will be notified</span>
+                        </div>
+                        <div th:case="'READY_FOR_PICKUP'">
+                            <span class="hint">Waiting for courier to pick up...</span>
+                        </div>
+                        <div th:case="'PICKED_UP'">
+                            <span class="hint">Courier is delivering to customer</span>
+                        </div>
+                        <div th:case="'DELIVERED'">
+                            <span class="hint">Order completed successfully</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,139 @@
+server:
+  port: 8000
+
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      routes:
+        # Order Service (consumer UI + order APIs)
+        - id: order-service
+          uri: lb://ORDER-SERVICE
+          predicates:
+            - Path=/consumer/**, /api/orders/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: order-service
+                fallbackUri: forward:/fallback/order
+
+        # Restaurant Service (menu CRUD APIs)
+        - id: restaurant-service
+          uri: lb://RESTAURANT-SERVICE
+          predicates:
+            - Path=/api/restaurants/**, /api/menu-items/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: restaurant-service
+                fallbackUri: forward:/fallback/restaurant
+
+        # Restaurant orders → rewrite to kitchen-service
+        - id: restaurant-orders-to-kitchen
+          uri: lb://KITCHEN-SERVICE
+          predicates:
+            - Path=/restaurant/{restaurantId}/orders
+          filters:
+            - RewritePath=/restaurant/(?<restaurantId>.*)/orders, /kitchen/${restaurantId}/orders
+
+        # Restaurant Portal (menu management on order-service)
+        - id: restaurant-portal
+          uri: lb://ORDER-SERVICE
+          predicates:
+            - Path=/restaurant/**
+
+        # Kitchen Service
+        - id: kitchen-service
+          uri: lb://KITCHEN-SERVICE
+          predicates:
+            - Path=/kitchen/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: kitchen-service
+                fallbackUri: forward:/fallback/kitchen
+
+        # Delivery Service (courier UI)
+        - id: delivery-service
+          uri: lb://DELIVERY-SERVICE
+          predicates:
+            - Path=/courier/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: delivery-service
+                fallbackUri: forward:/fallback/delivery
+
+        # Accounting Service
+        - id: accounting-service
+          uri: lb://ACCOUNTING-SERVICE
+          predicates:
+            - Path=/accounting/**, /api/payments/**, /api/bills/**
+          filters:
+            - name: CircuitBreaker
+              args:
+                name: accounting-service
+                fallbackUri: forward:/fallback/accounting
+
+        # Home page
+        - id: home
+          uri: lb://ORDER-SERVICE
+          predicates:
+            - Path=/
+
+        # H2 Console proxy
+        - id: h2-console
+          uri: lb://ORDER-SERVICE
+          predicates:
+            - Path=/h2-console/**
+
+      # Global filters
+      default-filters:
+        - PreserveHostHeader
+        - AddResponseHeader=X-Gateway, ftgo-api-gateway
+        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_FIRST
+
+# ── Eureka ──
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+  instance:
+    prefer-ip-address: true
+
+# ── Resilience4j ──
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        sliding-window-size: 10
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 10s
+        permitted-number-of-calls-in-half-open-state: 3
+    instances:
+      order-service:
+        base-config: default
+      restaurant-service:
+        base-config: default
+      kitchen-service:
+        base-config: default
+      delivery-service:
+        base-config: default
+      accounting-service:
+        base-config: default
+
+# ── Actuator ──
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, gateway, info
+  endpoint:
+    gateway:
+      enabled: true
+
+logging:
+  level:
+    org.springframework.cloud.gateway: INFO

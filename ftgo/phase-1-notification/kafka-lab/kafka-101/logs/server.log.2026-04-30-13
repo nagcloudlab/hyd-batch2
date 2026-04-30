@@ -1,0 +1,529 @@
+[2026-04-30 13:14:10,795] INFO [NodeToControllerChannelManager id=101 name=forwarding] Node 103 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-04-30 13:15:56,600] INFO [ReplicaFetcherManager on broker 101] Removed fetcher for partitions Set(ftgo.notification.events-2) (kafka.server.ReplicaFetcherManager)
+[2026-04-30 13:15:56,627] INFO [ReplicaFetcherThread-0-103]: Shutting down (kafka.server.ReplicaFetcherThread)
+[2026-04-30 13:15:56,627] INFO [ReplicaFetcherThread-0-103]: Stopped (kafka.server.ReplicaFetcherThread)
+[2026-04-30 13:15:56,627] INFO [ReplicaFetcherThread-0-103]: Shutdown completed (kafka.server.ReplicaFetcherThread)
+[2026-04-30 13:15:56,633] INFO [ReplicaFetcherManager on broker 101] Removed fetcher for partitions Set(ftgo.notification.events-1) (kafka.server.ReplicaFetcherManager)
+[2026-04-30 13:15:56,651] INFO [ReplicaFetcherManager on broker 101] Removed fetcher for partitions HashSet(ftgo.notification.events-0) (kafka.server.ReplicaFetcherManager)
+[2026-04-30 13:15:56,652] INFO [ReplicaFetcherManager on broker 101] Added fetcher to broker 102 for partitions Map(ftgo.notification.events-0 -> InitialFetchState(Some(8atFnNbaT7K8NLX9PWLi5g),BrokerEndPoint(id=102, host=localhost:9093),1,107)) (kafka.server.ReplicaFetcherManager)
+[2026-04-30 13:15:58,025] INFO [ReplicaFetcherManager on broker 101] Removed fetcher for partitions Set(ftgo.notification.events-0) (kafka.server.ReplicaFetcherManager)
+[2026-04-30 13:15:58,038] INFO [ReplicaFetcherThread-0-102]: Shutting down (kafka.server.ReplicaFetcherThread)
+[2026-04-30 13:15:58,038] INFO [ReplicaFetcherThread-0-102]: Stopped (kafka.server.ReplicaFetcherThread)
+[2026-04-30 13:15:58,038] INFO [ReplicaFetcherThread-0-102]: Shutdown completed (kafka.server.ReplicaFetcherThread)
+[2026-04-30 13:15:58,065] INFO [ReplicaFetcherManager on broker 101] Removed fetcher for partitions Set(ftgo.notification.events-1, ftgo.notification.events-2) (kafka.server.ReplicaFetcherManager)
+[2026-04-30 13:17:12,559] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:12,582] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:12,623] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:12,668] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:12,669] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:12,670] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:12,739] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:12,741] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:12,851] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:12,852] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:12,853] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:12,938] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:13,224] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:13,225] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:13,330] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:13,954] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:13,954] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:14,124] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:14,865] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:14,866] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:15,126] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:15,807] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:15,868] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:16,129] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:16,810] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:16,812] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:17,132] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:17,812] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:17,813] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:18,133] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:18,800] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:18,802] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:19,135] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:19,803] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:19,804] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:20,137] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:20,738] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:20,806] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:21,140] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:21,741] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:21,741] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:22,142] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:22,645] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:22,743] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:23,024] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:23,648] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:23,746] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:24,026] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:24,603] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:24,747] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:25,028] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:25,588] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:25,588] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:26,031] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:26,590] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:26,590] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:27,033] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:27,592] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:27,593] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:28,008] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:28,594] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:28,594] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:29,010] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:29,596] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:29,596] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:30,014] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:30,550] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:30,550] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:31,017] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:31,553] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:31,554] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:32,020] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:32,557] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:32,557] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:33,022] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:33,473] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:33,560] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:34,025] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:34,476] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:34,564] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:35,028] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:35,364] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:35,506] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:36,031] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:36,354] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:36,355] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:37,033] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:37,274] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:37,357] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:38,035] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:38,276] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:38,277] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:39,038] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:39,278] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:39,279] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:40,041] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:40,276] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:40,280] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:41,043] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:41,227] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:41,227] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:42,046] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:42,046] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:42,228] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:43,047] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:43,048] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:43,229] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:44,050] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:44,050] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:44,231] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:44,994] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:17:45,025] INFO [Controller id=101, targetBrokerId=102] Node 102 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-04-30 13:17:45,025] WARN [Controller id=101, targetBrokerId=102] Connection to node 102 (localhost/127.0.0.1:9093) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-04-30 13:17:45,026] INFO [Controller id=101, targetBrokerId=102] Client requested connection close from node 102 (org.apache.kafka.clients.NetworkClient)
+[2026-04-30 13:17:45,053] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:17:45,131] INFO [Controller id=101, targetBrokerId=102] Node 102 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-04-30 13:17:45,131] WARN [Controller id=101, targetBrokerId=102] Connection to node 102 (localhost/127.0.0.1:9093) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-04-30 13:17:45,131] INFO [Controller id=101, targetBrokerId=102] Client requested connection close from node 102 (org.apache.kafka.clients.NetworkClient)
+[2026-04-30 13:17:45,233] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:17:45,386] INFO [NodeToControllerChannelManager id=101 name=alter-partition] Node 103 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-04-30 13:17:45,386] WARN [NodeToControllerChannelManager id=101 name=alter-partition] Connection to node 103 (localhost/127.0.0.1:9094) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-04-30 13:17:45,387] INFO [zk-broker-101-to-controller-alter-partition-channel-manager]: Recorded new ZK controller, from now on will use node localhost:9092 (id: 101 rack: null) (kafka.server.NodeToControllerRequestThread)
+[2026-04-30 13:17:45,415] INFO [Partition ftgo.notification.events-2 broker=101] ISR updated to 101,102  and version updated to 3 (kafka.cluster.Partition)
+[2026-04-30 13:17:45,430] INFO [Partition ftgo.notification.events-1 broker=101] ISR updated to 101,102  and version updated to 3 (kafka.cluster.Partition)
+[2026-04-30 13:17:45,430] INFO [Partition ftgo.notification.events-0 broker=101] ISR updated to 101,102  and version updated to 3 (kafka.cluster.Partition)
+[2026-04-30 13:20:19,466] INFO [ReplicaFetcherManager on broker 101] Removed fetcher for partitions Set(ftgo.notification.events-1, ftgo.notification.events-2, ftgo.notification.events-0) (kafka.server.ReplicaFetcherManager)
+[2026-04-30 13:20:27,980] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:20:28,004] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:28,079] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:20:28,079] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:20:28,110] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:28,111] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:28,189] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:20:28,293] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:20:28,294] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:20:28,294] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:28,365] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:20:28,366] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:20:28,695] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:28,700] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:20:28,701] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:20:29,422] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:20:29,425] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:29,498] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:20:30,390] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:30,393] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:20:30,393] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:20:31,326] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:20:31,328] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:31,329] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:20:32,290] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:20:32,293] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:20:32,294] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:33,239] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:20:33,241] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:33,241] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:20:34,215] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:20:34,215] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:34,215] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:20:35,218] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:20:35,218] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:35,218] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:20:36,220] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:20:36,221] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:36,221] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:20:37,147] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:37,147] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:20:37,224] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:20:38,151] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:38,151] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:20:38,226] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:20:39,066] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:20:39,154] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:39,228] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:20:40,068] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:40,069] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:20:40,230] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:20:41,072] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:41,072] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:20:41,232] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:20:42,074] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:42,074] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:20:42,235] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:20:43,002] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:20:43,004] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:43,236] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:20:43,928] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:44,005] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:20:44,239] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:20:44,849] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:45,008] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:20:45,242] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:20:45,852] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:45,853] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:20:46,244] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:20:46,854] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:46,854] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:20:47,247] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:20:47,802] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:47,856] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:20:48,250] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:20:48,792] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:20:48,806] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:49,253] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:20:49,740] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:49,740] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:20:50,254] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:20:50,736] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:20:50,738] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:51,256] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:20:51,681] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:51,682] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:20:52,258] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:20:52,684] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:52,684] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:20:53,261] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:20:53,686] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:53,687] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:20:54,264] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:20:54,689] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:54,689] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:20:55,266] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:20:55,687] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:55,687] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:20:56,268] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:20:56,690] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:56,690] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:20:57,271] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:20:57,664] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:57,665] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:20:58,274] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:20:58,667] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:58,667] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:20:59,277] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:20:59,669] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:20:59,669] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:21:00,279] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:21:00,671] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:21:00,672] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:21:01,281] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:21:01,643] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:21:01,644] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:21:02,285] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:21:02,531] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:21:02,644] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:21:03,286] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:21:03,533] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:21:03,533] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:21:04,288] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-1 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-1
+[2026-04-30 13:21:04,374] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-0 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-0
+[2026-04-30 13:21:04,444] INFO [Controller id=101, targetBrokerId=102] Node 102 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-04-30 13:21:04,444] WARN [Controller id=101, targetBrokerId=102] Connection to node 102 (localhost/127.0.0.1:9093) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-04-30 13:21:04,444] INFO [Controller id=101, targetBrokerId=102] Client requested connection close from node 102 (org.apache.kafka.clients.NetworkClient)
+[2026-04-30 13:21:04,535] ERROR [ReplicaManager broker=101] Error processing append operation on partition ftgo.notification.events-2 (kafka.server.ReplicaManager)
+org.apache.kafka.common.errors.NotEnoughReplicasException: The size of the current ISR Set(101) is insufficient to satisfy the min.isr requirement of 2 for partition ftgo.notification.events-2
+[2026-04-30 13:21:04,545] INFO [Controller id=101, targetBrokerId=102] Node 102 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-04-30 13:21:04,546] WARN [Controller id=101, targetBrokerId=102] Connection to node 102 (localhost/127.0.0.1:9093) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-04-30 13:21:04,546] INFO [Controller id=101, targetBrokerId=102] Client requested connection close from node 102 (org.apache.kafka.clients.NetworkClient)
+[2026-04-30 13:21:04,815] INFO [Partition ftgo.notification.events-0 broker=101] ISR updated to 101,102  and version updated to 5 (kafka.cluster.Partition)
+[2026-04-30 13:21:04,832] INFO [Partition ftgo.notification.events-1 broker=101] ISR updated to 101,102  and version updated to 5 (kafka.cluster.Partition)
+[2026-04-30 13:21:04,832] INFO [Partition ftgo.notification.events-2 broker=101] ISR updated to 101,102  and version updated to 5 (kafka.cluster.Partition)
+[2026-04-30 13:26:03,453] INFO [ReplicaFetcherManager on broker 101] Removed fetcher for partitions HashSet(ftgo.notification.events-0) (kafka.server.ReplicaFetcherManager)
+[2026-04-30 13:26:03,458] INFO [ReplicaFetcherThread-0-102]: Starting (kafka.server.ReplicaFetcherThread)
+[2026-04-30 13:26:03,458] INFO [ReplicaFetcherManager on broker 101] Added fetcher to broker 102 for partitions Map(ftgo.notification.events-0 -> InitialFetchState(Some(8atFnNbaT7K8NLX9PWLi5g),BrokerEndPoint(id=102, host=localhost:9093),4,212)) (kafka.server.ReplicaFetcherManager)
+[2026-04-30 13:31:05,600] INFO [NodeToControllerChannelManager id=101 name=alter-partition] Node 101 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-04-30 13:36:57,722] INFO [Controller id=101, targetBrokerId=101] Node 101 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-04-30 13:36:57,722] INFO [Controller id=101, targetBrokerId=102] Node 102 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-04-30 13:36:57,725] INFO [Controller id=101, targetBrokerId=103] Node 103 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-04-30 13:36:57,725] WARN [Controller id=101, targetBrokerId=103] Connection to node 103 (localhost/127.0.0.1:9094) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-04-30 13:36:57,726] INFO [Controller id=101, targetBrokerId=103] Client requested connection close from node 103 (org.apache.kafka.clients.NetworkClient)
+[2026-04-30 13:36:57,829] INFO [Controller id=101, targetBrokerId=103] Node 103 disconnected. (org.apache.kafka.clients.NetworkClient)
+[2026-04-30 13:36:57,830] WARN [Controller id=101, targetBrokerId=103] Connection to node 103 (localhost/127.0.0.1:9094) could not be established. Node may not be available. (org.apache.kafka.clients.NetworkClient)
+[2026-04-30 13:36:57,830] INFO [Controller id=101, targetBrokerId=103] Client requested connection close from node 103 (org.apache.kafka.clients.NetworkClient)
+[2026-04-30 13:36:58,223] INFO [Partition ftgo.notification.events-1 broker=101] ISR updated to 101,102,103  and version updated to 6 (kafka.cluster.Partition)
+[2026-04-30 13:36:58,249] INFO [Partition ftgo.notification.events-2 broker=101] ISR updated to 101,102,103  and version updated to 6 (kafka.cluster.Partition)
+[2026-04-30 13:41:04,162] INFO [ReplicaFetcherManager on broker 101] Removed fetcher for partitions HashSet(ftgo.notification.events-2) (kafka.server.ReplicaFetcherManager)
+[2026-04-30 13:41:04,166] INFO [ReplicaFetcherThread-0-103]: Starting (kafka.server.ReplicaFetcherThread)
+[2026-04-30 13:41:04,166] INFO [ReplicaFetcherManager on broker 101] Added fetcher to broker 103 for partitions Map(ftgo.notification.events-2 -> InitialFetchState(Some(8atFnNbaT7K8NLX9PWLi5g),BrokerEndPoint(id=103, host=localhost:9094),4,199)) (kafka.server.ReplicaFetcherManager)
+[2026-04-30 13:46:58,295] INFO [NodeToControllerChannelManager id=101 name=alter-partition] Node 101 disconnected. (org.apache.kafka.clients.NetworkClient)

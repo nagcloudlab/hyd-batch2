@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FTGO Kitchen - Orders</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f6fa; }
+        .header { background: linear-gradient(135deg, #e67e22, #f39c12); color: white; padding: 16px 24px; }
+        .header h1 { font-size: 1.3em; }
+        .nav-links { margin-top: 8px; font-size: 0.85em; }
+        .nav-links a { color: white; margin-right: 16px; text-decoration: none; opacity: 0.85; }
+        .nav-links a:hover { opacity: 1; }
+        .container { max-width: 1100px; margin: 24px auto; padding: 0 20px; }
+        h2 { color: #2c3e50; margin-bottom: 20px; font-size: 1.4em; }
+        .svc-badge { display: inline-block; background: #fff3e0; color: #e67e22; padding: 4px 12px; border-radius: 12px; font-size: 0.75em; font-weight: 600; margin-bottom: 16px; }
+        .card { background: white; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-bottom: 16px; overflow: hidden; border-left: 4px solid #ddd; }
+        .card.PENDING { border-left-color: #95a5a6; }
+        .card.ACCEPTED { border-left-color: #3498db; }
+        .card.PREPARING { border-left-color: #f39c12; }
+        .card.READY { border-left-color: #27ae60; }
+        .card.CANCELLED { border-left-color: #e74c3c; }
+        .card-body { padding: 20px 24px; }
+        .card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .card-top h3 { color: #2c3e50; font-size: 1em; }
+        .status { padding: 4px 12px; border-radius: 20px; font-size: 0.8em; font-weight: 600; color: white; }
+        .status.PENDING { background: #95a5a6; }
+        .status.ACCEPTED { background: #3498db; }
+        .status.PREPARING { background: #f39c12; }
+        .status.READY { background: #27ae60; }
+        .status.CANCELLED { background: #e74c3c; }
+        .card-details { color: #888; font-size: 0.85em; margin-bottom: 12px; }
+        .card-details p { margin-bottom: 2px; }
+        .items { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+        .item-tag { background: #f8f9fa; padding: 4px 10px; border-radius: 6px; font-size: 0.85em; color: #555; }
+        .card-actions { display: flex; gap: 12px; align-items: center; }
+        .btn { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 0.85em; font-weight: 600; color: white; transition: all 0.2s; }
+        .btn-accept { background: #3498db; }
+        .btn-accept:hover { background: #2980b9; }
+        .btn-prepare { background: #f39c12; }
+        .btn-prepare:hover { background: #e67e22; }
+        .btn-ready { background: #27ae60; }
+        .btn-ready:hover { background: #219a52; }
+        .hint { font-size: 0.8em; color: #999; }
+        .amount { font-size: 1.1em; font-weight: 700; color: #27ae60; }
+        .empty { text-align: center; padding: 60px 20px; background: white; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); color: #999; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>FTGO Kitchen Service</h1>
+        <div class="nav-links">
+            <a href="/kitchen/1/orders">Restaurant 1</a>
+            <a href="/kitchen/2/orders">Restaurant 2</a>
+            <a href="/kitchen/3/orders">Restaurant 3</a>
+        </div>
+    </div>
+    <div class="container">
+        <span class="svc-badge">kitchen-service :8084</span>
+        <h2>Kitchen Orders</h2>
+
+        <div th:if="${tickets.isEmpty()}" class="empty">
+            <p>No orders yet. Orders appear here when consumers place them.</p>
+        </div>
+
+        <div th:each="t : ${tickets}" class="card" th:classappend="${t.status}">
+            <div class="card-body">
+                <div class="card-top">
+                    <h3>Order #<span th:text="${t.orderId}">1</span> &mdash; <span th:text="${t.consumerName}">Consumer</span></h3>
+                    <span class="status" th:classappend="${t.status}" th:text="${t.status}">Status</span>
+                </div>
+                <div class="card-details">
+                    <p>Restaurant: <span th:text="${t.restaurantName}">Restaurant</span></p>
+                    <p>Deliver to: <span th:text="${t.deliveryAddress}">Address</span></p>
+                    <p>Amount: <span class="amount">Rs.<span th:text="${t.totalAmount}">0</span></span></p>
+                </div>
+                <div class="items">
+                    <span class="item-tag" th:text="${t.items}">Items</span>
+                </div>
+                <div class="card-actions">
+                    <div th:switch="${t.status.name()}">
+                        <div th:case="'PENDING'">
+                            <form th:action="@{'/kitchen/tickets/' + ${t.id} + '/accept'}" method="post" style="display:inline">
+                                <input type="hidden" name="restaurantId" th:value="${restaurantId}" />
+                                <button type="submit" class="btn btn-accept">Accept Order</button>
+                            </form>
+                            <span class="hint">New order — accept to start processing</span>
+                        </div>
+                        <div th:case="'ACCEPTED'">
+                            <form th:action="@{'/kitchen/tickets/' + ${t.id} + '/prepare'}" method="post" style="display:inline">
+                                <input type="hidden" name="restaurantId" th:value="${restaurantId}" />
+                                <button type="submit" class="btn btn-prepare">Start Preparing</button>
+                            </form>
+                            <span class="hint">Begin cooking this order</span>
+                        </div>
+                        <div th:case="'PREPARING'">
+                            <form th:action="@{'/kitchen/tickets/' + ${t.id} + '/ready'}" method="post" style="display:inline">
+                                <input type="hidden" name="restaurantId" th:value="${restaurantId}" />
+                                <button type="submit" class="btn btn-ready">Ready for Pickup</button>
+                            </form>
+                            <span class="hint">Mark as ready when food is done</span>
+                        </div>
+                        <div th:case="'READY'">
+                            <span class="hint">Waiting for courier pickup...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

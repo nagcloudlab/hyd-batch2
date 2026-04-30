@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<nav th:fragment="navbar(activePage)" class="navbar">
+    <div class="nav-container">
+        <a href="/" class="nav-brand">
+            <span class="brand-icon">F</span>
+            <span class="brand-text">FTGO</span>
+        </a>
+        <div class="nav-links">
+            <div class="nav-group">
+                <span class="nav-group-label">Consumer</span>
+                <a href="/consumer/restaurants"
+                   th:classappend="${activePage == 'consumer-restaurants'} ? 'active' : ''">Restaurants</a>
+                <a href="/consumer/orders?consumerId=1"
+                   th:classappend="${activePage == 'consumer-orders'} ? 'active' : ''">My Orders</a>
+            </div>
+            <div class="nav-divider"></div>
+            <div class="nav-group">
+                <span class="nav-group-label">Restaurant</span>
+                <a href="/restaurant"
+                   th:classappend="${activePage == 'restaurant-menu' || activePage == 'restaurant-orders' || activePage == 'restaurant-select'} ? 'active' : ''">Dashboard</a>
+            </div>
+            <div class="nav-divider"></div>
+            <div class="nav-group">
+                <span class="nav-group-label">Courier</span>
+                <a href="http://localhost:8083/courier/available?courierId=1" target="_blank"
+                   style="color: #bb86fc;">Delivery Service &#8599;</a>
+            </div>
+        </div>
+        <a href="/h2-console" class="nav-db" target="_blank">H2 Console</a>
+    </div>
+</nav>
+
+<style th:fragment="navbar-styles">
+    .navbar { background: #1a1a2e; padding: 0; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 12px rgba(0,0,0,0.3); }
+    .nav-container { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; padding: 0 20px; height: 56px; }
+    .nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; margin-right: 32px; }
+    .brand-icon { width: 34px; height: 34px; background: linear-gradient(135deg, #e67e22, #f39c12); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 1.1em; }
+    .brand-text { color: white; font-size: 1.2em; font-weight: 700; letter-spacing: 1px; }
+    .nav-links { display: flex; align-items: center; gap: 0; flex: 1; }
+    .nav-group { display: flex; align-items: center; gap: 2px; padding: 0 8px; }
+    .nav-group-label { color: rgba(255,255,255,0.35); font-size: 0.7em; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-right: 8px; }
+    .nav-links a { color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.85em; font-weight: 500; padding: 8px 14px; border-radius: 6px; transition: all 0.2s; position: relative; }
+    .nav-links a:hover { color: white; background: rgba(255,255,255,0.1); }
+    .nav-links a.active { color: white; background: rgba(255,255,255,0.15); }
+    .nav-links a.active::after { content: ''; position: absolute; bottom: -12px; left: 50%; transform: translateX(-50%); width: 20px; height: 3px; background: #e67e22; border-radius: 2px; }
+    .nav-divider { width: 1px; height: 24px; background: rgba(255,255,255,0.12); margin: 0 8px; }
+    .nav-db { margin-left: auto; color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.75em; padding: 5px 12px; border: 1px solid rgba(255,255,255,0.15); border-radius: 5px; transition: all 0.2s; }
+    .nav-db:hover { color: white; border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.05); }
+</style>
+
+</body>
+</html>

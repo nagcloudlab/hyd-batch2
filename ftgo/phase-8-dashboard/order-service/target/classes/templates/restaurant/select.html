@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FTGO - Select Restaurant</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f6fa; }
+        .header { background: linear-gradient(135deg, #e67e22, #f39c12); color: white; padding: 20px 24px; display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 1.4em; }
+        .header a { color: white; text-decoration: none; opacity: 0.9; }
+        .header a:hover { opacity: 1; }
+        .container { max-width: 800px; margin: 30px auto; padding: 0 20px; }
+        h2 { color: #2c3e50; margin-bottom: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+        .card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); transition: all 0.2s; cursor: pointer; text-decoration: none; color: inherit; display: block; border: 2px solid transparent; }
+        .card:hover { border-color: #e67e22; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+        .card h3 { color: #e67e22; margin-bottom: 6px; }
+        .card p { color: #888; font-size: 0.85em; margin-bottom: 4px; }
+        .card-actions { margin-top: 12px; display: flex; gap: 8px; }
+        .card-actions a { padding: 6px 14px; background: #fff3e0; color: #e67e22; border-radius: 6px; text-decoration: none; font-size: 0.8em; font-weight: 600; }
+        .card-actions a:hover { background: #e67e22; color: white; }
+    </style>
+    <style th:replace="~{fragments/navbar :: navbar-styles}"></style>
+</head>
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar('restaurant-select')}"></nav>
+    <div class="container">
+        <h2>Select Your Restaurant</h2>
+        <div th:if="${restaurants.isEmpty()}" style="background:#fff3cd; border:1px solid #ffc107; border-left:4px solid #ff9800; border-radius:8px; padding:20px 24px; margin-bottom:24px; display:flex; align-items:center; gap:12px;">
+            <span style="font-size:1.5em;">&#9888;</span>
+            <div>
+                <strong style="color:#856404;">Restaurant Service Unavailable</strong>
+                <p style="color:#856404; font-size:0.9em; margin-top:4px;">The restaurant service is temporarily down. Circuit breaker is active. Please try again shortly.</p>
+            </div>
+        </div>
+        <div class="grid">
+            <div th:each="r : ${restaurants}" class="card">
+                <h3 th:text="${r.name}">Restaurant</h3>
+                <p th:text="${r.address}">Address</p>
+                <p th:text="'Phone: ' + ${r.phone}">Phone</p>
+                <div class="card-actions">
+                    <a th:href="@{'/restaurant/' + ${r.id} + '/menu'}">Manage Menu</a>
+                    <a th:href="@{'/restaurant/' + ${r.id} + '/orders'}">View Orders</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

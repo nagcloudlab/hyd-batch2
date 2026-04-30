@@ -1,0 +1,12 @@
+/Users/nag/spring-boot-mum-batch1/week-2/phase-4-kitchen/kitchen-service/src/main/java/com/example/kitchen/KitchenServiceApplication.java
+/Users/nag/spring-boot-mum-batch1/week-2/phase-4-kitchen/kitchen-service/src/main/java/com/example/kitchen/consumer/KitchenEventConsumer.java
+/Users/nag/spring-boot-mum-batch1/week-2/phase-4-kitchen/kitchen-service/src/main/java/com/example/kitchen/entity/KitchenTicket.java
+/Users/nag/spring-boot-mum-batch1/week-2/phase-4-kitchen/kitchen-service/src/main/java/com/example/kitchen/entity/TicketStatus.java
+/Users/nag/spring-boot-mum-batch1/week-2/phase-4-kitchen/kitchen-service/src/main/java/com/example/kitchen/event/KitchenEvent.java
+/Users/nag/spring-boot-mum-batch1/week-2/phase-4-kitchen/kitchen-service/src/main/java/com/example/kitchen/event/NotificationEvent.java
+/Users/nag/spring-boot-mum-batch1/week-2/phase-4-kitchen/kitchen-service/src/main/java/com/example/kitchen/event/OrderEvent.java
+/Users/nag/spring-boot-mum-batch1/week-2/phase-4-kitchen/kitchen-service/src/main/java/com/example/kitchen/producer/NotificationEventProducer.java
+/Users/nag/spring-boot-mum-batch1/week-2/phase-4-kitchen/kitchen-service/src/main/java/com/example/kitchen/producer/OrderEventProducer.java
+/Users/nag/spring-boot-mum-batch1/week-2/phase-4-kitchen/kitchen-service/src/main/java/com/example/kitchen/repository/KitchenTicketRepository.java
+/Users/nag/spring-boot-mum-batch1/week-2/phase-4-kitchen/kitchen-service/src/main/java/com/example/kitchen/service/KitchenTicketService.java
+/Users/nag/spring-boot-mum-batch1/week-2/phase-4-kitchen/kitchen-service/src/main/java/com/example/kitchen/web/KitchenController.java
