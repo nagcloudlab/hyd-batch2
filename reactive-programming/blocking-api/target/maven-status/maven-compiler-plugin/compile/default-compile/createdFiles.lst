@@ -1,0 +1,5 @@
+com/example/blocking/ProductRepository.class
+com/example/blocking/Product.class
+com/example/blocking/DataLoader.class
+com/example/blocking/BlockingApiApplication.class
+com/example/blocking/ProductController.class
