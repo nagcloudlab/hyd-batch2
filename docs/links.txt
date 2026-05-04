@@ -6,3 +6,9 @@ https://docs.google.com/presentation/d/1eu1vE3X09hQrBo2wrrnX51P-yOPCjiha2-_PrTwy
 
 Vert.x
 https://nagcloudlab.notion.site/Vert-x-a76b47d63efc48fea227b2b735f26742?source=copy_link
+
+
+SQL-level-1
+-----------
+
+https://drive.google.com/file/d/1BdnvBMCRkt6IJDDgzT-KzfceNfJdcsVK/view?usp=sharing
