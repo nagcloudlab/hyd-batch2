@@ -1,0 +1,20 @@
+
+
+ARG -> define a variable that can be passed at build time
+FROM -> base-image to build new image 
+WORKDIR -> set the working directory in the container
+RUN -> execute command in the container
+COPY -> copy files from host to container
+ADD -> copy files from host to container and extract if it's an archive
+ENV -> set environment variables
+EXPOSE -> specify the port on which the container will listen
+HEALTHCHECK -> specify a command to check the health of the container
+LABEL -> add metadata to the image
+MAINTAINER -> specify the author of the image
+STOPSIGNAL -> specify the signal to stop the container ( SIGTERM, SIGKILL, etc.)
+USER -> specify the user to run the container ( default is root)
+VOLUME -> create a mount point for a volume
+CMD -> specify the command to run when the container starts ( default command )
+ENTRYPOINT -> specify the command to run when the container starts ( can be overridden by CMD )
+SHELL -> specify the shell to use for RUN, CMD, and ENTRYPOINT instructions
+ONBUILD -> specify a command to run when the image is used as a base for another image
