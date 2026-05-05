@@ -1,6 +1,12 @@
 
+
+Spring Security
+---------------
+https://docs.google.com/presentation/d/1V7iNBkrz6aUghQJvc6UyTEoVKeiDMEqi/edit?usp=sharing&ouid=116008769779639876320&rtpof=true&sd=true
 https://nagcloudlab.notion.site/Spring-security-Intro-274aa670cfc94debb69dbf11badcf5c6?source=copy_link
 
+Microservices
+------------
 https://docs.google.com/presentation/d/1eu1vE3X09hQrBo2wrrnX51P-yOPCjiha2-_PrTwyHNw/edit?usp=sharing
 
 
@@ -8,6 +14,20 @@ Vert.x
 https://nagcloudlab.notion.site/Vert-x-a76b47d63efc48fea227b2b735f26742?source=copy_link
 
 
-SQL-level-1
------------
-https://drive.google.com/file/d/1BdnvBMCRkt6IJDDgzT-KzfceNfJdcsVK/view?usp=sharing
+
+Kafka Internal
+---------------
+https://docs.google.com/presentation/d/1zCeqFqWoLb1OhfMi2w1onxfKZxVgMgRq/edit?usp=sharing&ouid=116008769779639876320&rtpof=true&sd=true
+
+
+
+Reactive Programming
+--------------------
+
+https://nagcloudlab.notion.site/Reactive-Programming-0d55c2ee7c8a41b29d5b7e32e715394e?source=copy_link
+
+
+
+Java Async Programming
+--------------------------
+https://docs.google.com/presentation/d/16xN3dW1YO31zi4l6u7sKqcxc_FO4KpiKIEQLM_mzye4/edit?usp=sharing
